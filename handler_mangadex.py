@@ -191,9 +191,10 @@ class HandlerMangaDex(Handler):
 
         if TARGET_LANGUAGE == TargetLanguageEnum.ENGLISH and lang == MANGADEX_ENGLISH_TITLE:
           ch_title = ch_obj.text
+          ch_url = ch_obj.get_attribute(MANGADEX_CHAPTER_TOP_LEVEL_INNER_URL_ATTR)
           extracted_ch_num = utils.extract_chapter_num_string(ch_title)
           logging.info("Ch Num Extracted '" + extracted_ch_num + "' from: " + ch_title)
-          self.metadata.add_chapter_number(utils.extract_chapter_num_string(ch_title))
+          self.metadata.add_chapter_number(utils.extract_chapter_num_string(ch_title), ch_url)
         
       # Check if there are next pages
       # <button>  

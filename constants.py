@@ -55,6 +55,8 @@ MANGADEX_CHAPTER_TOP_LEVEL_XCLASS = "//a[contains(@class, 'flex flex-grow items-
 MANGADEX_CHAPTER_TOP_LEVEL_INNER_LANGUAGE_CLASS = "//img[contains(@class, 'inline-block select-none flex-shrink-0 !h-5 !w-5 -mx-0.5')]"
 # String containing the language
 MANGADEX_CHAPTER_TOP_LEVEL_INNER_LANGUAGE_ATTR = "title"
+# Link to chapter
+MANGADEX_CHAPTER_TOP_LEVEL_INNER_URL_ATTR = "href"
 
 # This is actually looking for "Pg. 1 / 2"
 MANGADEX_PAGE_COUNT_CLASS = "//div[contains(@class, 'flex-grow')]"
