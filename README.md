@@ -4,7 +4,7 @@ PC tool to replace the auto-update/download features of Tachiyomi extensions pos
 
 This serves as a tool to help collate content for PLEXing to official Tachiyomi extensions.
 
-Currently targeting the Komga official extension.
+Currently targeting the Kavita official extension.
 
 
 ## Dependencies
