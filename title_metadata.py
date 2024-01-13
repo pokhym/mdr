@@ -24,6 +24,10 @@ class TitleMetadata():
   
   def set_title(self, title):
     self.title = title
+    assert(self.title != "")
+  
+  def get_title(self):
+    return self.title
   
   def set_description(self, description):
     self.description = description
@@ -35,21 +39,36 @@ class TitleMetadata():
     self.chapter_numbers.append(chapter_number)
     self.chapter_urls.append(url)
   
+  def get_chapter_numbers(self):
+    return self.chapter_numbers, self.chapter_urls
+  
   def dump(self):
+    ret = ""
+    ret += "Title: " + str(self.title) + "\n"
+    ret += "==========\n"
     logging.info("Title: " + str(self.title))
     logging.info("==========")
     
+    ret += "Description: " + str(self.description) + "\n"
+    ret += "==========\n"
     logging.info("Description: " + str(self.description))
     logging.info("==========")
 
     categories_str = ""
     for c in sorted(list(self.categories)):
       categories_str += "\t" + c + "\n"
+    
+    ret += "Categories:\n" + categories_str
+    ret += "==========\n"
     logging.info("Categories:\n" + categories_str)
     logging.info("==========")
 
     chapters_str = ""
     for n, u in zip(self.chapter_numbers, self.chapter_urls):
       chapters_str += "\t" + n + ":" + u + "\n"
+
+    ret += "Chapter Numbers:\n" + chapters_str
     logging.info("Chapter Numbers:\n" + chapters_str)
+
+    return ret
 

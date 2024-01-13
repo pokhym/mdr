@@ -1,4 +1,5 @@
 from title_metadata import TitleMetadata
+from constants import *
 
 import logging
 import time
@@ -44,6 +45,14 @@ class Handler:
     self.current_chapter_base_url = None
     self.current_download_image_number = 0
 
+    self.driver = None
+
+  def start_driver(self):
+    """
+    Creates a new driver
+    """
+    logging.info("Starting " + self.source_name + " driver")
+
     # Initialize selenium
     # Define the Chrome webdriver options
     options = webdriver.FirefoxOptions()
@@ -69,6 +78,7 @@ class Handler:
     """
     logging.info("Terminating " + self.source_name + " driver")
     self.driver.close()
+    self.driver = None
   
   def reset_for_next_title(self):
     """
@@ -85,7 +95,20 @@ class Handler:
     """
     Initialize member variables for title and creates folders
     """
+    self.start_driver()
+
+    # Load the URL
+    logging.info("Loading title url: " + title_base_url)
+    self.current_title_base_url = title_base_url
+    self.driver.get(self.current_title_base_url)
+    time.sleep(5)
+
+    # Obtain the title
+    self.extract_title_name()
+
+    # Join the base path with the name of the manga
     self.download_title_abs_base_path = abspath(title_abs_base_path)
+    self.download_title_abs_base_path = path_join(self.download_title_abs_base_path, self.metadata.get_title())
     
     if not exists(self.download_title_abs_base_path):
       logging.info("Creating base title folder at: " + self.download_title_abs_base_path)
@@ -102,6 +125,8 @@ class Handler:
     self.current_title_base_url = title_base_url
     self.driver.get(self.current_title_base_url)
     time.sleep(5)
+
+    self.terminate_driver()
 
   def reset_for_next_chapter(self):
     """
@@ -213,6 +238,27 @@ class Handler:
     the current title
     """
     pass
+
+  def save_metadata(self):
+    """
+    Saves metadata to file in the base directory
+    """
+    joined = path_join(self.download_title_abs_base_path, METADATA_FILE_NAME)
+    with open(joined, "w") as fd:
+      fd.write(self.metadata.dump())
+      fd.close()
+  
+  def extract_metadata(self):
+    """
+    Obtains metadata for the title.
+    Implementation should wrap other metadata extraction
+    functions
+    """
+    self.extract_title_name()
+    self.extract_description()
+    self.extract_categories()
+    self.extract_chapter_numbers()
+    self.save_metadata()
 
   def get_update(self):
     """

@@ -3,6 +3,9 @@ from enum import Enum
 class TargetLanguageEnum(Enum):
   ENGLISH = 1
 
+""" --- BEGIN METADATA FILE NAME ---"""
+METADATA_FILE_NAME = "metadata.txt"
+
 """--- BEGIN TARGET LANGUAGE ---"""
 TARGET_LANGUAGE = TargetLanguageEnum.ENGLISH
 """--- END TARGET LANGUAGE ---"""
@@ -16,6 +19,7 @@ SOURCE_MANGADEX = "MangaDex"
 """--- BEGIN MANADEX CONSTANTS ---"""
 # User Icon XPATH
 MANGADEX_USER_ICON_XPATH = "//*[@id='avatar']"
+MANGADEX_USER_ICON_ID = "avatar"
 # Language submenu in user
 MANGADEX_USER_ICON_CHAPTER_LANGUAGES_XPATH = "/html/body/div[1]/div[3]/div[2]/div/div[1]/button[2]"
 # English language selection XPATHs

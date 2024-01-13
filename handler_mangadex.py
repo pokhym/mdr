@@ -3,7 +3,7 @@ from constants import *
 import utils
 
 import logging
-from os.path import join as path_join
+from os.path import join as path_join, exists, isdir
 import time
 
 from selenium import webdriver 
@@ -22,7 +22,7 @@ class HandlerMangaDex(Handler):
 
   def select_english_chapters_only(self):
     # Click user icon
-    self.driver.find_element(By.XPATH, MANGADEX_USER_ICON_XPATH).click()
+    self.driver.find_element(By.ID, MANGADEX_USER_ICON_ID).click()
     # Select chapter selection language
     self.driver.find_element(By.XPATH, MANGADEX_USER_ICON_CHAPTER_LANGUAGES_XPATH).click()
     # Select the checkmark for english
@@ -201,7 +201,11 @@ class HandlerMangaDex(Handler):
       #   <span>
       #     <svg>
       # This is why it is ./.. and ./.. twice
-      right_arrow_button = self.driver.find_element(By.XPATH, MANGADEX_TITLE_RIGHT_ARROW_XPATH).find_element(By.XPATH, "./..").find_element(By.XPATH, "./..")
+      try:
+        right_arrow_button = self.driver.find_element(By.XPATH, MANGADEX_TITLE_RIGHT_ARROW_XPATH).find_element(By.XPATH, "./..").find_element(By.XPATH, "./..")
+      except:
+        logging.info("Cannot find right button, only 1 page breaking")
+        break
 
       # Check if the button is disabled
       if MANGADEX_TITLE_RIGHT_ARROW_BUTTON_CLASS_DISABLED in right_arrow_button.get_attribute(MANGADEX_TITLE_RIGHT_ARROW_BUTTON_CLASS_ATTR):
@@ -212,4 +216,39 @@ class HandlerMangaDex(Handler):
       time.sleep(5)
       
       page_num += 1
+
+  def extract_metadata(self):
+    assert(self.current_title_base_url != None)
+    self.start_driver()
+    self.driver.get(self.current_title_base_url)
+    time.sleep(5)
+
+    self.select_chapter_language()
+    self.extract_title_name()
+    self.extract_description()
+    self.extract_categories()
+    self.extract_chapter_numbers()
+    self.save_metadata()
+
+    self.terminate_driver()
+
+  def get_update(self):
+    chs, urls = self.metadata.get_chapter_numbers()
+    assert(len(chs) == len(urls))
+
+    logging.info("Updating title '" + self.metadata.get_title() + "' on source " + self.source_name)
+
+    for idx in range(len(chs)):
+      # Check if the folder exists
+      joined_chapter_path = path_join(self.download_title_abs_base_path, chs[idx])
+      
+      # If the folder doesn't exist or if the path does exist but is not a foler
+      # Attempt to download it
+      if not exists(joined_chapter_path) or (exists(joined_chapter_path) and not isdir(joined_chapter_path)):
+        self.reset_for_next_chapter()
+        self.start_driver()
+        self.init_for_chapter(chs[idx], urls[idx])
+        self.extract_chapter_images()
+        self.terminate_driver()
+
     
