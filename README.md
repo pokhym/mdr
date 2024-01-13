@@ -17,9 +17,18 @@ Because I'm dumb and don't know how to do anything web development wise, I am fa
 
 ## Files/Structure
 
+* `constants.py`
+  * Global constants used throuhout the project
+* `handler_mangadex.py`
+  * Handles MangaDex titles
+* `handler.py`
+  * General handler which all all other handlers inherit from
+* `test_handler_mangadex.py`
+  * Tests for `handler_manadex.py`
+* `utils.py`
+  * General utility functions
 * `webpage_utils.py`
-  * Handles pulling JavaScript webpages
-  * Handles downloading of images
+  * General scratch file
 
 ## TODOs
 
