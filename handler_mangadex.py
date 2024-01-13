@@ -112,4 +112,8 @@ class HandlerMangaDex(Handler):
   def extract_title_name(self):
     title = self.driver.find_element(By.XPATH, MANGADEX_TITLE_XCLASS).text
     self.metadata.set_title(title)
+
+  def extract_description(self):
+    description = self.driver.find_element(By.XPATH, MANGADEX_DESCRIPTION_XCLASS).text
+    self.metadata.set_description(description)
   

@@ -192,6 +192,9 @@ class Handler:
   def extract_description(self):
     """
     Obtain the description
+
+    Implemented for:
+      - MangaDex
     """
     pass
 

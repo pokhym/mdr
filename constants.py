@@ -7,6 +7,8 @@ SOURCE_MANGADEX = "MangaDex"
 """--- BEGIN MANADEX CONSTANTS ---"""
 # Title XPATH
 MANGADEX_TITLE_XCLASS = "/html/body/div[1]/div[1]/div[2]/div[2]/div/div[4]/p"
+# Description XPATH
+MANGADEX_DESCRIPTION_XCLASS = "/html/body/div[1]/div[1]/div[2]/div[2]/div/div[8]/div/div/div/div[1]/div/p"
 # This is actually looking for "Pg. 1 / 2"
 MANGADEX_PAGE_COUNT_CLASS = "//div[contains(@class, 'flex-grow')]"
 MANGADEX_PAGE_KEYWORD_START = "Pg."
