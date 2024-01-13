@@ -14,6 +14,29 @@ from selenium.webdriver.common.keys import Keys
 
 class HandlerMangaDex(Handler):
 
+  def select_chapter_language(self):
+    if TARGET_LANGUAGE != TargetLanguageEnum.ENGLISH:
+      raise Exception("Unhandled language type to select!")
+
+    self.select_english_chapters_only()
+
+  def select_english_chapters_only(self):
+    # Click user icon
+    self.driver.find_element(By.XPATH, MANGADEX_USER_ICON_XPATH).click()
+    # Select chapter selection language
+    self.driver.find_element(By.XPATH, MANGADEX_USER_ICON_CHAPTER_LANGUAGES_XPATH).click()
+    # Select the checkmark for english
+    self.driver.find_element(By.XPATH, MANGADEX_USER_ICON_CHAPTER_LANGUAES_ENGLISH_XPATH).click()
+
+    # Ensure it is checked
+    assert("true" == self.driver.find_element(By.XPATH, MANGADEX_USER_ICON_CHAPTER_LANGUAES_ENGLISH_XPATH).get_attribute(MANGADEX_USER_ICON_CHAPTER_LANGUAES_ENGLISH_CHECKED_ATTR))
+    time.sleep(5)
+
+    # Exit the menu
+    self.driver.find_element(By.CSS_SELECTOR, "body").click()
+    time.sleep(5)
+
+
   def extract_current_page(self):
     content = self.driver.find_element(By.XPATH, MANGADEX_PAGE_COUNT_CLASS).text
     # 'Site Rules\nPrivacy Policy\nAnnouncements\nv2023.11.27\n© MangaDex 2024\nCtrl\nK\nImmigrants and Doosu (2)\nIsekai Nonbiri Nouka\nCh. 222\nPg. 1 / 11\nMenu\nLHTranslation\n1\n11'
@@ -146,4 +169,46 @@ class HandlerMangaDex(Handler):
       self.metadata.add_category(d)
     for f in format:
       self.metadata.add_category(f)
-  
+
+  def extract_chapter_numbers(self):
+    """
+    Currently only supports English
+    """
+    if TARGET_LANGUAGE != TargetLanguageEnum.ENGLISH:
+      raise Exception("Unhandled target language!")
+    
+    # /html/body/div[1]/div[1]/div[2]/div[2]/div/div[9]/div[2]/div[2]/div[2]/div[7]
+    x = self.driver.find_elements(By.XPATH, "//svg[contains(@class, 'feather feather-arrow-left icon')]")
+    print(x)
+
+    page_num = 1
+    while True:
+      logging.info("Grabbing page " + str(page_num) + " of chapters")
+      # Obtain the the first page  
+      for ch_obj in self.driver.find_elements(By.XPATH, MANGADEX_CHAPTER_TOP_LEVEL_XCLASS):
+        flag_obj = ch_obj.find_element(By.XPATH, MANGADEX_CHAPTER_TOP_LEVEL_INNER_LANGUAGE_CLASS)
+        lang = flag_obj.get_attribute(MANGADEX_CHAPTER_TOP_LEVEL_INNER_LANGUAGE_ATTR)
+
+        if TARGET_LANGUAGE == TargetLanguageEnum.ENGLISH and lang == MANGADEX_ENGLISH_TITLE:
+          ch_title = ch_obj.text
+          extracted_ch_num = utils.extract_chapter_num_string(ch_title)
+          logging.info("Ch Num Extracted '" + extracted_ch_num + "' from: " + ch_title)
+          self.metadata.add_chapter_number(utils.extract_chapter_num_string(ch_title))
+        
+      # Check if there are next pages
+      # <button>  
+      #   <span>
+      #     <svg>
+      # This is why it is ./.. and ./.. twice
+      right_arrow_button = self.driver.find_element(By.XPATH, MANGADEX_TITLE_RIGHT_ARROW_XPATH).find_element(By.XPATH, "./..").find_element(By.XPATH, "./..")
+
+      # Check if the button is disabled
+      if MANGADEX_TITLE_RIGHT_ARROW_BUTTON_CLASS_DISABLED in right_arrow_button.get_attribute(MANGADEX_TITLE_RIGHT_ARROW_BUTTON_CLASS_ATTR):
+        break
+
+      # Click to advance to next page
+      right_arrow_button.click()
+      time.sleep(5)
+      
+      page_num += 1
+    

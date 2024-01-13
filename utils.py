@@ -28,3 +28,45 @@ def get_blob_contents(driver, uri):
   if type(result) == int :
     raise Exception("Request failed with status %s" % result)
   return base64.b64decode(result)
+
+def is_char_digit(c):
+  return c in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+
+def is_char_period(c):
+  return c == "."
+
+def extract_chapter_num_string(chapter_title):
+  """
+  Ch. 227 - Tried Various Things (3) -> 227
+
+  Returns
+  ------------
+  ch_num: str
+    String representation of the chapter number
+  """
+  found_first_digit = False
+  num_string = ""
+  for c in chapter_title:
+    # First character must be a number
+    if is_char_digit(c) and found_first_digit == False:
+      found_first_digit = True
+      num_string += c
+      continue
+    elif found_first_digit == False:
+      continue
+    # Any subsequent char must be a digit or period
+    if found_first_digit and (is_char_digit(c) or is_char_period(c)):
+      num_string += c
+    # Terminate if no more digits or periods are found
+    else:
+      break
+  
+  if num_string == "":
+    raise Exception("Unable to find chapter number for '" + chapter_title + "'")
+  
+  return num_string
+
+
+if __name__ == "__main__":
+  ns = extract_chapter_num_string("Ch. 227 - Tried Various Things (3)")
+  print(ns)
