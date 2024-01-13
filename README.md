@@ -43,3 +43,4 @@ Because I'm dumb and don't know how to do anything web development wise, I am fa
   * Status of publishing
 * Create a UI to handle everything with PySimpleGUI?
 * Manual redownloading feature if a download fails
+* Logging to know what was done on each session
