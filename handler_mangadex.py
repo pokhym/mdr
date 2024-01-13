@@ -117,3 +117,33 @@ class HandlerMangaDex(Handler):
     description = self.driver.find_element(By.XPATH, MANGADEX_DESCRIPTION_XCLASS).text
     self.metadata.set_description(description)
   
+  def extract_categories(self):
+    genres = []
+    genres_obj = self.driver.find_element(By.XPATH, MANGADEX_GENRES_XCLASS)
+    for tag_obj in genres_obj.find_elements(By.CLASS_NAME, MANGADEX_GENRES_TAG_OBJ_CLASS):
+      genres.append(tag_obj.find_element(By.TAG_NAME, MANGADEX_GENRES_TAG_OBJ_TAG).text)
+    
+    themes = []
+    themes_obj = self.driver.find_element(By.XPATH, MANGADEX_THEMES_XCLASS)
+    for tag_obj in themes_obj.find_elements(By.CLASS_NAME, MANGADEX_THEMES_TAG_OBJ_CLASS):
+      themes.append(tag_obj.find_element(By.TAG_NAME, MANGADEX_THEMES_TAG_OBJ_TAG).text)
+    
+    demographic = []
+    demographic_obj = self.driver.find_element(By.XPATH, MANGADEX_DEMOGRAPHIC_XCLASS)
+    for tag_obj in demographic_obj.find_elements(By.CLASS_NAME, MANGADEX_DEMOGRAPHIC_TAG_OBJ_CLASS):
+      demographic.append(tag_obj.find_element(By.TAG_NAME, MANGADEX_DEMOGRAPHIC_TAG_OBJ_TAG).text)
+    
+    format = []
+    format_obj = self.driver.find_element(By.XPATH, MANGADEX_FORMAT_XCLASS)
+    for tag_obj in format_obj.find_elements(By.CLASS_NAME, MANGADEX_FORMAT_TAG_OBJ_CLASS):
+      format.append(tag_obj.find_element(By.TAG_NAME, MANGADEX_FORMAT_TAG_OBJ_TAG).text)
+
+    for g in genres:
+      self.metadata.add_category(g)
+    for t in themes:
+      self.metadata.add_category(t)
+    for d in demographic:
+      self.metadata.add_category(d)
+    for f in format:
+      self.metadata.add_category(f)
+  

@@ -18,6 +18,7 @@ def test_title_metadata():
   mh.init_for_title("test/test_title", "https://mangadex.org/title/879af0bb-ce30-47e4-a74e-cd1ce874c6e3/isekai-nonbiri-nouka")
   mh.extract_title_name()
   mh.extract_description()
+  mh.extract_categories()
   mh.terminate_driver()
 
   mh.metadata.dump()

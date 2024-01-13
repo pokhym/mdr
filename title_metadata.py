@@ -41,12 +41,11 @@ class TitleMetadata():
     categories_str = ""
     for c in sorted(list(self.categories)):
       categories_str += "\t" + c + "\n"
-    logging.info("Categories:\n")
-    logging.info(categories_str)
+    logging.info("Categories:\n" + categories_str)
     logging.info("==========")
 
     chapters_str = ""
     for c in self.chapter_numbers:
       chapters_str += "\t" + c + "\n"
-    logging.info("Chapter Numbers: ")
-    logging.info(chapters_str)
+    logging.info("Chapter Numbers:\n" + chapters_str)
+    

@@ -201,6 +201,9 @@ class Handler:
   def extract_categories(self):
     """
     Returns the categories for the current title
+
+    Implemented for:
+      - MangaDex
     """
     pass
 
