@@ -1,6 +1,7 @@
 # Test files
 *.png
 out
+test/**
 
 # Ignore vscode
 launch.json
