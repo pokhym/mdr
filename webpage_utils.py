@@ -18,6 +18,14 @@ PAGE_DELIM_CURR_TOTAL = "/"
 IMAGE_XCLASS = "//img[contains(@class, 'img sp limit-width limit-height mx-auto')]"
 # Attribute containing the blob url
 IMAGE_BLOB_ATTR = "src"
+# Next image visibility attribute
+IMAGE_VISIBILITY_ATTR = "style"
+IMAGE_VISIBILITY_ATTR_NOT_VISIBLE_VALUE = "display: none"
+# Next image button 
+NEXT_IMAGE_BUTTON_XCLASS = "/html/body/div[1]/div[1]/div[2]/div[2]/div/div[2]/div/div[3]/button[2]"
+
+# Store downloaded blobs uri
+DOWNLOADED_BLOBS_SET = set()
 
 def get_blob_contents(driver, uri):
   """
@@ -89,21 +97,27 @@ def extract_total_pages(driver):
   return end_page_num
 
 def extract_single_image(driver, i, base_path=""):
-  blob_location = driver.find_element(By.XPATH, IMAGE_XCLASS).get_attribute(IMAGE_BLOB_ATTR)
+  # blob_location = driver.find_element(By.XPATH, IMAGE_XCLASS).get_attribute(IMAGE_BLOB_ATTR)
 
+  offset = 0
   for x in driver.find_elements(By.XPATH, IMAGE_XCLASS):
-    print(x.get_attribute("src"))
+    blob_location = x.get_attribute(IMAGE_BLOB_ATTR)
+    visible = True if x.get_attribute(IMAGE_VISIBILITY_ATTR).find(IMAGE_VISIBILITY_ATTR_NOT_VISIBLE_VALUE) == -1 else False
+    logging.info("Image: " + blob_location + " " + str(x.get_attribute(IMAGE_VISIBILITY_ATTR)))
+    # Download if it doesn't exist yet
+    if blob_location not in DOWNLOADED_BLOBS_SET and visible:
+      DOWNLOADED_BLOBS_SET.add(blob_location)
+      logging.info("Downloading image " + str(i + offset) + " with uri " + blob_location)
+      extract_current_page(driver)
 
-  logging.info("Downloading image " + str(i) + " with uri " + blob_location)
-  extract_current_page(driver)
+      bytes = get_blob_contents(driver, blob_location)
+      with open(base_path + str(i + offset) + ".png", "wb") as fd:
+        fd.write(bytes)
+        fd.close()
+      offset += 1
+  return offset
 
-  bytes = get_blob_contents(driver, blob_location)
-  with open(base_path + str(i) + ".png", "wb") as fd:
-    fd.write(bytes)
-    fd.close()
-  return blob_location
-
-def extract_chapter_images(driver):
+def extract_chapter_images(driver, chapter_base_url):
   """
   Extracts the number of pages, and the pages of a chapter.
   This expects that the driver is already loaded for the chapter
@@ -111,28 +125,29 @@ def extract_chapter_images(driver):
   curr_page_num = extract_current_page(driver)
   end_page_num = extract_total_pages(driver)
 
-  # Save the image
-  # for i in range(curr_page_num, end_page_num + 1):
-  #   extract_single_image(driver, i)
-  #   driver.find_element(By.CSS_SELECTOR, "body").send_keys(Keys.ARROW_RIGHT)
-  #   time.sleep(5)
-  previous_blob = None
-  counter = 0
+  # Open the menu
+  # This only should be done once as this remains open until you go back
+  # To the original content page
   driver.find_element(By.CSS_SELECTOR, "body").send_keys("m")
   time.sleep(1)
-  while True:
-    if counter > end_page_num:
-      break
-    returned_blob = extract_single_image(driver, counter)
-    driver.find_element(By.XPATH, "/html/body/div[1]/div[1]/div[2]/div[2]/div/div[2]/div/div[3]/button[2]").click()
+
+  # Save the image
+  offset = 0
+  while offset < end_page_num:
+    # Grab the specific page
+    logging.info("Attempting to parse: " + url + "/" + str(offset + 1))
+    driver.get(url + "/" + str(offset + 1))
     time.sleep(5)
 
-    if previous_blob == None:
-      previous_blob = returned_blob
-      counter += 1
-    elif previous_blob != returned_blob:
-      previous_blob = returned_blob
-      counter += 1
+    # Download the image
+    extract_single_image(driver, offset)
+    time.sleep(5)
+
+    # Click the next button
+    driver.find_element(By.XPATH, NEXT_IMAGE_BUTTON_XCLASS).click()
+    time.sleep(5)
+
+    offset += 1
 
   a = 0
   return
@@ -178,7 +193,7 @@ if __name__ == "__main__":
   driver.get(url)
 
   time.sleep(5)
-  print(driver.page_source)
-  print("----------------------")
-  extract_chapter_images(driver)
+  # print(driver.page_source)
+  # print("----------------------")
+  extract_chapter_images(driver, url)
   driver.close()
