@@ -141,6 +141,9 @@ class Handler:
     """
     Gets the current page number
 
+    Implemented for:
+      - MangaDex
+
     Returns
     -------------------
     current_chapter_page: int
@@ -151,6 +154,9 @@ class Handler:
     """
     Gets the total number of pages in a chapter
 
+    Implemented for:
+      - MangaDex
+
     Returns
     --------------------
     total_chapter_pages: int
@@ -159,18 +165,27 @@ class Handler:
   def extract_single_page(self):
     """
     Downloads a single page's image
+
+    Implemented for:
+      - MangaDex
     """
     pass
 
   def extract_chapter_images(self):
     """
     Downloads a full chapter
+
+    Implemented for:
+      - MangaDex
     """
     pass
 
   def extract_title_name(self):
     """
     Obtain the title name
+
+    Implemented for:
+      - MangaDex
     """
     pass
 
