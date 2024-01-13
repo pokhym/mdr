@@ -1,5 +1,10 @@
 # tachiyomicompanion
-PC tool to replace the auto-update/download features of Tachiyomi extensions post v0.15.2
+
+PC tool to replace the auto-update/download features of Tachiyomi extensions post v0.15.2.
+
+This serves as a tool to help collate content for PLEXing to official Tachiyomi extensions.
+
+Currently targeting the Komga official extension.
 
 
 ## Dependencies
