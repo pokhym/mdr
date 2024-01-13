@@ -1,3 +1,5 @@
+from title_metadata import TitleMetadata
+
 import logging
 import time
 from os.path import abspath, join as path_join, exists, isdir
@@ -16,6 +18,8 @@ class Handler:
     -----------------
     source_name: str
       Name of the source defined as SOURCE_XX in constants.py
+    metadata: TitleMetadata
+      Store metadata about this title
     downloaded_blobs_set: Set[str]
       Set of downloaded blob links for the currently being handled chapter
     download_title_abs_base_path: Union[None, str]
@@ -32,6 +36,7 @@ class Handler:
       Firefox driver from Selenium
     """
     self.source_name = source_name
+    self.metadata = TitleMetadata()
     self.downloaded_blobs_set = set()
     self.download_title_abs_base_path = None
     self.download_chapter_rel_base_path = None
@@ -163,16 +168,28 @@ class Handler:
     """
     pass
 
-  def extract_chapter_numbers(self):
+  def extract_title_name(self):
     """
-    Returns the chapter numbers (and titles) of
-    the current title
+    Obtain the title name
+    """
+    pass
+
+  def extract_description(self):
+    """
+    Obtain the description
     """
     pass
 
   def extract_categories(self):
     """
     Returns the categories for the current title
+    """
+    pass
+
+  def extract_chapter_numbers(self):
+    """
+    Returns the chapter numbers (and titles) of
+    the current title
     """
     pass
 
