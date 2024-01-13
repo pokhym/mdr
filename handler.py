@@ -22,6 +22,8 @@ class Handler:
       Absolute base path
     download_chapter_rel_base_path: Union[None, str]
       Relative base path to the current chapter download
+    current_title_base_url: Union[None, str]
+      Base URL of the title
     current_chapter_base_url: Union[None, str]
       Base URL of the chapter
     current_download_image_number: int
@@ -33,6 +35,7 @@ class Handler:
     self.downloaded_blobs_set = set()
     self.download_title_abs_base_path = None
     self.download_chapter_rel_base_path = None
+    self.current_title_base_url = None
     self.current_chapter_base_url = None
     self.current_download_image_number = 0
 
@@ -69,13 +72,13 @@ class Handler:
     self.downloaded_blobs_set.clear()
     self.download_title_abs_base_path = None
     self.download_chapter_rel_base_path = None
+    self.current_title_base_url = None
     self.current_chapter_base_url = None
     self.current_download_image_number = 0
 
-  def init_for_title(self, title_abs_base_path):
+  def init_for_title(self, title_abs_base_path, title_base_url):
     """
-    TODO:
-    Initialize member variables for title
+    Initialize member variables for title and creates folders
     """
     self.download_title_abs_base_path = abspath(title_abs_base_path)
     
@@ -89,11 +92,16 @@ class Handler:
       assert(exists(self.download_title_abs_base_path))
       assert(isdir(self.download_title_abs_base_path))
       logging.info("Base title folder exists at: " + self.download_title_abs_base_path)
+    
+    logging.info("Loading title url: " + title_base_url)
+    self.current_title_base_url = title_base_url
+    self.driver.get(self.current_title_base_url)
+    time.sleep(5)
 
   def reset_for_next_chapter(self):
     """
     Resets all member variables for handling the
-    next chapter
+    next chapter and creates folders
     """
     self.downloaded_blobs_set.clear()
     self.download_chapter_rel_base_path = None
