@@ -4,7 +4,7 @@ from handler_mangadex import *
 from constants import *
 
 def test_chapter_download():
-  mh = HandlerMangaDex(SOURCE_MANGADEX)
+  mh = HandlerMangaDex(0, SOURCE_MANGADEX)
   mh.reset_for_next_title()
   
   mh.init_for_title("test/", "https://mangadex.org/title/879af0bb-ce30-47e4-a74e-cd1ce874c6e3/isekai-nonbiri-nouka")
@@ -16,7 +16,7 @@ def test_chapter_download():
   mh.terminate_driver()
 
 def test_comicinfo_and_zip():
-  mh = HandlerMangaDex(SOURCE_MANGADEX)
+  mh = HandlerMangaDex(0, SOURCE_MANGADEX)
   mh.reset_for_next_title()
   
   mh.init_for_title("test/", "https://mangadex.org/title/879af0bb-ce30-47e4-a74e-cd1ce874c6e3/isekai-nonbiri-nouka")
@@ -32,7 +32,7 @@ def test_comicinfo_and_zip():
   mh.terminate_driver()
 
 def test_title_metadata():
-  mh = HandlerMangaDex(SOURCE_MANGADEX)
+  mh = HandlerMangaDex(0, SOURCE_MANGADEX)
   mh.reset_for_next_title()
 
   mh.init_for_title("test/", "https://mangadex.org/title/879af0bb-ce30-47e4-a74e-cd1ce874c6e3/isekai-nonbiri-nouka")
@@ -42,7 +42,7 @@ def test_title_metadata():
   mh.metadata.dump()
 
 def test_title_metadata2():
-  mh = HandlerMangaDex(SOURCE_MANGADEX)
+  mh = HandlerMangaDex(0, SOURCE_MANGADEX)
   mh.reset_for_next_title()
 
   mh.init_for_title("test/", "https://mangadex.org/title/ffe69cc2-3f9e-4eab-a7f7-c963cea9ec25/hitoribocchi-no-isekai-kouryaku")
@@ -52,7 +52,7 @@ def test_title_metadata2():
   mh.metadata.dump()
 
 def test_language_selection():
-  mh = HandlerMangaDex(SOURCE_MANGADEX)
+  mh = HandlerMangaDex(0, SOURCE_MANGADEX)
   mh.reset_for_next_title()
   mh.start_driver()
   mh.init_for_title("test/", "https://mangadex.org/title/879af0bb-ce30-47e4-a74e-cd1ce874c6e3/isekai-nonbiri-nouka")
@@ -60,7 +60,7 @@ def test_language_selection():
   mh.terminate_driver()
 
 def test_full():
-  mh = HandlerMangaDex(SOURCE_MANGADEX)
+  mh = HandlerMangaDex(0, SOURCE_MANGADEX)
   mh.reset_for_next_title()
   
   mh.init_for_title("test/", "https://mangadex.org/title/6af5379f-ace2-453f-a9dd-94f7c443937a/shinozaki-himeno-s-love-q-a")
