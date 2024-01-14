@@ -118,6 +118,16 @@ def test_full():
 
   mh.get_update()
 
+def test_full1():
+  mh = HandlerMangaDex(0, SOURCE_MANGADEX)
+  mh.reset_for_next_title()
+  
+  mh.init_for_title("test/", "https://mangadex.org/title/010abcb5-c705-4dcb-a51d-49b2c518b673/ea4a2fff-90fa-46f2-9d4e-ced50b02af52")
+  
+  mh.extract_metadata()
+
+  mh.get_update()
+
 if __name__ == "__main__":
   # Setup Logging
   logging.basicConfig(level=logging.INFO
@@ -135,4 +145,4 @@ if __name__ == "__main__":
   # add the handler to the root logger
   logging.getLogger().addHandler(console)
   
-  test_title_metadata3()
+  test_full1()
