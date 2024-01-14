@@ -4,6 +4,7 @@ out
 test/**
 test*
 log.txt
+library_links.txt
 *.xml
 
 # Ignore vscode
