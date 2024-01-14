@@ -1,5 +1,6 @@
 from handler import Handler
 from constants import *
+from comic_info import ComicInfo
 import utils
 import urllib
 import shutil
@@ -146,6 +147,19 @@ class HandlerMangaDex(Handler):
 
     return
   
+  def create_comic_info(self):
+    logging.info("Creating ComicInfo.xml...")
+    ci = ComicInfo()
+    ci.add_all_info(
+      title=self.download_chapter_rel_base_path,
+      series=self.metadata.get_title(),
+      web=self.current_chapter_base_url,
+      summary=self.metadata.get_description(),
+      genres=self.metadata.get_categories(),
+      page_count=str(self.current_download_image_number)
+    )
+    ci.write_out(path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path, "ComicInfo.xml"))
+  
   def extract_title_name(self):
     title = self.driver.find_element(By.XPATH, MANGADEX_TITLE_XCLASS).text
     self.metadata.set_title(title)
@@ -279,6 +293,7 @@ class HandlerMangaDex(Handler):
         self.start_driver()
         self.init_for_chapter(chs[idx], urls[idx])
         self.extract_chapter_images()
+        self.create_comic_info()
         self.terminate_driver()
 
     

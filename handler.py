@@ -205,6 +205,15 @@ class Handler:
     """
     pass
 
+  def create_comic_info(self):
+    """
+    Creates and saves a ComicInfo.xml
+
+    Impleented for:
+      - MangaDex
+    """
+    pass
+
   def extract_title_name(self):
     """
     Obtain the title name

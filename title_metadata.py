@@ -32,8 +32,14 @@ class TitleMetadata():
   def set_description(self, description):
     self.description = description
   
+  def get_description(self):
+    return self.description
+  
   def add_category(self, category):
     self.categories.add(category.lower())
+
+  def get_categories(self):
+    return sorted(list(self.categories))
   
   def add_chapter_number(self, chapter_number, url):
     self.chapter_numbers.append(chapter_number)
@@ -41,6 +47,12 @@ class TitleMetadata():
   
   def get_chapter_numbers(self):
     return self.chapter_numbers, self.chapter_urls
+  
+  def get_chapter_number_from_url(self, in_url):
+    for (ch, url) in zip(self.chapter_numbers, self.chapter_urls):
+      if url == in_url:
+        return ch
+    raise Exception("Unknon url: " + in_url)
   
   def dump(self):
     ret = ""
