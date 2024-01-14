@@ -82,7 +82,7 @@ class Handler:
     # Pass the defined options objects to initialize the web driver 
     self.driver = Firefox(options=options, service=driver_service) 
     # Set an implicit wait of 5 seconds to allow time for elements to appear before throwing an exception
-    self.driver.implicitly_wait(5)
+    self.driver.implicitly_wait(15)
 
   def terminate_driver(self):
     """
