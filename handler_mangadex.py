@@ -227,7 +227,20 @@ class HandlerMangaDex(Handler):
         if TARGET_LANGUAGE == TargetLanguageEnum.ENGLISH and lang == MANGADEX_ENGLISH_TITLE:
           ch_title = ch_obj.text
           ch_url = ch_obj.get_attribute(MANGADEX_CHAPTER_TOP_LEVEL_INNER_URL_ATTR)
-          extracted_ch_num = utils.extract_chapter_num_string(ch_title)
+          try:
+            extracted_ch_num = utils.extract_chapter_num_string(ch_title)
+          except:
+            logging.info("Unable to extract chapter number! Probably has multiple sources! Attempting to grab outter div with chapter num!")
+            try:
+              # 'Chapter 57\nSkeleton...?\n44\nDreamManga\nN/A\nferonimo1\n3 years ago\nSkeleton...?\n66\nMangasushi\nN/A\nkketoxsushi\n3 years ago'
+              ch_title = ch_obj.find_element(By.XPATH, "./..").find_element(By.XPATH, "./..").find_element(By.XPATH, "./..").find_element(By.XPATH, "./..").text.split("\n")
+              # Chapter 57
+              ch_title = ch_title[0]
+              extracted_ch_num = utils.extract_chapter_num_string(ch_title)
+            except Exception as e:
+              raise e
+
+
           logging.info("Ch Num Extracted '" + extracted_ch_num + "' from: " + ch_title)
           self.metadata.add_chapter_number(utils.extract_chapter_num_string(ch_title), ch_url)
         

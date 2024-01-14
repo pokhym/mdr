@@ -41,6 +41,16 @@ def test_title_metadata():
 
   mh.metadata.dump()
 
+def test_title_metadata2():
+  mh = HandlerMangaDex(SOURCE_MANGADEX)
+  mh.reset_for_next_title()
+
+  mh.init_for_title("test/", "https://mangadex.org/title/ffe69cc2-3f9e-4eab-a7f7-c963cea9ec25/hitoribocchi-no-isekai-kouryaku")
+
+  mh.extract_metadata()
+
+  mh.metadata.dump()
+
 def test_language_selection():
   mh = HandlerMangaDex(SOURCE_MANGADEX)
   mh.reset_for_next_title()
@@ -63,4 +73,4 @@ if __name__ == "__main__":
   # Setup Logging
   logging.basicConfig(level=logging.INFO)
   
-  test_comicinfo_and_zip()
+  test_title_metadata2()
