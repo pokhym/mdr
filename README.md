@@ -48,4 +48,3 @@ This serves as a tool to help collate content for PLEXing to self hosted content
   * Status of publishing
 * Create a UI to handle everything with PySimpleGUI?
 * Manual redownloading feature if a download fails
-* Logging to know what was done on each session
