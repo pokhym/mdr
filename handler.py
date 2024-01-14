@@ -265,6 +265,7 @@ class Handler:
     self.extract_description()
     self.extract_categories()
     self.extract_chapter_numbers()
+    self.extract_cover()
     self.save_metadata()
 
   def get_update(self):
