@@ -160,6 +160,13 @@ class HandlerMangaDex(Handler):
     )
     ci.write_out(path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path, "ComicInfo.xml"))
   
+  def create_cbz(self):
+    logging.info("Creating cbz for: " + path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path))
+    utils.zip_folder_into_cbz(path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path))
+    assert(exists(path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path + ".cbz")))
+    logging.info("Removing folder: " + path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path))
+    shutil.rmtree(path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path))
+
   def extract_title_name(self):
     title = self.driver.find_element(By.XPATH, MANGADEX_TITLE_XCLASS).text
     self.metadata.set_title(title)
@@ -294,6 +301,7 @@ class HandlerMangaDex(Handler):
         self.init_for_chapter(chs[idx], urls[idx])
         self.extract_chapter_images()
         self.create_comic_info()
+        self.create_cbz()
         self.terminate_driver()
 
     

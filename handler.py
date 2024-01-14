@@ -214,6 +214,16 @@ class Handler:
     """
     pass
 
+  def create_cbz(self):
+    """
+    Zips the currently operating folder and creates
+    a cbz in its place then deletes the chapter folder
+
+    Implemented for:
+      - MangaDex
+    """
+    pass
+
   def extract_title_name(self):
     """
     Obtain the title name

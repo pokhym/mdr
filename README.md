@@ -33,10 +33,6 @@ Because I'm dumb and don't know how to do anything web development wise, I am fa
 ## TODOs
 
 * Global time.sleep() value
-* Compress to cbz in python
-* Add ComicInfo.xml for all chapters
-  * Include metadata
-* Add covers to all chapters
 * Add other sources
 * Create a store to store all the currently existing ongoing stories
 * More metadata
