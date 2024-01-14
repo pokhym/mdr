@@ -56,7 +56,7 @@ class HandlerMangaDex(Handler):
       curr_page_num = int(curr_page)
     except Exception as e:
       raise Exception("Unable to convert current page number " + curr_page) from e
-    logging.info("Start page: (str) " + str(curr_page) + " (int) " +  str(curr_page_num))
+    logging.info("[extract_current_page]: Start page: (str) " + str(curr_page) + " (int) " +  str(curr_page_num))
     return curr_page_num
   
   def extract_total_pages(self):
@@ -76,7 +76,7 @@ class HandlerMangaDex(Handler):
       end_page_num = int(end_page)
     except Exception as e:
       raise Exception("Unable to convert current page number " + end_page) from e
-    logging.info("End page: (str) " + str(end_page) + " (int) " +  str(end_page_num))
+    logging.info("[extract_total_pages]: End page: (str) " + str(end_page) + " (int) " +  str(end_page_num))
 
     return end_page_num
   
@@ -85,7 +85,6 @@ class HandlerMangaDex(Handler):
     for x in self.driver.find_elements(By.XPATH, MANGADEX_IMAGE_XCLASS):
       blob_location = x.get_attribute(MANGADEX_IMAGE_BLOB_ATTR)
       visible = True if x.get_attribute(MANGADEX_IMAGE_VISIBILITY_ATTR).find(MANGADEX_IMAGE_VISIBILITY_ATTR_NOT_VISIBLE_VALUE) == -1 else False
-      # logging.info("Image: " + blob_location + " " + str(x.get_attribute(MANGADEX_IMAGE_VISIBILITY_ATTR)))
 
       # Download if it doesn't exist yet
       if blob_location not in self.downloaded_blobs_set and visible:
@@ -93,8 +92,8 @@ class HandlerMangaDex(Handler):
         assert(downloaded == False)
 
         self.downloaded_blobs_set.add(blob_location)
-        logging.info("Downloading image " + str(self.current_download_image_number) + " with uri " + blob_location)
-        self.extract_current_page()
+        logging.info("[extract_single_image]: Downloading image " + str(self.current_download_image_number) + " with uri " + blob_location)
+        # self.extract_current_page()
 
         bytes = utils.get_blob_contents(self.driver, blob_location)
         joined_path = path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path, str(self.current_download_image_number) + ".png")
@@ -119,7 +118,7 @@ class HandlerMangaDex(Handler):
     # Save the image
     while self.current_download_image_number <= end_page_num:
       # Grab the specific page
-      logging.info("Attempting to parse: " + self.current_chapter_base_url + "/" + str(self.current_download_image_number))
+      logging.info("[extract_chapter_images]: Attempting to parse: " + self.current_chapter_base_url + "/" + str(self.current_download_image_number))
       self.driver.get(self.current_chapter_base_url + "/" + str(self.current_download_image_number))
       time.sleep(5)
 
@@ -148,7 +147,7 @@ class HandlerMangaDex(Handler):
     return
   
   def create_comic_info(self):
-    logging.info("Creating ComicInfo.xml...")
+    logging.info("[create_comic_info]: Creating ComicInfo.xml...")
     ci = ComicInfo()
     ci.add_all_info(
       title=self.download_chapter_rel_base_path,
@@ -161,10 +160,10 @@ class HandlerMangaDex(Handler):
     ci.write_out(path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path, "ComicInfo.xml"))
   
   def create_cbz(self):
-    logging.info("Creating cbz for: " + path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path))
+    logging.info("[create_cbz]: Creating cbz for: " + path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path))
     utils.zip_folder_into_cbz(path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path))
     assert(exists(path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path + ".cbz")))
-    logging.info("Removing folder: " + path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path))
+    logging.info("[create_cbz]: Removing folder: " + path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path))
     shutil.rmtree(path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path))
 
   def extract_title_name(self):
@@ -218,7 +217,7 @@ class HandlerMangaDex(Handler):
 
     page_num = 1
     while True:
-      logging.info("Grabbing page " + str(page_num) + " of chapters")
+      logging.info("[extract_chapter_numbers]: Grabbing page " + str(page_num) + " of chapters")
       # Obtain the the first page  
       for ch_obj in self.driver.find_elements(By.XPATH, MANGADEX_CHAPTER_TOP_LEVEL_XCLASS):
         flag_obj = ch_obj.find_element(By.XPATH, MANGADEX_CHAPTER_TOP_LEVEL_INNER_LANGUAGE_CLASS)
@@ -230,7 +229,7 @@ class HandlerMangaDex(Handler):
           try:
             extracted_ch_num = utils.extract_chapter_num_string(ch_title)
           except:
-            logging.info("Unable to extract chapter number! Probably has multiple sources! Attempting to grab outter div with chapter num!")
+            logging.info("[extract_chapter_numbers]: Unable to extract chapter number! Probably has multiple sources! Attempting to grab outter div with chapter num!")
             try:
               # 'Chapter 57\nSkeleton...?\n44\nDreamManga\nN/A\nferonimo1\n3 years ago\nSkeleton...?\n66\nMangasushi\nN/A\nkketoxsushi\n3 years ago'
               ch_title = ch_obj.find_element(By.XPATH, "./..").find_element(By.XPATH, "./..").find_element(By.XPATH, "./..").find_element(By.XPATH, "./..").text.split("\n")
@@ -241,7 +240,7 @@ class HandlerMangaDex(Handler):
               raise e
 
 
-          logging.info("Ch Num Extracted '" + extracted_ch_num + "' from: " + ch_title)
+          logging.info("[extract_chapter_numbers]: Ch Num Extracted '" + extracted_ch_num + "' from: " + ch_title)
           self.metadata.add_chapter_number(utils.extract_chapter_num_string(ch_title), ch_url)
         
       # Check if there are next pages
@@ -252,7 +251,7 @@ class HandlerMangaDex(Handler):
       try:
         right_arrow_button = self.driver.find_element(By.XPATH, MANGADEX_TITLE_RIGHT_ARROW_XPATH).find_element(By.XPATH, "./..").find_element(By.XPATH, "./..")
       except:
-        logging.info("Cannot find right button, only 1 page breaking")
+        logging.info("[extract_chapter_numbers]: Cannot find right button, only 1 page breaking")
         break
 
       # Check if the button is disabled
@@ -278,7 +277,7 @@ class HandlerMangaDex(Handler):
       raise Exception("Unknown cover image type with href: " + href)
     urllib.request.urlretrieve(cover.get_attribute(MANGADEX_TITLE_COVER_IMAGE_URL_ATTR), joined_path)
 
-    logging.info("Saving cover at: " + joined_path)
+    logging.info("[extract_cover]: Saving cover at: " + joined_path)
 
   def extract_metadata(self):
     assert(self.current_title_base_url != None)
@@ -300,15 +299,15 @@ class HandlerMangaDex(Handler):
     chs, urls = self.metadata.get_chapter_numbers()
     assert(len(chs) == len(urls))
 
-    logging.info("Updating title '" + self.metadata.get_title() + "' on source " + self.source_name)
+    logging.info("[get_update]: Updating title '" + self.metadata.get_title() + "' on source " + self.source_name)
 
     for idx in range(len(chs)):
       # Check if the folder exists
-      joined_chapter_path = path_join(self.download_title_abs_base_path, chs[idx])
+      joined_chapter_path = path_join(self.download_title_abs_base_path, chs[idx] + ".cbz")
       
       # If the folder doesn't exist or if the path does exist but is not a foler
       # Attempt to download it
-      if not exists(joined_chapter_path) or (exists(joined_chapter_path) and not isdir(joined_chapter_path)):
+      if not exists(joined_chapter_path):
         self.reset_for_next_chapter()
         self.start_driver()
         self.init_for_chapter(chs[idx], urls[idx])
@@ -316,5 +315,7 @@ class HandlerMangaDex(Handler):
         self.create_comic_info()
         self.create_cbz()
         self.terminate_driver()
+      else:
+        logging.info("[get_update]: Skipping chapter " + str(chs[idx]) + " for title: " + self.metadata.get_title())
 
     

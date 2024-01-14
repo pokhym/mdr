@@ -86,4 +86,4 @@ if __name__ == "__main__":
   # add the handler to the root logger
   logging.getLogger().addHandler(console)
   
-  test_title_metadata2()
+  test_full()

@@ -51,7 +51,7 @@ class Handler:
     """
     Creates a new driver
     """
-    logging.info("Starting " + self.source_name + " driver")
+    logging.info("[start_driver]: Starting " + self.source_name + " driver")
 
     # Initialize selenium
     # Define the Chrome webdriver options
@@ -76,7 +76,7 @@ class Handler:
     """
     Terminates the Selenium driver
     """
-    logging.info("Terminating " + self.source_name + " driver")
+    logging.info("[terminate_driver]: Terminating " + self.source_name + " driver")
     self.driver.close()
     self.driver = None
   
@@ -98,7 +98,7 @@ class Handler:
     self.start_driver()
 
     # Load the URL
-    logging.info("Loading title url: " + title_base_url)
+    logging.info("[init_for_title]: Loading title url: " + title_base_url)
     self.current_title_base_url = title_base_url
     self.driver.get(self.current_title_base_url)
     time.sleep(5)
@@ -111,7 +111,7 @@ class Handler:
     self.download_title_abs_base_path = path_join(self.download_title_abs_base_path, self.metadata.get_title())
     
     if not exists(self.download_title_abs_base_path):
-      logging.info("Creating base title folder at: " + self.download_title_abs_base_path)
+      logging.info("[init_for_title]: Creating base title folder at: " + self.download_title_abs_base_path)
       try:
         makedirs(self.download_title_abs_base_path)
       except Exception as e:
@@ -119,9 +119,9 @@ class Handler:
     else:
       assert(exists(self.download_title_abs_base_path))
       assert(isdir(self.download_title_abs_base_path))
-      logging.info("Base title folder exists at: " + self.download_title_abs_base_path)
+      logging.info("[init_for_title]: Base title folder exists at: " + self.download_title_abs_base_path)
     
-    logging.info("Loading title url: " + title_base_url)
+    logging.info("[init_for_title]: Loading title url: " + title_base_url)
     self.current_title_base_url = title_base_url
     self.driver.get(self.current_title_base_url)
     time.sleep(5)
@@ -147,7 +147,7 @@ class Handler:
 
     joined_path = path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path)
     if not exists(joined_path):
-      logging.info("Creating chapter folder at: " + joined_path)
+      logging.info("[init_for_chapter]: Creating chapter folder at: " + joined_path)
       try:
         makedirs(joined_path)
       except Exception as e:
@@ -155,9 +155,9 @@ class Handler:
     else:
       assert(exists(joined_path))
       assert(isdir(joined_path))
-      logging.info("Chapter folder exists at: " + joined_path)
+      logging.info("[init_for_chapter]: Chapter folder exists at: " + joined_path)
       
-    logging.info("Loading chapter url: " + chapter_url)
+    logging.info("[init_for_chapter]: (Title: " + self.metadata.get_title() + ", Chapter: " + self.download_chapter_rel_base_path + ") Loading chapter url: " + chapter_url)
     self.current_chapter_base_url = chapter_url
     self.driver.get(self.current_chapter_base_url)
     time.sleep(5)

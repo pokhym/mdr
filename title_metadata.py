@@ -52,7 +52,7 @@ class TitleMetadata():
     for (ch, url) in zip(self.chapter_numbers, self.chapter_urls):
       if url == in_url:
         return ch
-    raise Exception("Unknon url: " + in_url)
+    raise Exception("Unknown url: " + in_url)
   
   def dump(self):
     ret = ""
