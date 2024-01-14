@@ -20,9 +20,8 @@ def test_chapter_download():
 def test_title_metadata():
   mh = HandlerMangaDex(SOURCE_MANGADEX)
   mh.reset_for_next_title()
-  mh.start_driver()
+
   mh.init_for_title("test/", "https://mangadex.org/title/879af0bb-ce30-47e4-a74e-cd1ce874c6e3/isekai-nonbiri-nouka")
-  mh.terminate_driver()
 
   mh.extract_metadata()
 
@@ -50,4 +49,4 @@ if __name__ == "__main__":
   # Setup Logging
   logging.basicConfig(level=logging.INFO)
   
-  test_full()
+  test_title_metadata()

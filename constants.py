@@ -26,6 +26,10 @@ MANGADEX_USER_ICON_CHAPTER_LANGUAGES_XPATH = "/html/body/div[1]/div[3]/div[2]/di
 MANGADEX_USER_ICON_CHAPTER_LANGUAES_ENGLISH_XPATH = "/html/body/div[1]/div[3]/div[2]/div/div[2]/div[2]/label"
 MANGADEX_USER_ICON_CHAPTER_LANGUAES_ENGLISH_CHECKED_ATTR = "aria-checked"
 
+# Cover Image XPATH
+MANGADEX_TITLE_COVER_IMAGE_XPATH = "/html/body/div[1]/div[1]/div[2]/div[2]/div/div[3]/div/a/img[1]"
+MANGADEX_TITLE_COVER_IMAGE_URL_ATTR = "src"
+
 # Next page of available chapters XPATHS
 MANGADEX_TITLE_RIGHT_ARROW_XPATH = "//*[contains(@class, 'feather feather-arrow-right icon')]"
 MANGADEX_TITLE_RIGHT_ARROW_BUTTON_CLASS_ATTR = "class"

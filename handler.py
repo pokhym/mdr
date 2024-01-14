@@ -239,6 +239,13 @@ class Handler:
     """
     pass
 
+  def extract_cover(self):
+    """
+    Get the cover image and save it to the
+    base directory as cover.jpg
+    """
+    pass
+
   def save_metadata(self):
     """
     Saves metadata to file in the base directory

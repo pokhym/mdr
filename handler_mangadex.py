@@ -1,6 +1,7 @@
 from handler import Handler
 from constants import *
 import utils
+import urllib
 
 import logging
 from os.path import join as path_join, exists, isdir
@@ -178,8 +179,8 @@ class HandlerMangaDex(Handler):
       raise Exception("Unhandled target language!")
     
     # /html/body/div[1]/div[1]/div[2]/div[2]/div/div[9]/div[2]/div[2]/div[2]/div[7]
-    x = self.driver.find_elements(By.XPATH, "//svg[contains(@class, 'feather feather-arrow-left icon')]")
-    print(x)
+    # x = self.driver.find_elements(By.XPATH, "//svg[contains(@class, 'feather feather-arrow-left icon')]")
+    # print(x)
 
     page_num = 1
     while True:
@@ -217,6 +218,21 @@ class HandlerMangaDex(Handler):
       
       page_num += 1
 
+  def extract_cover(self):
+    cover = self.driver.find_element(By.XPATH, MANGADEX_TITLE_COVER_IMAGE_XPATH)
+    href = cover.get_attribute(MANGADEX_TITLE_COVER_IMAGE_URL_ATTR)
+
+    joined_path = None
+    if "jpg" in href or "jpeg" in href:
+      joined_path = path_join(self.download_title_abs_base_path, "cover.jpg")
+    elif "png" in href:
+      joined_path = path_join(self.download_title_abs_base_path, "cover.png")
+    else:
+      raise Exception("Unknown cover image type with href: " + href)
+    urllib.request.urlretrieve(cover.get_attribute(MANGADEX_TITLE_COVER_IMAGE_URL_ATTR), joined_path)
+
+    logging.info("Saving cover at: " + joined_path)
+
   def extract_metadata(self):
     assert(self.current_title_base_url != None)
     self.start_driver()
@@ -228,6 +244,7 @@ class HandlerMangaDex(Handler):
     self.extract_description()
     self.extract_categories()
     self.extract_chapter_numbers()
+    self.extract_cover()
     self.save_metadata()
 
     self.terminate_driver()
