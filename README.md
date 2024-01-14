@@ -1,7 +1,6 @@
 # mdr
 
 PC tool to replace the auto-update/download features of Tachiyomi extensions post v0.15.2.
-
 This serves as a tool to help collate content for PLEXing to self hosted content servers such as Kavita/Komga and is intended to be used with them.
 
 ## Dependencies
