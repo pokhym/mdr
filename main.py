@@ -24,7 +24,7 @@ LIBRARY_LINKS_FILE_PATH = "library_links.txt"
 LOG_FILE_PATH = "log.txt"
 
 # The number of concurrent HandlerMangaDex instances to exist
-MAX_THREADS = 3
+MAX_THREADS = 5
 
 # Mappin between thread id to URLs
 # Key: tid (int)
