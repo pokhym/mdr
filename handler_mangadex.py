@@ -186,24 +186,37 @@ class HandlerMangaDex(Handler):
   
   def extract_categories(self):
     genres = []
-    genres_obj = self.driver.find_element(By.XPATH, MANGADEX_GENRES_XCLASS)
-    for tag_obj in genres_obj.find_elements(By.CLASS_NAME, MANGADEX_GENRES_TAG_OBJ_CLASS):
-      genres.append(tag_obj.find_element(By.TAG_NAME, MANGADEX_GENRES_TAG_OBJ_TAG).text)
+    try:
+      genres_obj = self.driver.find_element(By.XPATH, MANGADEX_GENRES_XCLASS)
+      for tag_obj in genres_obj.find_elements(By.CLASS_NAME, MANGADEX_GENRES_TAG_OBJ_CLASS):
+        genres.append(tag_obj.find_element(By.TAG_NAME, MANGADEX_GENRES_TAG_OBJ_TAG).text)
+    except:
+      logging.info("[" + self.get_tid() + " extract_categories] : No genres!")
     
     themes = []
-    themes_obj = self.driver.find_element(By.XPATH, MANGADEX_THEMES_XCLASS)
-    for tag_obj in themes_obj.find_elements(By.CLASS_NAME, MANGADEX_THEMES_TAG_OBJ_CLASS):
-      themes.append(tag_obj.find_element(By.TAG_NAME, MANGADEX_THEMES_TAG_OBJ_TAG).text)
+    try:
+      themes_obj = self.driver.find_element(By.XPATH, MANGADEX_THEMES_XCLASS)
+      for tag_obj in themes_obj.find_elements(By.CLASS_NAME, MANGADEX_THEMES_TAG_OBJ_CLASS):
+        themes.append(tag_obj.find_element(By.TAG_NAME, MANGADEX_THEMES_TAG_OBJ_TAG).text)
+    except:
+      logging.info("[" + self.get_tid() + " extract_categories] : No themes!")
     
     demographic = []
-    demographic_obj = self.driver.find_element(By.XPATH, MANGADEX_DEMOGRAPHIC_XCLASS)
-    for tag_obj in demographic_obj.find_elements(By.CLASS_NAME, MANGADEX_DEMOGRAPHIC_TAG_OBJ_CLASS):
-      demographic.append(tag_obj.find_element(By.TAG_NAME, MANGADEX_DEMOGRAPHIC_TAG_OBJ_TAG).text)
-    
+    try:
+      demographic_obj = self.driver.find_element(By.XPATH, MANGADEX_DEMOGRAPHIC_XCLASS)
+      logging.info("[" + self.get_tid() + " extract_categories] : 2.1")
+      for tag_obj in demographic_obj.find_elements(By.CLASS_NAME, MANGADEX_DEMOGRAPHIC_TAG_OBJ_CLASS):
+        demographic.append(tag_obj.find_element(By.TAG_NAME, MANGADEX_DEMOGRAPHIC_TAG_OBJ_TAG).text)
+    except:
+      logging.info("[" + self.get_tid() + " extract_categories] : No demographic!")
+
     format = []
-    format_obj = self.driver.find_element(By.XPATH, MANGADEX_FORMAT_XCLASS)
-    for tag_obj in format_obj.find_elements(By.CLASS_NAME, MANGADEX_FORMAT_TAG_OBJ_CLASS):
-      format.append(tag_obj.find_element(By.TAG_NAME, MANGADEX_FORMAT_TAG_OBJ_TAG).text)
+    try:
+      format_obj = self.driver.find_element(By.XPATH, MANGADEX_FORMAT_XCLASS)
+      for tag_obj in format_obj.find_elements(By.CLASS_NAME, MANGADEX_FORMAT_TAG_OBJ_CLASS):
+        format.append(tag_obj.find_element(By.TAG_NAME, MANGADEX_FORMAT_TAG_OBJ_TAG).text)
+    except:
+      logging.info("[" + self.get_tid() + " extract_categories] : No format!")
 
     for g in genres:
       self.metadata.add_category(g)
@@ -293,17 +306,24 @@ class HandlerMangaDex(Handler):
     logging.info("[" + self.get_tid() + " extract_cover]: Saving cover at: " + joined_path)
 
   def extract_metadata(self):
-    assert(self.current_title_base_url != None)
+    logging.info("[" + self.get_tid() + " extract_metadata]: Extracting metadata!")
     self.start_driver()
     self.driver.get(self.current_title_base_url)
     time.sleep(5)
 
+    logging.info("[" + self.get_tid() + " extract_metadata]: Selecting language!")
     self.select_chapter_language()
+    logging.info("[" + self.get_tid() + " extract_metadata]: Getting titlename!")
     self.extract_title_name()
+    logging.info("[" + self.get_tid() + " extract_metadata]: Getting description!")
     self.extract_description()
+    logging.info("[" + self.get_tid() + " extract_metadata]: Getting categories!")
     self.extract_categories()
+    logging.info("[" + self.get_tid() + " extract_metadata]: Getting chapter numbers!")
     self.extract_chapter_numbers()
+    logging.info("[" + self.get_tid() + " extract_metadata]: Getting chapter cover!")
     self.extract_cover()
+    logging.info("[" + self.get_tid() + " extract_metadata]: Saving metadata!")
     self.save_metadata()
 
     self.terminate_driver()
