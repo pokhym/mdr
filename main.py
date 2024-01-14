@@ -1,12 +1,12 @@
 import logging
 import threading
-from os.path import exists
+from os.path import exists, expanduser
 
 from handler_mangadex import HandlerMangaDex
 from constants import *
 
 # The full path to the root library location
-ROOT_LIB_PATH = "~/Desktop/manga_library/"
+ROOT_LIB_PATH = expanduser("~/Desktop/manga_library/")
 
 # A file containing all links to Manga to be downloaded
 # Each line contains a link
@@ -87,6 +87,9 @@ if __name__ == "__main__":
   console.setFormatter(formatter)
   # add the handler to the root logger
   logging.getLogger().addHandler(console)
+
+  print(ROOT_LIB_PATH)
+  exit(0)
 
   logging.info("[main]: Starting!")
 
