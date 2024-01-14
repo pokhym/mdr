@@ -9,6 +9,8 @@ def test_chapter_download():
   
   mh.init_for_title("test/", "https://mangadex.org/title/879af0bb-ce30-47e4-a74e-cd1ce874c6e3/isekai-nonbiri-nouka")
   
+  mh.extract_metadata()
+  
   mh.start_driver()
   mh.init_for_chapter("216", "https://mangadex.org/chapter/d1d38099-b7a4-459b-ad4c-729bd74c55f9")
   mh.extract_chapter_images()
@@ -86,4 +88,4 @@ if __name__ == "__main__":
   # add the handler to the root logger
   logging.getLogger().addHandler(console)
   
-  test_full()
+  test_chapter_download()
