@@ -23,7 +23,7 @@ LIBRARY_LINKS_FILE_PATH = "library_links.txt"
 # occured before an exception was raised
 LOG_FILE_PATH = "log.txt"
 
-# The number of concurrent HandlerMangadex instances to exist
+# The number of concurrent HandlerMangaDex instances to exist
 MAX_THREADS = 1
 
 # Mappin between thread id to URLs
