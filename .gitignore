@@ -2,6 +2,8 @@
 *.png
 out
 test/**
+test*
+log.txt
 *.xml
 
 # Ignore vscode
