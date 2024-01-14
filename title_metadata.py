@@ -5,6 +5,8 @@ class TitleMetadata():
     """
     title: str
       Title
+    title_url: str
+      Title URLl
     description: str
       Description
     categories: Set[str]
@@ -17,6 +19,7 @@ class TitleMetadata():
       Urls corresponding to the chapter_numbers
     """
     self.title = None
+    self.title_url = None
     self.description = None
     self.categories = set()
     self.chapter_numbers = []
@@ -28,6 +31,12 @@ class TitleMetadata():
   
   def get_title(self):
     return self.title
+
+  def set_title_url(self, title_url):
+    self.title_url = title_url
+  
+  def get_title_url(self):
+    return self.title_url
   
   def set_description(self, description):
     self.description = description
@@ -60,6 +69,12 @@ class TitleMetadata():
     ret += "==========\n"
     if log:
       logging.info("Title: " + str(self.title))
+      logging.info("==========")
+    
+    ret += "Title URL: " + str(self.title_url) + "\n"
+    ret += "==========\n"
+    if log:
+      logging.info("Title URL: " + str(self.title_url))
       logging.info("==========")
     
     ret += "Description: " + str(self.description) + "\n"

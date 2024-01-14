@@ -315,6 +315,8 @@ class HandlerMangaDex(Handler):
     self.select_chapter_language()
     logging.info("[" + self.get_tid() + " extract_metadata]: Getting titlename!")
     self.extract_title_name()
+    logging.info("[" + self.get_tid() + " extract_metadata]: Getting title base url!")
+    self.extract_title_url()
     logging.info("[" + self.get_tid() + " extract_metadata]: Getting description!")
     self.extract_description()
     logging.info("[" + self.get_tid() + " extract_metadata]: Getting categories!")

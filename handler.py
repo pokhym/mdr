@@ -248,6 +248,12 @@ class Handler:
     """
     pass
 
+  def extract_title_url(self):
+    """
+    Set the title url
+    """
+    self.metadata.set_title_url(self.current_title_base_url)
+
   def extract_description(self):
     """
     Obtain the description
@@ -305,6 +311,7 @@ class Handler:
       - MangaDex
     """
     self.extract_title_name()
+    self.extract_title_url()
     self.extract_description()
     self.extract_categories()
     self.extract_chapter_numbers()

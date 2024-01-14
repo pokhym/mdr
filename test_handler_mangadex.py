@@ -145,4 +145,4 @@ if __name__ == "__main__":
   # add the handler to the root logger
   logging.getLogger().addHandler(console)
   
-  test_full1()
+  test_title_metadata()
