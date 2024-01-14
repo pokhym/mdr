@@ -2,6 +2,7 @@
 *.png
 out
 test/**
+*.xml
 
 # Ignore vscode
 launch.json
