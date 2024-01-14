@@ -54,17 +54,19 @@ class TitleMetadata():
         return ch
     raise Exception("Unknown url: " + in_url)
   
-  def dump(self):
+  def dump(self, log=False):
     ret = ""
     ret += "Title: " + str(self.title) + "\n"
     ret += "==========\n"
-    logging.info("Title: " + str(self.title))
-    logging.info("==========")
+    if log:
+      logging.info("Title: " + str(self.title))
+      logging.info("==========")
     
     ret += "Description: " + str(self.description) + "\n"
     ret += "==========\n"
-    logging.info("Description: " + str(self.description))
-    logging.info("==========")
+    if log:
+      logging.info("Description: " + str(self.description))
+      logging.info("==========")
 
     categories_str = ""
     for c in sorted(list(self.categories)):
@@ -72,15 +74,17 @@ class TitleMetadata():
     
     ret += "Categories:\n" + categories_str
     ret += "==========\n"
-    logging.info("Categories:\n" + categories_str)
-    logging.info("==========")
+    if log:
+      logging.info("Categories:\n" + categories_str)
+      logging.info("==========")
 
     chapters_str = ""
     for n, u in zip(self.chapter_numbers, self.chapter_urls):
       chapters_str += "\t" + n + ":" + u + "\n"
 
     ret += "Chapter Numbers:\n" + chapters_str
-    logging.info("Chapter Numbers:\n" + chapters_str)
+    if log:
+      logging.info("Chapter Numbers:\n" + chapters_str)
 
     return ret
 
