@@ -245,6 +245,9 @@ class Handler:
     """
     Returns the chapter numbers (and titles) of
     the current title
+
+    Implemented for:
+      - MangaDex
     """
     pass
 
@@ -252,6 +255,9 @@ class Handler:
     """
     Get the cover image and save it to the
     base directory as cover.jpg
+
+    Implemented for:
+      - MangaDex
     """
     pass
 
@@ -269,6 +275,9 @@ class Handler:
     Obtains metadata for the title.
     Implementation should wrap other metadata extraction
     functions
+
+    Implemented for:
+      - MangaDex
     """
     self.extract_title_name()
     self.extract_description()
@@ -281,5 +290,8 @@ class Handler:
     """
     Checks for new chapters and if required
     downloads them
+
+    Implemented for:
+      - MangaDex
     """
     pass
