@@ -2,7 +2,7 @@
 *.png
 out
 test/**
-test*
+test_log.txt
 log.txt
 library_links.txt
 *.xml
