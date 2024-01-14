@@ -42,8 +42,14 @@ class HandlerMangaDex(Handler):
 
 
   def extract_current_page(self):
-    content = self.driver.find_element(By.XPATH, MANGADEX_PAGE_COUNT_CLASS).text
+    try:
+      content = self.driver.find_element(By.XPATH, MANGADEX_PAGE_COUNT_CLASS).text
+    except:
+      logging.warn("[" + self.get_tid + " extract_current_page]: Failed to extract page count info!")
+      assert(0)
     # 'Site Rules\nPrivacy Policy\nAnnouncements\nv2023.11.27\n© MangaDex 2024\nCtrl\nK\nImmigrants and Doosu (2)\nIsekai Nonbiri Nouka\nCh. 222\nPg. 1 / 11\nMenu\nLHTranslation\n1\n11'
+    if content.count(MANGADEX_PAGE_KEYWORD_START) != 1:
+      logging.warn("[" + self.get_tid + " extract_current_page]: Failed to find '" + MANGADEX_PAGE_KEYWORD_START + "': " + content)
     assert(content.count(MANGADEX_PAGE_KEYWORD_START) == 1)
     # ` 1 / 11\nMenu\nLHTranslation\n1\n11'
     stripped = content[content.find(MANGADEX_PAGE_KEYWORD_START) + len(MANGADEX_PAGE_KEYWORD_START):]
