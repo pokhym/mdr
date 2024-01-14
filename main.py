@@ -1,5 +1,5 @@
 import logging
-import threading
+import multiprocessing as mp
 from os.path import exists, expanduser
 
 from handler_mangadex import HandlerMangaDex
@@ -24,7 +24,7 @@ LIBRARY_LINKS_FILE_PATH = "library_links.txt"
 LOG_FILE_PATH = "log.txt"
 
 # The number of concurrent HandlerMangadex instances to exist
-MAX_THREADS = 3
+MAX_THREADS = 1
 
 # Mappin between thread id to URLs
 # Key: tid (int)
@@ -91,13 +91,8 @@ if __name__ == "__main__":
   logging.info("[main]: Starting!")
 
   create_thread_mapping()
-
-  threads = []
-  for i in range(MAX_THREADS):
-    t = threading.Thread(target=run_handler_thread, args=(i,))
-    t.start()
-    threads.append(t)
-  for t in threads:
-    t.join()
+  run_handler_thread(0)
+  # p = mp.Pool(MAX_THREADS)
+  # p.map(run_handler_thread, [i for i in range(MAX_THREADS)])
   
   logging.info("[main]: Completed!")
