@@ -19,6 +19,7 @@ class HandlerMangaDex(Handler):
 
   def select_chapter_language(self):
     if TARGET_LANGUAGE != TargetLanguageEnum.ENGLISH:
+      self.save_screenshot()
       raise Exception("Unhandled language type to select!")
 
     self.select_english_chapters_only()
@@ -55,6 +56,7 @@ class HandlerMangaDex(Handler):
     try:
       curr_page_num = int(curr_page)
     except Exception as e:
+      self.save_screenshot()
       raise Exception("Unable to convert current page number " + curr_page) from e
     logging.info("[" + self.get_tid() + " extract_current_page]: Start page: (str) " + str(curr_page) + " (int) " +  str(curr_page_num))
     return curr_page_num
@@ -75,6 +77,7 @@ class HandlerMangaDex(Handler):
     try:
       end_page_num = int(end_page)
     except Exception as e:
+      self.save_screenshot()
       raise Exception("Unable to convert current page number " + end_page) from e
     logging.info("[" + self.get_tid() + " extract_total_pages]: End page: (str) " + str(end_page) + " (int) " +  str(end_page_num))
 
@@ -145,6 +148,7 @@ class HandlerMangaDex(Handler):
       # Copy cover
       shutil.copy(cover_path, path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path, "0.jpg"))
     else:
+      self.save_screenshot()
       raise Exception("Cover is missing!")
 
     return
@@ -212,6 +216,7 @@ class HandlerMangaDex(Handler):
     Currently only supports English
     """
     if TARGET_LANGUAGE != TargetLanguageEnum.ENGLISH:
+      self.save_screenshot()
       raise Exception("Unhandled target language!")
     
     # /html/body/div[1]/div[1]/div[2]/div[2]/div/div[9]/div[2]/div[2]/div[2]/div[7]
@@ -240,6 +245,7 @@ class HandlerMangaDex(Handler):
               ch_title = ch_title[0]
               extracted_ch_num = utils.extract_chapter_num_string(ch_title)
             except Exception as e:
+              self.save_screenshot()
               raise e
 
 
@@ -277,6 +283,7 @@ class HandlerMangaDex(Handler):
     elif "png" in href:
       joined_path = path_join(self.download_title_abs_base_path, "cover.png")
     else:
+      self.save_screenshot()
       raise Exception("Unknown cover image type with href: " + href)
     urllib.request.urlretrieve(cover.get_attribute(MANGADEX_TITLE_COVER_IMAGE_URL_ATTR), joined_path)
 

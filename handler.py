@@ -55,6 +55,9 @@ class Handler:
     Returns the thread id as "tidX" as a str
     """
     return "tid" + str(self.tid)
+  
+  def save_screenshot(self):
+    self.driver.get_screenshot_as_file(self.get_tid + ".png")
 
   def start_driver(self):
     """
@@ -124,6 +127,7 @@ class Handler:
       try:
         makedirs(self.download_title_abs_base_path)
       except Exception as e:
+        self.save_screenshot()
         raise Exception("Unable to create base title folder at: " + self.download_title_abs_base_path)
     else:
       assert(exists(self.download_title_abs_base_path))
@@ -160,6 +164,7 @@ class Handler:
       try:
         makedirs(joined_path)
       except Exception as e:
+        self.save_screenshot()
         raise Exception("Unable to create chapter folder at: " + joined_path)
     else:
       assert(exists(joined_path))
