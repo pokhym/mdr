@@ -107,6 +107,7 @@ class Handler:
     """
     Initialize member variables for title and creates folders
     """
+    assert(self.driver == None)
     self.start_driver()
 
     # Load the URL
@@ -134,7 +135,7 @@ class Handler:
       assert(isdir(self.download_title_abs_base_path))
       logging.info("[" + self.get_tid() + " init_for_title]: Base title folder exists at: " + self.download_title_abs_base_path)
     
-    logging.info("[" + self.get_tid() + " init_for_title]: Loading title url: " + title_base_url)
+    # logging.info("[" + self.get_tid() + " init_for_title]: Loading title url: " + title_base_url)
     self.current_title_base_url = title_base_url
     self.driver.get(self.current_title_base_url)
     time.sleep(5)
