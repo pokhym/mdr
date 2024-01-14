@@ -171,11 +171,12 @@ class Handler:
       assert(exists(joined_path))
       assert(isdir(joined_path))
       logging.info("[" + self.get_tid() + " init_for_chapter]: Chapter folder exists at: " + joined_path)
-      
-    logging.info("[" + self.get_tid() + " init_for_chapter]: (Title: " + self.metadata.get_title() + ", Chapter: " + self.download_chapter_rel_base_path + ") Loading chapter url: " + chapter_url)
+    
     self.current_chapter_base_url = chapter_url
     self.driver.get(self.current_chapter_base_url)
     time.sleep(5)
+
+    logging.info("[" + self.get_tid() + " init_for_chapter]: (Title: " + self.metadata.get_title() + ", Chapter: " + self.download_chapter_rel_base_path + ") Loading chapter url: " + chapter_url)
 
   def extract_current_page(self):
     """

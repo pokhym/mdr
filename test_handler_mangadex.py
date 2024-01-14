@@ -128,6 +128,16 @@ def test_full1():
 
   mh.get_update()
 
+def test_full2():
+  mh = HandlerMangaDex(0, SOURCE_MANGADEX)
+  mh.reset_for_next_title()
+  
+  mh.init_for_title("test/", "https://mangadex.org/title/009c62ce-6064-4409-9949-4f00ba6d593c/cheat-skill-shisha-sosei-ga-kakusei-shite-inishie-no-maougun-wo-fukkatsu-sasete-shimaimashita")
+  
+  mh.extract_metadata()
+
+  mh.get_update()
+
 if __name__ == "__main__":
   # Setup Logging
   logging.basicConfig(level=logging.INFO
@@ -145,4 +155,4 @@ if __name__ == "__main__":
   # add the handler to the root logger
   logging.getLogger().addHandler(console)
   
-  test_title_metadata()
+  test_full2()

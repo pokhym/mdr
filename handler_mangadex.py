@@ -109,16 +109,18 @@ class HandlerMangaDex(Handler):
         
 
   def extract_chapter_images(self):
+    logging.info("[" + self.get_tid() + " extract_chapter_images]: Handling chapter: " + self.current_chapter_base_url)
+
+    logging.info("[" + self.get_tid() + " extract_chapter_images]: Extracting page numbers")
     curr_page_num = self.extract_current_page()
     end_page_num = self.extract_total_pages()
 
     # Open the menu
     # This only should be done once as this remains open until you go back
     # To the original content page
-    self.driver.find_element(By.CSS_SELECTOR, "body").send_keys("m")
-    time.sleep(1)
-
-    logging.info("[" + self.get_tid() + " extract_chapter_images]: Handling chapter: " + self.current_chapter_base_url)
+    # logging.info("[" + self.get_tid() + " extract_chapter_images]: Opening menu")
+    # self.driver.find_element(By.CSS_SELECTOR, "body").send_keys("m")
+    # time.sleep(1)
 
     # Save the image
     while self.current_download_image_number <= end_page_num:
