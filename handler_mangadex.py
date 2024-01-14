@@ -126,8 +126,10 @@ class HandlerMangaDex(Handler):
       self.extract_single_image()
       time.sleep(5)
 
-      # Click the next button
-      self.driver.find_element(By.XPATH, MANGADEX_NEXT_IMAGE_BUTTON_XCLASS).click()
+      # Use right arrow key to advance to new page
+      self.driver.find_element(By.CSS_SELECTOR, "body").send_keys(Keys.ARROW_RIGHT)
+      # # Click the next button
+      # self.driver.find_element(By.XPATH, MANGADEX_NEXT_IMAGE_BUTTON_XCLASS).click()
       time.sleep(5)
 
       self.current_download_image_number += 1
