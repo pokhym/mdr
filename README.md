@@ -1,30 +1,36 @@
-# tachiyomicompanion
+# mdr
 
 PC tool to replace the auto-update/download features of Tachiyomi extensions post v0.15.2.
 
-This serves as a tool to help collate content for PLEXing to official Tachiyomi extensions.
-
-Currently targeting the Kavita official extension.
-
+This serves as a tool to help collate content for PLEXing to self hosted content servers such as Kavita/Komga and is intended to be used with them.
 
 ## Dependencies
 
-Because I'm dumb and don't know how to do anything web development wise, I am farming out the GET requests to Python.
-
-### Python Dependencies
-
 * `pip install selenium`
+  * Used to render JavaScript webpages
+  * Used to navigate/parse HTML pages
+  * Used to interact with JavaScript pages
 
 ## Files/Structure
 
+* `comic_info.py`
+  * Generates a `ComicInfo.xml` per chapter
 * `constants.py`
   * Global constants used throuhout the project
+* `grab_urls.sh`
+  * Parses an unzipped tachibk file to extract certain source's links
+    * Supported
+      * MangaDex
 * `handler_mangadex.py`
   * Handles MangaDex titles
 * `handler.py`
   * General handler which all all other handlers inherit from
+* `main.py`
+  * Main wrapper
 * `test_handler_mangadex.py`
   * Tests for `handler_manadex.py`
+* `title_metadata.py`
+  * Metadata for a title and its chapters used in the `Handler`
 * `utils.py`
   * General utility functions
 * `webpage_utils.py`
@@ -32,9 +38,10 @@ Because I'm dumb and don't know how to do anything web development wise, I am fa
 
 ## TODOs
 
+* Support Windows
+* Swap back to Chromium (?) or add search function for Gecko
 * Global time.sleep() value
 * Add other sources
-* Create a store to store all the currently existing ongoing stories
 * More metadata
   * Status of publishing
 * Create a UI to handle everything with PySimpleGUI?
