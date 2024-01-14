@@ -1,4 +1,6 @@
 import base64
+import shutil
+from os.path import split as path_split, join as path_join
 
 def get_blob_contents(driver, uri):
   """
@@ -66,7 +68,15 @@ def extract_chapter_num_string(chapter_title):
   
   return num_string
 
+def zip_folder_into_cbz(abs_folder_path):
+  split_path = path_split(abs_folder_path)
+  assert(len(split_path) == 2)
+
+  shutil.make_archive(abs_folder_path, 'zip', abs_folder_path)
+  shutil.move(abs_folder_path + ".zip", abs_folder_path + ".cbz")
+
 
 if __name__ == "__main__":
   ns = extract_chapter_num_string("Ch. 227 - Tried Various Things (3)")
   print(ns)
+  zip_folder_into_cbz("test/Isekai Nonbiri Nouka/216")
