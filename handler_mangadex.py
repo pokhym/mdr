@@ -139,7 +139,7 @@ class HandlerMangaDex(Handler):
       self.current_download_image_number += 1
 
     # Ensure the correct number of files is downloaded
-    assert(self.current_download_image_number == end_page_num)
+    assert(self.current_download_image_number - 1 == end_page_num)
     
     cover_path = None
     if exists(path_join(self.download_title_abs_base_path, "cover.png")):
