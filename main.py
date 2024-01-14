@@ -57,7 +57,7 @@ def run_handler_thread(tid):
   # Obtain the URLs that are for this thread
   logging.info("[run_handler_thread]: Starting tid " + str(tid))
 
-  for url in TID_TO_URLS[tid]:
+  for url in sorted(TID_TO_URLS[tid]):
     url = url.strip()
     # logging.info("[run_handler_thread]: Thread " + str(tid) + " handling: " + str(url))
 
