@@ -24,7 +24,7 @@ LIBRARY_LINKS_FILE_PATH = "library_links.txt"
 LOG_FILE_PATH = "log.txt"
 
 # The number of concurrent HandlerMangaDex instances to exist
-MAX_THREADS = 1
+MAX_THREADS = 3
 
 # Mappin between thread id to URLs
 # Key: tid (int)
@@ -57,7 +57,8 @@ def run_handler_thread(tid):
   # Obtain the URLs that are for this thread
   logging.info("[run_handler_thread]: Starting tid " + str(tid))
 
-  for url in sorted(TID_TO_URLS[tid]):
+  urls = sorted(TID_TO_URLS[tid])
+  for url in urls:
     url = url.strip()
     # logging.info("[run_handler_thread]: Thread " + str(tid) + " handling: " + str(url))
 
@@ -91,8 +92,8 @@ if __name__ == "__main__":
   logging.info("[main]: Starting!")
 
   create_thread_mapping()
-  run_handler_thread(0)
-  # p = mp.Pool(MAX_THREADS)
-  # p.map(run_handler_thread, [i for i in range(MAX_THREADS)])
+  # run_handler_thread(0)
+  p = mp.Pool(MAX_THREADS)
+  p.map(run_handler_thread, [i for i in range(MAX_THREADS)])
   
   logging.info("[main]: Completed!")
