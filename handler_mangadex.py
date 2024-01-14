@@ -2,6 +2,7 @@ from handler import Handler
 from constants import *
 import utils
 import urllib
+import shutil
 
 import logging
 from os.path import join as path_join, exists, isdir
@@ -115,10 +116,10 @@ class HandlerMangaDex(Handler):
     time.sleep(1)
 
     # Save the image
-    while self.current_download_image_number < end_page_num:
+    while self.current_download_image_number <= end_page_num:
       # Grab the specific page
-      logging.info("Attempting to parse: " + self.current_chapter_base_url + "/" + str(self.current_download_image_number + 1))
-      self.driver.get(self.current_chapter_base_url + "/" + str(self.current_download_image_number + 1))
+      logging.info("Attempting to parse: " + self.current_chapter_base_url + "/" + str(self.current_download_image_number))
+      self.driver.get(self.current_chapter_base_url + "/" + str(self.current_download_image_number))
       time.sleep(5)
 
       # Download the image
@@ -130,6 +131,18 @@ class HandlerMangaDex(Handler):
       time.sleep(5)
 
       self.current_download_image_number += 1
+    
+    cover_path = None
+    if exists(path_join(self.download_title_abs_base_path, "cover.png")):
+      cover_path = path_join(self.download_title_abs_base_path, "cover.png")
+      # Copy cover
+      shutil.copy(cover_path, path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path, "0.png"))
+    elif exists(path_join(self.download_title_abs_base_path, "cover.jpg")):
+      cover_path = path_join(self.download_title_abs_base_path, "cover.jpg")
+      # Copy cover
+      shutil.copy(cover_path, path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path, "0.jpg"))
+    else:
+      raise Exception("Cover is missing!")
 
     return
   

@@ -43,7 +43,7 @@ class Handler:
     self.download_chapter_rel_base_path = None
     self.current_title_base_url = None
     self.current_chapter_base_url = None
-    self.current_download_image_number = 0
+    self.current_download_image_number = 1
 
     self.driver = None
 
@@ -89,7 +89,7 @@ class Handler:
     self.download_chapter_rel_base_path = None
     self.current_title_base_url = None
     self.current_chapter_base_url = None
-    self.current_download_image_number = 0
+    self.current_download_image_number = 1
 
   def init_for_title(self, title_abs_base_path, title_base_url):
     """
@@ -136,7 +136,7 @@ class Handler:
     self.downloaded_blobs_set.clear()
     self.download_chapter_rel_base_path = None
     self.current_chapter_base_url = None
-    self.current_download_image_number = 0
+    self.current_download_image_number = 1
 
   def init_for_chapter(self, chapter_base_rel_path, chapter_url):
     """
