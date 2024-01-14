@@ -115,10 +115,11 @@ class HandlerMangaDex(Handler):
     self.driver.find_element(By.CSS_SELECTOR, "body").send_keys("m")
     time.sleep(1)
 
+    logging.info("[" + self.get_tid() + " extract_chapter_images]: Handling chapter: " + self.current_chapter_base_url)
+
     # Save the image
     while self.current_download_image_number <= end_page_num:
       # Grab the specific page
-      logging.info("[" + self.get_tid() + " extract_chapter_images]: Attempting to parse: " + self.current_chapter_base_url + "/" + str(self.current_download_image_number))
       self.driver.get(self.current_chapter_base_url + "/" + str(self.current_download_image_number))
       time.sleep(5)
 
