@@ -6,6 +6,9 @@ class TargetLanguageEnum(Enum):
 """ --- BEGIN METADATA FILE NAME ---"""
 METADATA_FILE_NAME = "metadata.txt"
 
+""" --- GLOBAL SLEEP TIME --- """
+SLEEP_SEC = 10
+
 """--- BEGIN TARGET LANGUAGE ---"""
 TARGET_LANGUAGE = TargetLanguageEnum.ENGLISH
 """--- END TARGET LANGUAGE ---"""

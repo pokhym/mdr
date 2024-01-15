@@ -34,19 +34,19 @@ class HandlerMangaDex(Handler):
 
     # Ensure it is checked
     assert("true" == self.driver.find_element(By.XPATH, MANGADEX_USER_ICON_CHAPTER_LANGUAES_ENGLISH_XPATH).get_attribute(MANGADEX_USER_ICON_CHAPTER_LANGUAES_ENGLISH_CHECKED_ATTR))
-    time.sleep(5)
+    time.sleep(SLEEP_SEC)
 
     # Exit the menu
     self.driver.find_element(By.CSS_SELECTOR, "body").click()
-    time.sleep(5)
+    time.sleep(SLEEP_SEC)
 
 
   def extract_current_page(self):
     # Sometimes the page number cannot be seen if the image is too big scroll to the top of the page
-    time.sleep(5)
+    time.sleep(SLEEP_SEC)
     self.driver.find_element(By.CSS_SELECTOR, "body").send_keys(Keys.PAGE_UP)
     self.driver.find_element(By.CSS_SELECTOR, "body").send_keys(Keys.PAGE_UP)
-    time.sleep(5)
+    time.sleep(SLEEP_SEC)
     content = self.driver.find_element(By.XPATH, MANGADEX_PAGE_COUNT_XPATH).text
     # try:
     #   content = self.driver.find_element(By.XPATH, MANGADEX_PAGE_COUNT_XPATH).text
@@ -75,11 +75,11 @@ class HandlerMangaDex(Handler):
   
   def extract_total_pages(self):
     # Sometimes the page number cannot be seen if the image is too big scroll to the top of the page
-    time.sleep(5)
+    time.sleep(SLEEP_SEC)
     self.driver.find_element(By.CSS_SELECTOR, "body").send_keys(Keys.PAGE_UP)
     self.driver.find_element(By.CSS_SELECTOR, "body").send_keys(Keys.PAGE_UP)
     content = self.driver.find_element(By.XPATH, MANGADEX_PAGE_COUNT_XPATH).text
-    time.sleep(5)
+    time.sleep(SLEEP_SEC)
     # try:
     #   content = self.driver.find_element(By.XPATH, MANGADEX_PAGE_COUNT_XPATH).text
     # except:
@@ -152,17 +152,17 @@ class HandlerMangaDex(Handler):
     while self.current_download_image_number <= end_page_num:
       # Grab the specific page
       self.driver.get(self.current_chapter_base_url + "/" + str(self.current_download_image_number))
-      time.sleep(5)
+      time.sleep(SLEEP_SEC)
 
       # Download the image
       self.extract_single_image()
-      time.sleep(5)
+      time.sleep(SLEEP_SEC)
 
       # Use right arrow key to advance to new page
       self.driver.find_element(By.CSS_SELECTOR, "body").send_keys(Keys.ARROW_RIGHT)
       # # Click the next button
       # self.driver.find_element(By.XPATH, MANGADEX_NEXT_IMAGE_BUTTON_XCLASS).click()
-      time.sleep(5)
+      time.sleep(SLEEP_SEC)
 
       self.current_download_image_number += 1
 
@@ -232,7 +232,7 @@ class HandlerMangaDex(Handler):
     demographic = []
     try:
       demographic_obj = self.driver.find_element(By.XPATH, MANGADEX_DEMOGRAPHIC_XCLASS)
-      logging.info("[" + self.get_tid() + " extract_categories] : 2.1")
+      # logging.info("[" + self.get_tid() + " extract_categories] : 2.1")
       for tag_obj in demographic_obj.find_elements(By.CLASS_NAME, MANGADEX_DEMOGRAPHIC_TAG_OBJ_CLASS):
         demographic.append(tag_obj.find_element(By.TAG_NAME, MANGADEX_DEMOGRAPHIC_TAG_OBJ_TAG).text)
     except:
@@ -313,7 +313,7 @@ class HandlerMangaDex(Handler):
 
       # Click to advance to next page
       right_arrow_button.click()
-      time.sleep(5)
+      time.sleep(SLEEP_SEC)
       
       page_num += 1
 
@@ -337,7 +337,7 @@ class HandlerMangaDex(Handler):
     logging.info("[" + self.get_tid() + " extract_metadata]: Extracting metadata!")
     self.start_driver()
     self.driver.get(self.current_title_base_url)
-    time.sleep(5)
+    time.sleep(SLEEP_SEC)
 
     logging.info("[" + self.get_tid() + " extract_metadata]: Selecting language!")
     self.select_chapter_language()

@@ -108,6 +108,14 @@ def test_language_selection():
   mh.select_chapter_language()
   mh.terminate_driver()
 
+def test_language_selection1():
+  mh = HandlerMangaDex(0, SOURCE_MANGADEX)
+  mh.reset_for_next_title()
+  
+  mh.init_for_title("test/", "https://mangadex.org/title/00b64b8f-cb7e-4322-9855-3669fe210ac7/766f76d8-316d-4174-aca1-971c00f830c3")
+  
+  mh.extract_metadata()
+
 def test_full():
   mh = HandlerMangaDex(0, SOURCE_MANGADEX)
   mh.reset_for_next_title()
@@ -165,4 +173,4 @@ if __name__ == "__main__":
   # add the handler to the root logger
   logging.getLogger().addHandler(console)
   
-  test_chapter_download()
+  test_language_selection1()

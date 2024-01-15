@@ -42,7 +42,6 @@ This serves as a tool to help collate content for PLEXing to self hosted content
 * Remove timeouts for explicit waits?
 * Support Windows
 * Swap back to Chromium (?) or add search function for Gecko
-* Global time.sleep() value
 * Add other sources
 * More metadata
   * Status of publishing

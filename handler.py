@@ -82,7 +82,7 @@ class Handler:
     # Pass the defined options objects to initialize the web driver 
     self.driver = Firefox(options=options, service=driver_service) 
     # Set an implicit wait of 5 seconds to allow time for elements to appear before throwing an exception
-    self.driver.implicitly_wait(15)
+    self.driver.implicitly_wait(SLEEP_SEC)
 
   def terminate_driver(self):
     """
@@ -114,7 +114,7 @@ class Handler:
     logging.info("[" + self.get_tid() + " init_for_title]: Loading title url: " + title_base_url)
     self.current_title_base_url = title_base_url
     self.driver.get(self.current_title_base_url)
-    time.sleep(5)
+    time.sleep(SLEEP_SEC)
 
     # Obtain the title
     self.extract_title_name()
@@ -138,7 +138,7 @@ class Handler:
     # logging.info("[" + self.get_tid() + " init_for_title]: Loading title url: " + title_base_url)
     self.current_title_base_url = title_base_url
     self.driver.get(self.current_title_base_url)
-    time.sleep(5)
+    time.sleep(SLEEP_SEC)
 
     self.terminate_driver()
 
@@ -174,7 +174,7 @@ class Handler:
     
     self.current_chapter_base_url = chapter_url
     self.driver.get(self.current_chapter_base_url)
-    time.sleep(5)
+    time.sleep(SLEEP_SEC)
 
     logging.info("[" + self.get_tid() + " init_for_chapter]: (Title: " + self.metadata.get_title() + ", Chapter: " + self.download_chapter_rel_base_path + ") Loading chapter url: " + chapter_url)
 
