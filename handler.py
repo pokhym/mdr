@@ -319,6 +319,25 @@ class Handler:
     self.extract_cover()
     self.save_metadata()
 
+  def is_url_valid_source(self, url):
+    """
+    Checks if the URL is actually from the accepted list of
+    links.  For instance if a url is from MangaDex the link
+    should only go to a valid MangaDex chapter and not one for
+    J-Novel.
+
+    eg. Ignore https://j-novel.club/read/XXXX
+    eg. Allow  https://mangadex.org/chapter/XXXX
+    """
+    if self.source_name == SOURCE_MANGADEX:
+      if SOURCE_MANGADEX_BASE_URL in url:
+        return True
+      else:
+        return False
+    else:
+      assert(0)
+    return False
+
   def get_update(self):
     """
     Checks for new chapters and if required

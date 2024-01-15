@@ -7,7 +7,7 @@ class TargetLanguageEnum(Enum):
 METADATA_FILE_NAME = "metadata.txt"
 
 """ --- GLOBAL SLEEP TIME --- """
-SLEEP_SEC = 5
+SLEEP_SEC = 10
 
 """--- BEGIN TARGET LANGUAGE ---"""
 TARGET_LANGUAGE = TargetLanguageEnum.ENGLISH
@@ -15,6 +15,7 @@ TARGET_LANGUAGE = TargetLanguageEnum.ENGLISH
 
 """--- BEGIN SOURCE NAMES ---"""
 SOURCE_MANGADEX = "MangaDex"
+SOURCE_MANGADEX_BASE_URL = "https://mangadex.org"
 """--- END SOURCE NAMES ---"""
 
 """--- START PER SOURCE CONSTANTS ---"""

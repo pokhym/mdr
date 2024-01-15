@@ -111,7 +111,14 @@ class HandlerMangaDex(Handler):
   
   def extract_single_image(self):
     downloaded = False
+    attempts = 0
     while True:
+      if attempts > 5:
+        self.driver.get(self.current_chapter_base_url + "/" + str(self.current_download_image_number))
+        time.sleep(SLEEP_SEC)
+        logging.info("[" + self.get_tid() + " extract_single_image]: Reloading because no images!")
+        attempts = 0
+      attempts += 1
       for x in self.driver.find_elements(By.XPATH, MANGADEX_IMAGE_XCLASS):
           blob_location = x.get_attribute(MANGADEX_IMAGE_BLOB_ATTR)
           visible = True if x.get_attribute(MANGADEX_IMAGE_VISIBILITY_ATTR).find(MANGADEX_IMAGE_VISIBILITY_ATTR_NOT_VISIBLE_VALUE) == -1 else False
@@ -375,7 +382,7 @@ class HandlerMangaDex(Handler):
       
       # If the folder doesn't exist or if the path does exist but is not a foler
       # Attempt to download it
-      if not exists(joined_chapter_path):
+      if not exists(joined_chapter_path) and self.is_url_valid_source(urls[idx]):
         self.reset_for_next_chapter()
         self.start_driver()
         self.init_for_chapter(chs[idx], urls[idx])
@@ -384,6 +391,10 @@ class HandlerMangaDex(Handler):
         self.create_cbz()
         self.terminate_driver()
       else:
-        logging.info("[" + self.get_tid() + " get_update]: Skipping chapter " + str(chs[idx]) + " for title: " + self.metadata.get_title())
+        if not self.is_url_valid_source(urls[idx]):
+          logging.info("[" + self.get_tid() + " get_update]: Skipping chapter " + str(chs[idx]) + " for title: " + self.metadata.get_title() + " as it is not from a vlid source: " + urls[idx])
+        else:
+          assert(exists(joined_chapter_path))
+          logging.info("[" + self.get_tid() + " get_update]: Skipping chapter " + str(chs[idx]) + " for title: " + self.metadata.get_title() + " as it is already downloaded")
 
     
