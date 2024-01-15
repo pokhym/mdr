@@ -161,7 +161,7 @@ class HandlerMangaDex(Handler):
 
       # Download the image
       self.extract_single_image()
-      time.sleep(SLEEP_SEC)
+      # time.sleep(SLEEP_SEC)
 
       # Use right arrow key to advance to new page
       self.driver.find_element(By.CSS_SELECTOR, "body").send_keys(Keys.ARROW_RIGHT)
