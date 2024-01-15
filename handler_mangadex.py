@@ -111,27 +111,32 @@ class HandlerMangaDex(Handler):
   
   def extract_single_image(self):
     downloaded = False
-    for x in self.driver.find_elements(By.XPATH, MANGADEX_IMAGE_XCLASS):
-      blob_location = x.get_attribute(MANGADEX_IMAGE_BLOB_ATTR)
-      visible = True if x.get_attribute(MANGADEX_IMAGE_VISIBILITY_ATTR).find(MANGADEX_IMAGE_VISIBILITY_ATTR_NOT_VISIBLE_VALUE) == -1 else False
+    while True:
+      for x in self.driver.find_elements(By.XPATH, MANGADEX_IMAGE_XCLASS):
+          blob_location = x.get_attribute(MANGADEX_IMAGE_BLOB_ATTR)
+          visible = True if x.get_attribute(MANGADEX_IMAGE_VISIBILITY_ATTR).find(MANGADEX_IMAGE_VISIBILITY_ATTR_NOT_VISIBLE_VALUE) == -1 else False
 
-      # Download if it doesn't exist yet
-      if blob_location not in self.downloaded_blobs_set and visible:
-        # Ensure we only download one image per page
-        assert(downloaded == False)
+          # Download if it doesn't exist yet
+          if blob_location not in self.downloaded_blobs_set and visible:
+            # Ensure we only download one image per page
+            assert(downloaded == False)
 
-        self.downloaded_blobs_set.add(blob_location)
-        logging.info("[" + self.get_tid() + " extract_single_image]: Downloading image " + str(self.current_download_image_number) + " with uri " + blob_location)
-        # self.extract_current_page()
+            self.downloaded_blobs_set.add(blob_location)
+            logging.info("[" + self.get_tid() + " extract_single_image]: Downloading image " + str(self.current_download_image_number) + " with uri " + blob_location)
+            # self.extract_current_page()
 
-        bytes = utils.get_blob_contents(self.driver, blob_location)
-        joined_path = path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path, str(self.current_download_image_number) + ".png")
-        with open(joined_path, "wb") as fd:
-          fd.write(bytes)
-          fd.close()
-        
-        # Flip flag so that we ensure next iteration doesn't download
-        downloaded = True
+            bytes = utils.get_blob_contents(self.driver, blob_location)
+            joined_path = path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path, str(self.current_download_image_number) + ".png")
+            with open(joined_path, "wb") as fd:
+              fd.write(bytes)
+              fd.close()
+            
+            # Flip flag so that we ensure next iteration doesn't download
+            downloaded = True
+            break
+      if downloaded:
+        break
+    assert(exists(path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path, str(self.current_download_image_number) + ".png")))
         
 
   def extract_chapter_images(self):
