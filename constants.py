@@ -68,6 +68,7 @@ MANGADEX_CHAPTER_TOP_LEVEL_INNER_URL_ATTR = "href"
 
 # This is actually looking for "Pg. 1 / 2"
 MANGADEX_PAGE_COUNT_CLASS = "//div[contains(@class, 'flex-grow')]"
+MANGADEX_PAGE_COUNT_XPATH = "/html/body/div[1]/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[2]/div[2]"
 MANGADEX_PAGE_KEYWORD_START = "Pg."
 MANGADEX_PAGE_KEYWORD_END = "\n"
 # 1 / 11 slash is the delimiter

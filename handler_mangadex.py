@@ -42,19 +42,25 @@ class HandlerMangaDex(Handler):
 
 
   def extract_current_page(self):
-    try:
-      content = self.driver.find_element(By.XPATH, MANGADEX_PAGE_COUNT_CLASS).text
-    except:
-      logging.warn("[" + self.get_tid() + " extract_current_page]: Failed to extract page count info!")
-      assert(0)
-    # 'Site Rules\nPrivacy Policy\nAnnouncements\nv2023.11.27\n© MangaDex 2024\nCtrl\nK\nImmigrants and Doosu (2)\nIsekai Nonbiri Nouka\nCh. 222\nPg. 1 / 11\nMenu\nLHTranslation\n1\n11'
+    # Sometimes the page number cannot be seen if the image is too big scroll to the top of the page
+    time.sleep(5)
+    self.driver.find_element(By.CSS_SELECTOR, "body").send_keys(Keys.PAGE_UP)
+    self.driver.find_element(By.CSS_SELECTOR, "body").send_keys(Keys.PAGE_UP)
+    time.sleep(5)
+    content = self.driver.find_element(By.XPATH, MANGADEX_PAGE_COUNT_XPATH).text
+    # try:
+    #   content = self.driver.find_element(By.XPATH, MANGADEX_PAGE_COUNT_XPATH).text
+    # except:
+    #   logging.warn("[" + self.get_tid() + " extract_current_page]: Failed to extract page count info!")
+    #   assert(0)
+    # Pg. 1 / 35
     if content.count(MANGADEX_PAGE_KEYWORD_START) != 1:
       logging.warn("[" + self.get_tid() + " extract_current_page]: Failed to find '" + MANGADEX_PAGE_KEYWORD_START + "': " + content)
     assert(content.count(MANGADEX_PAGE_KEYWORD_START) == 1)
-    # ` 1 / 11\nMenu\nLHTranslation\n1\n11'
+    # ` 1 / 35'
     stripped = content[content.find(MANGADEX_PAGE_KEYWORD_START) + len(MANGADEX_PAGE_KEYWORD_START):]
-    # ` 1/ 11`
-    stripped = stripped[:stripped.find(MANGADEX_PAGE_KEYWORD_END)]
+    # ` 1 / 35`
+    # stripped = stripped[:stripped.find(MANGADEX_PAGE_KEYWORD_END)]
     # ` 1`
     curr_page = stripped[:stripped.find(MANGADEX_PAGE_DELIM_CURR_TOTAL)]
     curr_page = curr_page.strip()
@@ -68,13 +74,27 @@ class HandlerMangaDex(Handler):
     return curr_page_num
   
   def extract_total_pages(self):
-    content = self.driver.find_element(By.XPATH, MANGADEX_PAGE_COUNT_CLASS).text
+    # Sometimes the page number cannot be seen if the image is too big scroll to the top of the page
+    time.sleep(5)
+    self.driver.find_element(By.CSS_SELECTOR, "body").send_keys(Keys.PAGE_UP)
+    self.driver.find_element(By.CSS_SELECTOR, "body").send_keys(Keys.PAGE_UP)
+    content = self.driver.find_element(By.XPATH, MANGADEX_PAGE_COUNT_XPATH).text
+    time.sleep(5)
+    # try:
+    #   content = self.driver.find_element(By.XPATH, MANGADEX_PAGE_COUNT_XPATH).text
+    # except:
+    #   logging.warn("[" + self.get_tid() + " extract_total_pages]: Failed to extract page count info!")
+    #   assert(0)
     # 'Site Rules\nPrivacy Policy\nAnnouncements\nv2023.11.27\n© MangaDex 2024\nCtrl\nK\nImmigrants and Doosu (2)\nIsekai Nonbiri Nouka\nCh. 222\nPg. 1 / 11\nMenu\nLHTranslation\n1\n11'
+    if content.count(MANGADEX_PAGE_KEYWORD_START) != 1:
+      logging.warn("[" + self.get_tid() + " extract_total_pages]: Failed to find '" + MANGADEX_PAGE_KEYWORD_START + "': " + content)
+
+    # 'Pg. 1 / 35'
     assert(content.count(MANGADEX_PAGE_KEYWORD_START) == 1)
-    # ` 1 / 11\nMenu\nLHTranslation\n1\n11'
+    # ` 1 / 35``
     stripped = content[content.find(MANGADEX_PAGE_KEYWORD_START) + len(MANGADEX_PAGE_KEYWORD_START):]
-    # ` 1/ 11`
-    stripped = stripped[:stripped.find(MANGADEX_PAGE_KEYWORD_END)]
+    # ` 1 / 35`
+    # stripped = stripped[:stripped.find(MANGADEX_PAGE_KEYWORD_END)]
 
     # ` 11`
     end_page = stripped[stripped.find(MANGADEX_PAGE_DELIM_CURR_TOTAL) + len(MANGADEX_PAGE_DELIM_CURR_TOTAL):]
