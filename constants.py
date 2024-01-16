@@ -22,8 +22,10 @@ TARGET_LANGUAGE = TargetLanguageEnum.ENGLISH
 """--- BEGIN SOURCE NAMES ---"""
 SOURCE_MANGADEX = "MangaDex"
 SOURCE_MANGADEX_BASE_URL = "https://mangadex.org"
+SOURCE_MANGADEX_BASE_WWW_URL = "https://www.mangadex.org"
 SOURCE_MANGAHERE = "MangaHere"
 SOURCE_MANGAHERE_BASE_URL = "https://mangahere.cc"
+SOURCE_MANGAHERE_BASE_WWW_URL = "https://www.mangahere.cc"
 """--- END SOURCE NAMES ---"""
 
 """--- START PER SOURCE CONSTANTS ---"""
