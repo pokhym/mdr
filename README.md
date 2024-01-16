@@ -3,6 +3,11 @@
 PC tool to replace the auto-update/download features of Tachiyomi extensions post v0.15.2.
 This serves as a tool to help collate content for PLEXing to self hosted content servers such as Kavita/Komga and is intended to be used with them.
 
+Currently supports
+
+* Linux, Windows
+* MangaDex
+
 ## Dependencies
 
 * `pip install selenium`
@@ -83,7 +88,6 @@ Working MangaDex downloader for English.
 * Add tool to match the mangaupdates status with ones from current sources
   * Add migration
 * Remove timeouts for explicit waits?
-* Support Windows
 * Swap back to Chromium (?) or add search function for Gecko
 * Add other sources
 * More metadata
