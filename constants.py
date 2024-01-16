@@ -120,4 +120,9 @@ MANGAHERE_CHAPTERS_OUTER_INNER_LINK_ATTR = "href"
 
 # Cover image XPATH
 MANGAHERE_COVER_IMAGE_XPATH = "/html/body/div[5]/div/div[1]/img"
+
+# Page buttons outer XPATH
+MANGAHERE_PAGE_BUTTONS_OUTER_XPATH = "/html/body/div[5]/div/span"
+# Contains the links to various pages or left right buttons
+MANGAHERE_PAGE_BUTTONS_INNER_TAG = "a"
 """--- END START PER SOURCE CONSTANTS ---"""

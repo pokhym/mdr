@@ -15,10 +15,37 @@ from selenium.webdriver.common.keys import Keys
 class HandlerMangaHere(Handler):
   
   def extract_current_page(self):
-    return super().extract_current_page()
+    pages_outer_element = self.driver.find_element(By.XPATH, MANGAHERE_PAGE_BUTTONS_OUTER_XPATH)
+    
+    # Iterate from left -> right
+    # This allows us to get the first page number
+    curr_page_num = None
+    for a in pages_outer_element.find_elements(By.TAG_NAME, MANGAHERE_PAGE_BUTTONS_INNER_TAG):
+      try:
+        curr_page_num = int(a.text)
+        logging.info("[" + self.get_tid() + " extract_current_page]: Start page: (str) " + str(a.text) + " (int) " +  str(curr_page_num))
+        return curr_page_num
+      except:
+        # Unable to convert to a number (possibly due to < or > representing back/forward)
+        pass
+    raise Exception("Unable to extract current page number!")
+    
   
   def extract_total_pages(self):
-    return super().extract_total_pages()
+    pages_outer_element = self.driver.find_element(By.XPATH, MANGAHERE_PAGE_BUTTONS_OUTER_XPATH)
+    
+    # Iterate from left -> right
+    # This allows us to get the first page number
+    curr_page_num = None
+    for a in reversed(pages_outer_element.find_elements(By.TAG_NAME, MANGAHERE_PAGE_BUTTONS_INNER_TAG)):
+      try:
+        curr_page_num = int(a.text)
+        logging.info("[" + self.get_tid() + " extract_total_pages]: Emd page: (str) " + str(a.text) + " (int) " +  str(curr_page_num))
+        return curr_page_num
+      except:
+        # Unable to convert to a number (possibly due to < or > representing back/forward)
+        pass
+    raise Exception("Unable to extract current page number!")
   
   def extract_single_page(self):
     return super().extract_single_page()
