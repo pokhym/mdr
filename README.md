@@ -10,6 +10,30 @@ This serves as a tool to help collate content for PLEXing to self hosted content
   * Used to navigate/parse HTML pages
   * Used to interact with JavaScript pages
 
+## Usage
+
+This is currently a work in progress and can be buggy (specifically if `MAX_THREADS` is not 1 in `main.py`) due to webpage load times.
+APIs are not used when accessing MangaDex meaning that the page is loaded and parsed with Selenium instead.
+For examples of how to download a specific chapter/title, refer to `handler_mangadex.py`.
+
+For trying to batch download run `main.py`.
+This requires a file (by default `library_links.txt`) located in the root directory.
+Feel free to change constants in `main.py` to modify behavior.
+It's format is like
+
+```
+https://mangadex.org/title/XXXX
+https://mangadex.org/title/XXXX
+https://mangadex.org/title/XXXX
+https://mangadex.org/title/XXXX
+```
+
+If you have a `.tachibk` file, extract it and parse it with `gen_urls.sh`.
+
+## Status
+
+Working MangaDex downloader for English.
+
 ## Files/Structure
 
 * `comic_info.py`
