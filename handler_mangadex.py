@@ -196,26 +196,6 @@ class HandlerMangaDex(Handler):
 
     return
   
-  def create_comic_info(self):
-    logging.info("[" + self.get_tid() + " create_comic_info]: Creating ComicInfo.xml...")
-    ci = ComicInfo()
-    ci.add_all_info(
-      title=self.download_chapter_rel_base_path,
-      series=self.metadata.get_title(),
-      web=self.current_chapter_base_url,
-      summary=self.metadata.get_description(),
-      genres=self.metadata.get_categories(),
-      page_count=str(self.current_download_image_number)
-    )
-    ci.write_out(path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path, "ComicInfo.xml"))
-  
-  def create_cbz(self):
-    logging.info("[" + self.get_tid() + " create_cbz]: Creating cbz for: " + path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path))
-    utils.zip_folder_into_cbz(path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path))
-    assert(exists(path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path + ".cbz")))
-    logging.info("[" + self.get_tid() + " create_cbz]: Removing folder: " + path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path))
-    shutil.rmtree(path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path))
-
   def extract_title_name(self):
     title = self.driver.find_element(By.XPATH, MANGADEX_TITLE_XCLASS).text
     self.metadata.set_title(title)
@@ -369,32 +349,4 @@ class HandlerMangaDex(Handler):
     self.save_metadata()
 
     self.terminate_driver()
-
-  def get_update(self):
-    chs, urls = self.metadata.get_chapter_numbers()
-    assert(len(chs) == len(urls))
-
-    logging.info("[" + self.get_tid() + " get_update]: Updating title '" + self.metadata.get_title() + "' on source " + self.source_name)
-
-    for idx in range(len(chs)):
-      # Check if the folder exists
-      joined_chapter_path = path_join(self.download_title_abs_base_path, chs[idx] + ".cbz")
-      
-      # If the folder doesn't exist or if the path does exist but is not a foler
-      # Attempt to download it
-      if not exists(joined_chapter_path) and self.is_url_valid_source(urls[idx]):
-        self.reset_for_next_chapter()
-        self.start_driver()
-        self.init_for_chapter(chs[idx], urls[idx])
-        self.extract_chapter_images()
-        self.create_comic_info()
-        self.create_cbz()
-        self.terminate_driver()
-      else:
-        if not self.is_url_valid_source(urls[idx]):
-          logging.info("[" + self.get_tid() + " get_update]: Skipping chapter " + str(chs[idx]) + " for title: " + self.metadata.get_title() + " as it is not from a vlid source: " + urls[idx])
-        else:
-          assert(exists(joined_chapter_path))
-          logging.info("[" + self.get_tid() + " get_update]: Skipping chapter " + str(chs[idx]) + " for title: " + self.metadata.get_title() + " as it is already downloaded")
-
     
