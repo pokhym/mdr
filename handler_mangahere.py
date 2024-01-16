@@ -159,6 +159,11 @@ class HandlerMangaHere(Handler):
       a = c.find_element(By.TAG_NAME, MANGAHERE_CHAPTERS_OUTER_INNER_LINK_TAG)
       ch_url = a.get_attribute(MANGAHERE_CHAPTERS_OUTER_INNER_LINK_ATTR)
 
+      # Replace http with https
+      if "http://" in ch_url:
+        assert(ch_url.count("http://") == 1)
+        ch_url = ch_url.replace("http://", "https://")
+
       try:
         extracted_ch_num = utils.extract_chapter_num_string(ch_title)
       except Exception as e:
