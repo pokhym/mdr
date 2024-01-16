@@ -109,14 +109,14 @@ class HandlerMangaDex(Handler):
 
     return end_page_num
   
-  def extract_single_image(self):
+  def extract_single_page(self):
     downloaded = False
     attempts = 0
     while True:
       if attempts > 5:
         self.driver.get(self.current_chapter_base_url + "/" + str(self.current_download_image_number))
         time.sleep(SLEEP_SEC)
-        logging.info("[" + self.get_tid() + " extract_single_image]: Reloading because no images!")
+        logging.info("[" + self.get_tid() + " extract_single_page]: Reloading because no images!")
         attempts = 0
       attempts += 1
       for x in self.driver.find_elements(By.XPATH, MANGADEX_IMAGE_XCLASS):
@@ -129,7 +129,7 @@ class HandlerMangaDex(Handler):
             assert(downloaded == False)
 
             self.downloaded_blobs_set.add(blob_location)
-            logging.info("[" + self.get_tid() + " extract_single_image]: Downloading image " + str(self.current_download_image_number) + " with uri " + blob_location)
+            logging.info("[" + self.get_tid() + " extract_single_page]: Downloading image " + str(self.current_download_image_number) + " with uri " + blob_location)
             # self.extract_current_page()
 
             bytes = utils.get_blob_contents(self.driver, blob_location)
@@ -167,7 +167,7 @@ class HandlerMangaDex(Handler):
       time.sleep(SLEEP_SEC)
 
       # Download the image
-      self.extract_single_image()
+      self.extract_single_page()
       # time.sleep(SLEEP_SEC)
 
       # Use right arrow key to advance to new page
