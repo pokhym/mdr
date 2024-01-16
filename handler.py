@@ -348,7 +348,12 @@ class Handler:
     eg. Allow  https://mangadex.org/chapter/XXXX
     """
     if self.source_name == SOURCE_MANGADEX:
-      if SOURCE_MANGADEX_BASE_URL in url:
+      if SOURCE_MANGADEX_BASE_URL in url or SOURCE_MANGADEX_BASE_WWW_URL in url:
+        return True
+      else:
+        return False
+    elif self.source_name == SOURCE_MANGAHERE:
+      if SOURCE_MANGAHERE_BASE_URL in url or SOURCE_MANGAHERE_BASE_WWW_URL in url:
         return True
       else:
         return False
