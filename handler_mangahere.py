@@ -4,7 +4,7 @@ from constants import *
 from handler import Handler
 import utils
 from os.path import join as path_join, exists
-import urllib
+import shutil
 
 from selenium import webdriver 
 from selenium.webdriver import Firefox
@@ -111,6 +111,19 @@ class HandlerMangaHere(Handler):
 
     # Ensure the correct number of files is downloaded
     assert(self.current_download_image_number - 1 == end_page_num)
+
+    cover_path = None
+    if exists(path_join(self.download_title_abs_base_path, "cover.png")):
+      cover_path = path_join(self.download_title_abs_base_path, "cover.png")
+      # Copy cover
+      shutil.copy(cover_path, path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path, "0.png"))
+    elif exists(path_join(self.download_title_abs_base_path, "cover.jpg")):
+      cover_path = path_join(self.download_title_abs_base_path, "cover.jpg")
+      # Copy cover
+      shutil.copy(cover_path, path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path, "0.jpg"))
+    else:
+      self.save_screenshot()
+      raise Exception("Cover is missing!")
   
   def create_comic_info(self):
     # TODO: Move into parent (also handler_mangadex.py)
