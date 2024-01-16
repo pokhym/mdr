@@ -125,4 +125,17 @@ MANGAHERE_COVER_IMAGE_XPATH = "/html/body/div[5]/div/div[1]/img"
 MANGAHERE_PAGE_BUTTONS_OUTER_XPATH = "/html/body/div[5]/div/span"
 # Contains the links to various pages or left right buttons
 MANGAHERE_PAGE_BUTTONS_INNER_TAG = "a"
+
+# Hide yd-mask overlay thingy script
+MANGAHERE_HIDE_OVERLAY_SCRIPT = """
+  if(document.getElementsByClassName("yd-mask").length > 0) {
+    var l = document.getElementsByClassName("yd-mask")[0];
+    l.parentNode.removeChild(l);
+  }
+"""
+# Hide danmaku XPATH
+MANGAHERE_HIDE_DANMAKU_XPATH = "/html/body/div[13]/a[2]"
+MANGAHERE_SHOW_DANMAKU_XPATH = "/html/body/div[12]/a"
+# Chapter Image XPATH
+MANGAHERE_CHAPTER_IMAGE_XPATH = "/html/body/div[7]/div/img"
 """--- END START PER SOURCE CONSTANTS ---"""

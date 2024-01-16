@@ -89,6 +89,8 @@ class Handler:
     self.driver = Firefox(options=options, service=driver_service) 
     # Set an implicit wait of 5 seconds to allow time for elements to appear before throwing an exception
     self.driver.implicitly_wait(SLEEP_SEC)
+    
+    self.driver.set_window_size(1920, 1080)
 
   def terminate_driver(self):
     """

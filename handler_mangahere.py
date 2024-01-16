@@ -3,7 +3,7 @@ import time
 from constants import *
 from handler import Handler
 import utils
-from os.path import join as path_join
+from os.path import join as path_join, exists
 import urllib
 
 from selenium import webdriver 
@@ -40,7 +40,7 @@ class HandlerMangaHere(Handler):
     for a in reversed(pages_outer_element.find_elements(By.TAG_NAME, MANGAHERE_PAGE_BUTTONS_INNER_TAG)):
       try:
         curr_page_num = int(a.text)
-        logging.info("[" + self.get_tid() + " extract_total_pages]: Emd page: (str) " + str(a.text) + " (int) " +  str(curr_page_num))
+        logging.info("[" + self.get_tid() + " extract_total_pages]: End page: (str) " + str(a.text) + " (int) " +  str(curr_page_num))
         return curr_page_num
       except:
         # Unable to convert to a number (possibly due to < or > representing back/forward)
@@ -48,10 +48,69 @@ class HandlerMangaHere(Handler):
     raise Exception("Unable to extract current page number!")
   
   def extract_single_page(self):
-    return super().extract_single_page()
+    downloaded = False
+    attempts = 0
+    while True:
+      if attempts > 5:
+        self.driver.get(self.current_chapter_base_url + "#ipg" + str(self.current_download_image_number))
+        time.sleep(SLEEP_SEC)
+        logging.info("[" + self.get_tid() + " extract_single_page]: Reloading because no images!")
+        attempts = 0
+
+      # Hide the overlay
+      self.driver.execute_script(MANGAHERE_HIDE_OVERLAY_SCRIPT)
+      # Hide Danmaku if they exist
+      try:
+        self.driver.find_element(By.XPATH, MANGAHERE_HIDE_DANMAKU_XPATH).click()
+      except:
+        try:
+          self.driver.find_element(By.XPATH, MANGAHERE_SHOW_DANMAKU_XPATH).click()
+          self.driver.find_element(By.XPATH, MANGAHERE_HIDE_DANMAKU_XPATH).click()
+        except:
+          raise Exception("Neither hide/show danmaku exist")
+        
+      try:
+        joined_path = path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path, str(self.current_download_image_number) + ".png")
+        self.driver.find_element(By.XPATH, MANGAHERE_CHAPTER_IMAGE_XPATH).screenshot(joined_path)
+        
+        logging.info("[" + self.get_tid() + " extract_single_page]: Downloading image " + str(self.current_download_image_number))
+        downloaded = True
+      except:
+        pass
+      attempts += 1
+
+      if downloaded:
+        break
+    
+    assert(exists(path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path, str(self.current_download_image_number) + ".png")))
   
   def extract_chapter_images(self):
-    return super().extract_chapter_images()
+    logging.info("[" + self.get_tid() + " extract_chapter_images]: Handling chapter: " + self.current_chapter_base_url)
+
+    logging.info("[" + self.get_tid() + " extract_chapter_images]: Extracting page numbers")
+    curr_page_num = self.extract_current_page()
+    end_page_num = self.extract_total_pages()
+
+    # Save the image
+    while self.current_download_image_number <= end_page_num:
+      # Grab the specific page
+      self.driver.get(self.current_chapter_base_url + "#ipg" + str(self.current_download_image_number))
+      time.sleep(SLEEP_SEC)
+
+      # Download the image
+      self.extract_single_page()
+      # time.sleep(SLEEP_SEC)
+
+      # Use right arrow key to advance to new page
+      self.driver.find_element(By.CSS_SELECTOR, "body").send_keys(Keys.ARROW_RIGHT)
+      # # Click the next button
+      # self.driver.find_element(By.XPATH, MANGADEX_NEXT_IMAGE_BUTTON_XCLASS).click()
+      time.sleep(SLEEP_SEC)
+
+      self.current_download_image_number += 1
+
+    # Ensure the correct number of files is downloaded
+    assert(self.current_download_image_number - 1 == end_page_num)
   
   def create_comic_info(self):
     # TODO: Move into parent (also handler_mangadex.py)
