@@ -9,8 +9,27 @@ This serves as a tool to help collate content for PLEXing to self hosted content
   * Used to render JavaScript webpages
   * Used to navigate/parse HTML pages
   * Used to interact with JavaScript pages
+* Gecko driver: Obtain the one for your architecture
+  * `https://github.com/mozilla/geckodriver/releases`
+* Firefox
+  * Make sure this is installed and place wherever you wish
 
 ## Usage
+
+If you are using Windows make sure in `constants.py` the following are correctly set.
+Below is an example.
+
+```
+FIREFOX_BIN_PATH = "C:/Program Files/Mozilla Firefox/firefox.exe"
+GECKO_BIN_PATH = "./geckodriver.exe"
+```
+
+If you are using Linux make sure in `constants.py` the following are correctly set
+Below is an example.
+
+```
+GECKO_BIN_PATH = "/snap/bin/geckodriver"
+```
 
 This is currently a work in progress and can be buggy (specifically if `MAX_THREADS` is not 1 in `main.py`) due to webpage load times.
 APIs are not used when accessing MangaDex meaning that the page is loaded and parsed with Selenium instead.

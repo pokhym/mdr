@@ -3,6 +3,12 @@ from enum import Enum
 class TargetLanguageEnum(Enum):
   ENGLISH = 1
 
+"""--- BEGIN SELENIUM FIREFOX OPTIONS ---"""
+# USE ONLY IF ONLY WINDOWS
+FIREFOX_BIN_PATH = "C:/Program Files/Mozilla Firefox/firefox.exe"
+# USE ON BOTH LINUX AND WINDOWS
+GECKO_BIN_PATH = "/snap/bin/geckodriver"
+
 """ --- BEGIN METADATA FILE NAME ---"""
 METADATA_FILE_NAME = "metadata.txt"
 

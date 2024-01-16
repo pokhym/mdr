@@ -5,6 +5,7 @@ import logging
 import time
 from os.path import abspath, join as path_join, exists, isdir
 from os import makedirs
+import platform
 
 from selenium import webdriver 
 from selenium.webdriver import Firefox
@@ -72,11 +73,16 @@ class Handler:
     options.add_argument("--headless") # Set the Chrome webdriver to run in headless mode for scalability
     options.add_argument("--enable-javascript")
 
+    if platform.system() == "Windows":
+      options.binary_location = FIREFOX_BIN_PATH
+    else:
+      assert(platform.system() == "Linux")
+
     # By default, Selenium waits for all resources to download before taking actions.
     # However, we don't need it as the page is populated with dynamically generated JavaScript code.
     options.page_load_strategy = "none"
 
-    geckodriver_path = "/snap/bin/geckodriver"  # specify the path to your geckodriver
+    geckodriver_path = GECKO_BIN_PATH  # specify the path to your geckodriver
     driver_service = Service(executable_path=geckodriver_path)
 
     # Pass the defined options objects to initialize the web driver 
