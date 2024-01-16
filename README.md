@@ -5,8 +5,12 @@ This serves as a tool to help collate content for PLEXing to self hosted content
 
 Currently supports
 
-* Linux, Windows
-* MangaDex
+* Operating Systems
+  * Linux
+  * Windows
+* Sources
+  * MangaDex
+  * MangaHere (except those marked as 18+)
 
 ## Dependencies
 
@@ -50,6 +54,10 @@ https://mangadex.org/title/XXXX
 https://mangadex.org/title/XXXX
 https://mangadex.org/title/XXXX
 https://mangadex.org/title/XXXX
+https://mangahere.cc/manga/XXXX
+https://mangahere.cc/manga/XXXX
+https://mangahere.cc/manga/XXXX
+https://mangahere.cc/manga/XXXX
 ```
 
 If you have a `.tachibk` file, extract it and parse it with `gen_urls.sh`.
@@ -68,14 +76,19 @@ Working MangaDex downloader for English.
   * Parses an unzipped tachibk file to extract certain source's links
     * Supported
       * MangaDex
+      * MangaHere
 * `handler_mangadex.py`
   * Handles MangaDex titles
+* `handler_mangahere.py`
+  * Handles MangaHere titles
 * `handler.py`
   * General handler which all all other handlers inherit from
 * `main.py`
   * Main wrapper
 * `test_handler_mangadex.py`
-  * Tests for `handler_manadex.py`
+  * Tests for `handler_mangadex.py`
+* `test_handler_mangahere.py`
+  * Tests for `handler_mangahere.py`
 * `title_metadata.py`
   * Metadata for a title and its chapters used in the `Handler`
 * `utils.py`

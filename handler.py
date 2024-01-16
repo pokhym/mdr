@@ -194,6 +194,7 @@ class Handler:
 
     Implemented for:
       - MangaDex
+      - MangaHere
 
     Returns
     -------------------
@@ -207,6 +208,7 @@ class Handler:
 
     Implemented for:
       - MangaDex
+      - MangaHere
 
     Returns
     --------------------
@@ -219,6 +221,7 @@ class Handler:
 
     Implemented for:
       - MangaDex
+      - MangaHere
     """
     pass
 
@@ -228,6 +231,7 @@ class Handler:
 
     Implemented for:
       - MangaDex
+      - MangaHere
     """
     pass
 
@@ -264,6 +268,7 @@ class Handler:
 
     Implemented for:
       - MangaDex
+      - MangaHere
     """
     pass
 
@@ -279,6 +284,7 @@ class Handler:
 
     Implemented for:
       - MangaDex
+      - MangaHere
     """
     pass
 
@@ -288,6 +294,7 @@ class Handler:
 
     Implemented for:
       - MangaDex
+      - MangaHere
     """
     pass
 
@@ -298,6 +305,7 @@ class Handler:
 
     Implemented for:
       - MangaDex
+      - MangaHere
     """
     pass
 
@@ -308,6 +316,7 @@ class Handler:
 
     Implemented for:
       - MangaDex
+      - MangaHere
     """
     pass
 
@@ -328,6 +337,7 @@ class Handler:
 
     Implemented for:
       - MangaDex
+      - MangaHere
     """
     self.extract_title_name()
     self.extract_title_url()
