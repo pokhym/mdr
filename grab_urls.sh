@@ -31,12 +31,13 @@ grep -a -e "uploads.mangadex.org/covers" -e "/manga/" -e "/series/" $1 | while r
     
     STRIP3="https://mangadex.org/title/"$STRIP2
     echo "${STRIP3}"
+  elif [[ $(echo $line | grep -a -e "mangahere" | wc -l) -eq 1 ]] then
+    STRIP="${line#*/manga/}"
+    STRIP2="${STRIP%%/*}"
+    STRIP3="https://mangahere.cc/manga/"$STRIP2
+    echo "${STRIP3}"
+    # echo "MangaHere!"
+    # echo "----"
   fi
-  # elif [[ $(echo $line | grep -a -e "mangahere" | wc -l) -eq 1 ]] then
-  #   A=""
-  #   # echo $line
-  #   # echo "MangaHere!"
-  #   # echo "----"
-  # fi
 done
 
