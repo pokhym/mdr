@@ -7,7 +7,7 @@ class TargetLanguageEnum(Enum):
 METADATA_FILE_NAME = "metadata.txt"
 
 """ --- GLOBAL SLEEP TIME --- """
-SLEEP_SEC = 10
+SLEEP_SEC = 5
 
 """--- BEGIN TARGET LANGUAGE ---"""
 TARGET_LANGUAGE = TargetLanguageEnum.ENGLISH
@@ -16,11 +16,13 @@ TARGET_LANGUAGE = TargetLanguageEnum.ENGLISH
 """--- BEGIN SOURCE NAMES ---"""
 SOURCE_MANGADEX = "MangaDex"
 SOURCE_MANGADEX_BASE_URL = "https://mangadex.org"
+SOURCE_MANGAHERE = "MangaHere"
+SOURCE_MANGAHERE_BASE_URL = "https://mangahere.cc"
 """--- END SOURCE NAMES ---"""
 
 """--- START PER SOURCE CONSTANTS ---"""
 
-"""--- BEGIN MANADEX CONSTANTS ---"""
+"""--- BEGIN MANAGDEX CONSTANTS ---"""
 # User Icon XPATH
 MANGADEX_USER_ICON_XPATH = "//*[@id='avatar']"
 MANGADEX_USER_ICON_ID = "avatar"
@@ -86,6 +88,30 @@ MANGADEX_IMAGE_VISIBILITY_ATTR = "style"
 MANGADEX_IMAGE_VISIBILITY_ATTR_NOT_VISIBLE_VALUE = "display: none"
 # Next image button 
 MANGADEX_NEXT_IMAGE_BUTTON_XCLASS = "/html/body/div[1]/div[1]/div[2]/div[2]/div/div[2]/div/div[3]/button[2]"
-"""--- END MANADEX CONSTANTS ---"""
+"""--- END MANAGDEX CONSTANTS ---"""
 
+"""--- BEGIN MANGAHERE CONSTANTS ---"""
+# Title location
+MANGAHERE_TITLE_XPATH = "/html/body/div[5]/div/div[2]/p[1]/span[1]"
+
+# Description might need to be expanded
+MANGAHERE_DESCRIPTION_XPATH = "/html/body/div[5]/div/div[2]/p[4]"
+MANGAHERE_DESCRIPTION_MORE_XPATH = "/html/body/div[5]/div/div[2]/p[4]/a"
+
+# Categories outer xpath
+MANGAHERE_CATEGORIES_OUTER_XPATH = '/html/body/div[5]/div/div[2]/p[3]'
+
+# Chapters XPATH
+MANGAHERE_CHAPTERS_OUTER_XPATH =  "/html/body/div[6]/div/div[1]/div[2]/div/ul"
+# 'Expand' button for Chapters XPATH
+MANGAHERE_CHAPTERS_EXPAND_BUTTON_XPATH = "/html/body/div[6]/div/div[1]/div[2]/div/div/a"
+# Chapter's individual element within outer
+MANGAHERE_CHAPTERS_OUTER_INNER_TAG = "li"
+# Chapter's link tag
+MANGAHERE_CHAPTERS_OUTER_INNER_LINK_TAG = "a"
+# Chapter's link attribute
+MANGAHERE_CHAPTERS_OUTER_INNER_LINK_ATTR = "href"
+
+# Cover image XPATH
+MANGAHERE_COVER_IMAGE_XPATH = "/html/body/div[5]/div/div[1]/img"
 """--- END START PER SOURCE CONSTANTS ---"""

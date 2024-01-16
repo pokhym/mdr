@@ -1,4 +1,13 @@
 import logging
+from constants import *
+from handler_mangahere import HandlerMangaHere
+
+def test_extract_title():
+  mh = HandlerMangaHere(0, SOURCE_MANGAHERE)
+  mh.init_for_title("test/", "https://www.mangahere.cc/manga/spy_x_family/")
+  mh.extract_metadata()
+
+  mh.metadata.dump(log=True)
 
 if __name__ == "__main__":
   # Setup Logging
@@ -16,3 +25,5 @@ if __name__ == "__main__":
   console.setFormatter(formatter)
   # add the handler to the root logger
   logging.getLogger().addHandler(console)
+
+  test_extract_title()
