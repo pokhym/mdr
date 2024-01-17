@@ -202,33 +202,21 @@ class HandlerMangaDex(Handler):
     # curr_page_num = self.extract_current_page()
     end_page_num = self.extract_total_pages()
 
-    # Open the menu
-    # This only should be done once as this remains open until you go back
-    # To the original content page
-    # logging.info("[" + self.get_tid() + " extract_chapter_images]: Opening menu")
-    # self.driver.find_element(By.CSS_SELECTOR, "body").send_keys("m")
-    # time.sleep(1)
-
     if self.is_webtoon:
       end_page_num = self.extract_webtoon_chapter()
     else:
-      # Save the image
-      while self.current_download_image_number <= end_page_num:
-        # Grab the specific page
-        self.driver.get(self.current_chapter_base_url + "/" + str(self.current_download_image_number))
-        time.sleep(SLEEP_SEC)
-
-        # Download the image
-        self.extract_single_page()
-        # time.sleep(SLEEP_SEC)
-
-        # Use right arrow key to advance to new page
-        self.driver.find_element(By.CSS_SELECTOR, "body").send_keys(Keys.ARROW_RIGHT)
-        # # Click the next button
-        # self.driver.find_element(By.XPATH, MANGADEX_NEXT_IMAGE_BUTTON_XCLASS).click()
-        time.sleep(SLEEP_SEC)
-
-        self.current_download_image_number += 1
+      # Open the menu
+      # This only should be done once as this remains open until you go back
+      # To the original content page
+      logging.info("[" + self.get_tid() + " extract_chapter_images]: Opening menu")
+      self.driver.find_element(By.CSS_SELECTOR, "body").send_keys("m")
+      time.sleep(SLEEP_SEC)
+      # Convert to long strip to obtain blobs all at once and use extract_webtoon as normal
+      self.driver.find_element(By.XPATH, MANGADEX_CHANGE_READER_TYPE).click()
+      self.driver.find_element(By.XPATH, MANGADEX_CHANGE_READER_TYPE).click()
+      time.sleep(SLEEP_SEC)
+      
+      end_page_num = self.extract_webtoon_chapter()
 
     # Ensure the correct number of files is downloaded
     assert(self.current_download_image_number - 1 == end_page_num)

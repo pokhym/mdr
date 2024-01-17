@@ -103,6 +103,10 @@ MANGADEX_NEXT_IMAGE_BUTTON_XCLASS = "/html/body/div[1]/div[1]/div[2]/div[2]/div/
 #     <img>
 MANGADEX_WEBTOON_OUTER_XCLASS = "/html/body/div[1]/div[1]/div[2]/div[2]/div/div[1]/div[2]/div[1]/div"
 MANGADEX_WEBTOON_OUTER_OVERFLOW_XCLASS = ".//*"
+
+# CHange the view type (eg. single page, double page) button
+# Single Page -> Double Page -> Long Strip -> Wide Strip
+MANGADEX_CHANGE_READER_TYPE = "/html/body/div[1]/div[1]/div[2]/div[2]/div/div[2]/div/div[7]/button[1]"
 """--- END MANAGDEX CONSTANTS ---"""
 
 """--- BEGIN MANGAHERE CONSTANTS ---"""
