@@ -94,7 +94,6 @@ If you have a `.tachibk` file, extract it and parse it with `gen_urls.sh`.
 
 ## TODOs
 
-* Update ManaDex downloader to be faster by using continuous scroll and finding all blobs
 * Add tool to match the mangaupdates status with ones from current sources
   * Add migration
 * Remove timeouts for explicit waits?
