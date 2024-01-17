@@ -53,27 +53,34 @@ class HandlerMangaDex(Handler):
     # except:
     #   logging.warn("[" + self.get_tid() + " extract_current_page]: Failed to extract page count info!")
     #   assert(0)
-    # Pg. 1 / 35
+    
+    # Web toon does not show page count
     if content.count(MANGADEX_PAGE_KEYWORD_START) != 1:
-      logging.warn("[" + self.get_tid() + " extract_current_page]: Failed to find '" + MANGADEX_PAGE_KEYWORD_START + "': " + content)
-    assert(content.count(MANGADEX_PAGE_KEYWORD_START) == 1)
-    # ` 1 / 35'
-    stripped = content[content.find(MANGADEX_PAGE_KEYWORD_START) + len(MANGADEX_PAGE_KEYWORD_START):]
-    # ` 1 / 35`
-    # stripped = stripped[:stripped.find(MANGADEX_PAGE_KEYWORD_END)]
-    # ` 1`
-    curr_page = stripped[:stripped.find(MANGADEX_PAGE_DELIM_CURR_TOTAL)]
-    curr_page = curr_page.strip()
-    curr_page_num = None
-    try:
-      curr_page_num = int(curr_page)
-    except Exception as e:
-      self.save_screenshot()
-      raise Exception("Unable to convert current page number " + curr_page) from e
-    logging.info("[" + self.get_tid() + " extract_current_page]: Start page: (str) " + str(curr_page) + " (int) " +  str(curr_page_num))
-    return curr_page_num
+      logging.warn("[" + self.get_tid() + " extract_current_page]: Assuming webtoon failed to find '" + MANGADEX_PAGE_KEYWORD_START + "': " + content)
+
+      return self.current_download_image_number
+    # Pg. 1 / 35
+    else:
+      # ` 1 / 35'
+      stripped = content[content.find(MANGADEX_PAGE_KEYWORD_START) + len(MANGADEX_PAGE_KEYWORD_START):]
+      # ` 1 / 35`
+      # stripped = stripped[:stripped.find(MANGADEX_PAGE_KEYWORD_END)]
+      # ` 1`
+      curr_page = stripped[:stripped.find(MANGADEX_PAGE_DELIM_CURR_TOTAL)]
+      curr_page = curr_page.strip()
+      curr_page_num = None
+      try:
+        curr_page_num = int(curr_page)
+      except Exception as e:
+        self.save_screenshot()
+        raise Exception("Unable to convert current page number " + curr_page) from e
+      logging.info("[" + self.get_tid() + " extract_current_page]: Start page: (str) " + str(curr_page) + " (int) " +  str(curr_page_num))
+      return curr_page_num
   
   def extract_total_pages(self):
+    """
+    Returns None if webtoon
+    """
     # Sometimes the page number cannot be seen if the image is too big scroll to the top of the page
     time.sleep(SLEEP_SEC)
     self.driver.find_element(By.CSS_SELECTOR, "body").send_keys(Keys.PAGE_UP)
@@ -85,29 +92,38 @@ class HandlerMangaDex(Handler):
     # except:
     #   logging.warn("[" + self.get_tid() + " extract_total_pages]: Failed to extract page count info!")
     #   assert(0)
-    # 'Site Rules\nPrivacy Policy\nAnnouncements\nv2023.11.27\n© MangaDex 2024\nCtrl\nK\nImmigrants and Doosu (2)\nIsekai Nonbiri Nouka\nCh. 222\nPg. 1 / 11\nMenu\nLHTranslation\n1\n11'
+    
+    # Web toon does not have 
     if content.count(MANGADEX_PAGE_KEYWORD_START) != 1:
-      logging.warn("[" + self.get_tid() + " extract_total_pages]: Failed to find '" + MANGADEX_PAGE_KEYWORD_START + "': " + content)
-
+      logging.warn("[" + self.get_tid() + " extract_total_pages]: Assuming webtoon failed to find '" + MANGADEX_PAGE_KEYWORD_START + "': " + content)
+      
+      # end_page_num = 0
+      # images_outer_wrapper_object = self.driver.find_element(By.XPATH, MANGADEX_WEBTOON_OUTER_XCLASS)
+      # blobs = [i.get_attribute(MANGADEX_IMAGE_BLOB_ATTR) for i in images_outer_wrapper_object.find_elements(By.XPATH, MANGADEX_WEBTOON_OUTER_OVERFLOW_XCLASS) if i.tag_name == "img"]
+      # logging.info("[" + self.get_tid() + " extract_total_pages]: End page: (str) " + str(len(blobs)) + " (int) " +  str(len(blobs)))
+      # Mark as webtoon
+      self.is_webtoon = True
+      return None
     # 'Pg. 1 / 35'
-    assert(content.count(MANGADEX_PAGE_KEYWORD_START) == 1)
-    # ` 1 / 35``
-    stripped = content[content.find(MANGADEX_PAGE_KEYWORD_START) + len(MANGADEX_PAGE_KEYWORD_START):]
-    # ` 1 / 35`
-    # stripped = stripped[:stripped.find(MANGADEX_PAGE_KEYWORD_END)]
+    else:
+      assert(content.count(MANGADEX_PAGE_KEYWORD_START) == 1)
+      # ` 1 / 35``
+      stripped = content[content.find(MANGADEX_PAGE_KEYWORD_START) + len(MANGADEX_PAGE_KEYWORD_START):]
+      # ` 1 / 35`
+      # stripped = stripped[:stripped.find(MANGADEX_PAGE_KEYWORD_END)]
 
-    # ` 11`
-    end_page = stripped[stripped.find(MANGADEX_PAGE_DELIM_CURR_TOTAL) + len(MANGADEX_PAGE_DELIM_CURR_TOTAL):]
-    end_page = end_page.strip()
-    end_page_num = None
-    try:
-      end_page_num = int(end_page)
-    except Exception as e:
-      self.save_screenshot()
-      raise Exception("Unable to convert current page number " + end_page) from e
-    logging.info("[" + self.get_tid() + " extract_total_pages]: End page: (str) " + str(end_page) + " (int) " +  str(end_page_num))
+      # ` 11`
+      end_page = stripped[stripped.find(MANGADEX_PAGE_DELIM_CURR_TOTAL) + len(MANGADEX_PAGE_DELIM_CURR_TOTAL):]
+      end_page = end_page.strip()
+      end_page_num = None
+      try:
+        end_page_num = int(end_page)
+      except Exception as e:
+        self.save_screenshot()
+        raise Exception("Unable to convert current page number " + end_page) from e
+      logging.info("[" + self.get_tid() + " extract_total_pages]: End page: (str) " + str(end_page) + " (int) " +  str(end_page_num))
 
-    return end_page_num
+      return end_page_num
   
   def extract_single_page(self):
     downloaded = False
@@ -144,13 +160,46 @@ class HandlerMangaDex(Handler):
       if downloaded:
         break
     assert(exists(path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path, str(self.current_download_image_number) + ".png")))
-        
+
+  def extract_webtoon_chapter(self):
+    """
+    As MangaDex seems to treat webtoons differently by loading all the images "at once"
+    this function is required to iterate over all of them. Requires the chapter to be loaded
+    by the driver before calling this
+
+    Returns
+    ------------------
+    Number of pages in the chapter
+    """ 
+    self.driver.get(self.current_chapter_base_url)
+    time.sleep(SLEEP_SEC)
+    end_page_num = 0
+    images_outer_wrapper_object = self.driver.find_element(By.XPATH, MANGADEX_WEBTOON_OUTER_XCLASS)
+    blobs = [i.get_attribute(MANGADEX_IMAGE_BLOB_ATTR) for i in images_outer_wrapper_object.find_elements(By.XPATH, MANGADEX_WEBTOON_OUTER_OVERFLOW_XCLASS) if i.tag_name == "img"]
+    for blob_location in blobs:
+      assert("blob" in blob_location)
+
+      end_page_num += 1
+    
+      self.downloaded_blobs_set.add(blob_location)
+      logging.info("[" + self.get_tid() + " extract_webtoon_chapter]: Downloading image " + str(self.current_download_image_number) + " with uri " + blob_location)
+      # self.extract_current_page()
+
+      bytes = utils.get_blob_contents(self.driver, blob_location)
+      joined_path = path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path, str(self.current_download_image_number) + ".png")
+      with open(joined_path, "wb") as fd:
+        fd.write(bytes)
+        fd.close()
+      
+      self.current_download_image_number += 1
+    assert(self.current_download_image_number -1 == end_page_num)
+    return end_page_num
 
   def extract_chapter_images(self):
     logging.info("[" + self.get_tid() + " extract_chapter_images]: Handling chapter: " + self.current_chapter_base_url)
 
     logging.info("[" + self.get_tid() + " extract_chapter_images]: Extracting page numbers")
-    curr_page_num = self.extract_current_page()
+    # curr_page_num = self.extract_current_page()
     end_page_num = self.extract_total_pages()
 
     # Open the menu
@@ -160,23 +209,26 @@ class HandlerMangaDex(Handler):
     # self.driver.find_element(By.CSS_SELECTOR, "body").send_keys("m")
     # time.sleep(1)
 
-    # Save the image
-    while self.current_download_image_number <= end_page_num:
-      # Grab the specific page
-      self.driver.get(self.current_chapter_base_url + "/" + str(self.current_download_image_number))
-      time.sleep(SLEEP_SEC)
+    if self.is_webtoon:
+      end_page_num = self.extract_webtoon_chapter()
+    else:
+      # Save the image
+      while self.current_download_image_number <= end_page_num:
+        # Grab the specific page
+        self.driver.get(self.current_chapter_base_url + "/" + str(self.current_download_image_number))
+        time.sleep(SLEEP_SEC)
 
-      # Download the image
-      self.extract_single_page()
-      # time.sleep(SLEEP_SEC)
+        # Download the image
+        self.extract_single_page()
+        # time.sleep(SLEEP_SEC)
 
-      # Use right arrow key to advance to new page
-      self.driver.find_element(By.CSS_SELECTOR, "body").send_keys(Keys.ARROW_RIGHT)
-      # # Click the next button
-      # self.driver.find_element(By.XPATH, MANGADEX_NEXT_IMAGE_BUTTON_XCLASS).click()
-      time.sleep(SLEEP_SEC)
+        # Use right arrow key to advance to new page
+        self.driver.find_element(By.CSS_SELECTOR, "body").send_keys(Keys.ARROW_RIGHT)
+        # # Click the next button
+        # self.driver.find_element(By.XPATH, MANGADEX_NEXT_IMAGE_BUTTON_XCLASS).click()
+        time.sleep(SLEEP_SEC)
 
-      self.current_download_image_number += 1
+        self.current_download_image_number += 1
 
     # Ensure the correct number of files is downloaded
     assert(self.current_download_image_number - 1 == end_page_num)

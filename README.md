@@ -9,7 +9,7 @@ Currently supports
   * Linux
   * Windows
 * Sources
-  * MangaDex (excpet Webtoons)
+  * MangaDex
   * MangaHere (except those marked as 18+)
 
 ## Dependencies
@@ -94,7 +94,7 @@ If you have a `.tachibk` file, extract it and parse it with `gen_urls.sh`.
 
 ## TODOs
 
-* (HIGH PRIORITY) MangaDex webtoons
+* Update ManaDex downloader to be faster by using continuous scroll and finding all blobs
 * Add tool to match the mangaupdates status with ones from current sources
   * Add migration
 * Remove timeouts for explicit waits?

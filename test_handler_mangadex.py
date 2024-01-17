@@ -167,6 +167,9 @@ def test_full3():
   mh.get_update()
 
 def test_full4():
+  """
+  webtoon test
+  """
   mh = HandlerMangaDex(0, SOURCE_MANGADEX)
   mh.reset_for_next_title()
 

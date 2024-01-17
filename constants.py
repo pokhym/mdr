@@ -96,6 +96,13 @@ MANGADEX_IMAGE_VISIBILITY_ATTR = "style"
 MANGADEX_IMAGE_VISIBILITY_ATTR_NOT_VISIBLE_VALUE = "display: none"
 # Next image button 
 MANGADEX_NEXT_IMAGE_BUTTON_XCLASS = "/html/body/div[1]/div[1]/div[2]/div[2]/div/div[2]/div/div[3]/button[2]"
+
+# The following are for webtoons
+# <outer>
+#   <overflow wrapper>
+#     <img>
+MANGADEX_WEBTOON_OUTER_XCLASS = "/html/body/div[1]/div[1]/div[2]/div[2]/div/div[1]/div[2]/div[1]/div"
+MANGADEX_WEBTOON_OUTER_OVERFLOW_XCLASS = ".//*"
 """--- END MANAGDEX CONSTANTS ---"""
 
 """--- BEGIN MANGAHERE CONSTANTS ---"""

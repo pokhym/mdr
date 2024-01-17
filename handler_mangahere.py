@@ -88,7 +88,7 @@ class HandlerMangaHere(Handler):
     logging.info("[" + self.get_tid() + " extract_chapter_images]: Handling chapter: " + self.current_chapter_base_url)
 
     logging.info("[" + self.get_tid() + " extract_chapter_images]: Extracting page numbers")
-    curr_page_num = self.extract_current_page()
+    # curr_page_num = self.extract_current_page()
     end_page_num = self.extract_total_pages()
 
     # Save the image

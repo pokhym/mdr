@@ -36,6 +36,9 @@ class Handler:
       Base URL of the title
     current_chapter_base_url: Union[None, str]
       Base URL of the chapter
+    is_webtoon: bool
+      True if current title is webtoon this governs the download behavior
+      currently required for MangaDex
     current_download_image_number: int
       A number representing the page number currently being downloaded
     driver:
@@ -49,6 +52,7 @@ class Handler:
     self.download_chapter_rel_base_path = None
     self.current_title_base_url = None
     self.current_chapter_base_url = None
+    self.is_webtoon = False
     self.current_download_image_number = 1
 
     self.driver = None
@@ -111,6 +115,7 @@ class Handler:
     self.download_chapter_rel_base_path = None
     self.current_title_base_url = None
     self.current_chapter_base_url = None
+    self.is_webtoon = False
     self.current_download_image_number = 1
 
   def init_for_title(self, title_abs_base_path, title_base_url):
