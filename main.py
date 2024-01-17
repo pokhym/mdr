@@ -3,6 +3,7 @@ import multiprocessing as mp
 from os.path import exists, expanduser
 
 from handler_mangadex import HandlerMangaDex
+from handler_mangahere import HandlerMangaHere
 from constants import *
 
 # The full path to the root library location
@@ -64,6 +65,12 @@ def run_handler_thread(tid):
 
     if "mangadex" in url:
       mh = HandlerMangaDex(tid, SOURCE_MANGADEX)
+      mh.reset_for_next_title()
+      mh.init_for_title(ROOT_LIB_PATH, url)
+      mh.extract_metadata()
+      mh.get_update()
+    elif "mangahere" in url:
+      mh = HandlerMangaHere(tid, SOURCE_MANGAHERE)
       mh.reset_for_next_title()
       mh.init_for_title(ROOT_LIB_PATH, url)
       mh.extract_metadata()
