@@ -62,10 +62,6 @@ https://mangahere.cc/manga/XXXX
 
 If you have a `.tachibk` file, extract it and parse it with `gen_urls.sh`.
 
-## Status
-
-Working MangaDex downloader for English.
-
 ## Files/Structure
 
 * `comic_info.py`
@@ -101,9 +97,9 @@ Working MangaDex downloader for English.
 * Add tool to match the mangaupdates status with ones from current sources
   * Add migration
 * Remove timeouts for explicit waits?
-* Swap back to Chromium (?) or add search function for Gecko
 * Add other sources
 * More metadata
   * Status of publishing
+  * Capture content type in MangaDex? (eg. Suggestive)
 * Create a UI to handle everything with PySimpleGUI?
 * Manual redownloading feature if a download fails
