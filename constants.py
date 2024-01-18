@@ -94,7 +94,7 @@ MANGADEX_IMAGE_XCLASS = "//img[contains(@class, '" + MANGADEX_IMAGE_CLASS + "')]
 # Delete image scripte
 MANGADEX_IMAGE_DELETE_SCRIPT = """
   if(document.getElementsByClassName(""" + '"' + MANGADEX_IMAGE_CLASS + '"' + """).length > 0) {
-    var l = document.getElementsByClassName("img ls limit-width")[0];
+    var l = document.getElementsByClassName(""" + '"' + MANGADEX_IMAGE_CLASS + '"' + """)[0];
     l.parentNode.removeChild(l);
   }
 """
