@@ -87,8 +87,17 @@ MANGADEX_PAGE_KEYWORD_START = "Pg."
 MANGADEX_PAGE_KEYWORD_END = "\n"
 # 1 / 11 slash is the delimiter
 MANGADEX_PAGE_DELIM_CURR_TOTAL = "/"
+# Image class
+MANGADEX_IMAGE_CLASS = "img ls limit-width"
 # Image XCLASS
-MANGADEX_IMAGE_XCLASS = "//img[contains(@class, 'img sp limit-width limit-height mx-auto')]"
+MANGADEX_IMAGE_XCLASS = "//img[contains(@class, '" + MANGADEX_IMAGE_CLASS + "')]"
+# Delete image scripte
+MANGADEX_IMAGE_DELETE_SCRIPT = """
+  if(document.getElementsByClassName(""" + '"' + MANGADEX_IMAGE_CLASS + '"' + """).length > 0) {
+    var l = document.getElementsByClassName("img ls limit-width")[0];
+    l.parentNode.removeChild(l);
+  }
+"""
 # Attribute containing the blob url
 MANGADEX_IMAGE_BLOB_ATTR = "src"
 # Next image visibility attribute

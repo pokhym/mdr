@@ -14,6 +14,8 @@ from selenium.webdriver import Firefox
 from selenium.webdriver.common.by import By 
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
 
 class HandlerMangaDex(Handler):
 
@@ -174,24 +176,36 @@ class HandlerMangaDex(Handler):
     self.driver.get(self.current_chapter_base_url)
     time.sleep(SLEEP_SEC)
     end_page_num = 0
-    images_outer_wrapper_object = self.driver.find_element(By.XPATH, MANGADEX_WEBTOON_OUTER_XCLASS)
-    blobs = [i.get_attribute(MANGADEX_IMAGE_BLOB_ATTR) for i in images_outer_wrapper_object.find_elements(By.XPATH, MANGADEX_WEBTOON_OUTER_OVERFLOW_XCLASS) if i.tag_name == "img"]
-    for blob_location in blobs:
-      assert("blob" in blob_location)
 
-      end_page_num += 1
-    
-      self.downloaded_blobs_set.add(blob_location)
-      logging.info("[" + self.get_tid() + " extract_webtoon_chapter]: Downloading image " + str(self.current_download_image_number) + " with uri " + blob_location)
+    while True:
+      wait = WebDriverWait(self.driver, SLEEP_SEC * 2)
+      try:
+        image_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_IMAGE_XCLASS)))
+      except:
+        logging.info("[" + self.get_tid() + " extract_webtoon_chapter]: Finished downloading chapter")
+        assert(len(self.driver.find_elements(By.XPATH, MANGADEX_IMAGE_XCLASS)) == 0)
+        break
+      image_blob = image_obj.get_attribute(MANGADEX_IMAGE_BLOB_ATTR)
+
+      if(image_blob in self.downloaded_blobs_set):
+        break
+      self.downloaded_blobs_set.add(image_blob)
+
+      logging.info("[" + self.get_tid() + " extract_webtoon_chapter]: Downloading image " + str(self.current_download_image_number) + " with uri " + image_blob)
       # self.extract_current_page()
 
-      bytes = utils.get_blob_contents(self.driver, blob_location)
+      bytes = utils.get_blob_contents(self.driver, image_blob)
       joined_path = path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path, str(self.current_download_image_number) + ".png")
       with open(joined_path, "wb") as fd:
         fd.write(bytes)
         fd.close()
+
+      # Delete image
+      self.driver.execute_script(MANGADEX_IMAGE_DELETE_SCRIPT)
       
+      end_page_num += 1
       self.current_download_image_number += 1
+
     assert(self.current_download_image_number -1 == end_page_num)
     return end_page_num
 
@@ -211,6 +225,7 @@ class HandlerMangaDex(Handler):
       logging.info("[" + self.get_tid() + " extract_chapter_images]: Opening menu")
       self.driver.find_element(By.CSS_SELECTOR, "body").send_keys("m")
       time.sleep(SLEEP_SEC)
+      logging.info("[" + self.get_tid() + " extract_chapter_images]: Selecting long strip")
       # Convert to long strip to obtain blobs all at once and use extract_webtoon as normal
       self.driver.find_element(By.XPATH, MANGADEX_CHANGE_READER_TYPE).click()
       self.driver.find_element(By.XPATH, MANGADEX_CHANGE_READER_TYPE).click()

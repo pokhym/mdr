@@ -1,6 +1,24 @@
 import base64
 import shutil
 from os.path import split as path_split, join as path_join
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+
+def get_xpath(elm):
+    """
+    https://stackoverflow.com/questions/71699032/find-the-xpath-with-get-attribute-in-python-selenium
+    """
+    e = elm
+    xpath = elm.tag_name
+    while e.tag_name != "html":
+        e = e.find_element(By.XPATH, "..")
+        neighbours = e.find_elements(By.XPATH, "../" + e.tag_name)
+        level = e.tag_name
+        if len(neighbours) > 1:
+            level += "[" + str(neighbours.index(e) + 1) + "]"
+        xpath = level + "/" + xpath
+    return "/" + xpath
 
 def get_blob_contents(driver, uri):
   """
