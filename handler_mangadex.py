@@ -330,6 +330,9 @@ class HandlerMangaDex(Handler):
           ch_title = ch_obj.text
           ch_url = ch_obj.get_attribute(MANGADEX_CHAPTER_TOP_LEVEL_INNER_URL_ATTR)
           try:
+            # When filtering by English, all chapters must begin with "Ch." unless there are multiple
+            # uploaders after which we nee dto go up two levels like in the try block below
+            assert(ch_title.startswith("Ch."))
             extracted_ch_num = utils.extract_chapter_num_string(ch_title)
           except:
             logging.info("[" + self.get_tid() + " extract_chapter_numbers]: Unable to extract chapter number! Probably has multiple sources! Attempting to grab outter div with chapter num!")

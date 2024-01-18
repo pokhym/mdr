@@ -2,6 +2,7 @@ import logging
 
 from handler_mangadex import *
 from constants import *
+from os.path import expanduser
 
 import multiprocessing as mp
 
@@ -120,6 +121,16 @@ def test_title_metadata4():
 
   mh.metadata.dump(log=True)
 
+def test_title_metadata5():
+  mh = HandlerMangaDex(0, SOURCE_MANGADEX)
+  mh.reset_for_next_title()
+
+  mh.init_for_title(expanduser("test/"), "https://mangadex.org/title/12e28a8a-cbfe-4e12-bab8-b6fb0b9a59b4/09960d27-f0a4-42bc-9e2b-c77ac93eec2a")
+
+  mh.extract_metadata()
+
+  mh.metadata.dump(log=True)
+
 def test_language_selection():
   mh = HandlerMangaDex(0, SOURCE_MANGADEX)
   mh.reset_for_next_title()
@@ -206,4 +217,4 @@ if __name__ == "__main__":
   # add the handler to the root logger
   logging.getLogger().addHandler(console)
   
-  test_title_metadata4()
+  test_title_metadata5()
