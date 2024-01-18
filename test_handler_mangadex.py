@@ -110,6 +110,16 @@ def test_title_metadata4():
 
   mh.metadata.dump()
 
+def test_title_metadata4():
+  mh = HandlerMangaDex(0, SOURCE_MANGADEX)
+  mh.reset_for_next_title()
+
+  mh.init_for_title("test/", "https://mangadex.org/title/0e009a58-6ebf-445b-8057-a1a69b8f8c7f/202cf5e2-44c9-4b4c-8c99-55f354f518fb")
+
+  mh.extract_metadata()
+
+  mh.metadata.dump(log=True)
+
 def test_language_selection():
   mh = HandlerMangaDex(0, SOURCE_MANGADEX)
   mh.reset_for_next_title()
@@ -196,4 +206,4 @@ if __name__ == "__main__":
   # add the handler to the root logger
   logging.getLogger().addHandler(console)
   
-  test_full()
+  test_title_metadata4()

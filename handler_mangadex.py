@@ -256,8 +256,12 @@ class HandlerMangaDex(Handler):
     self.metadata.set_title(title)
 
   def extract_description(self):
-    description = self.driver.find_element(By.XPATH, MANGADEX_DESCRIPTION_XCLASS).text
-    self.metadata.set_description(description)
+    try:
+      description = self.driver.find_element(By.XPATH, MANGADEX_DESCRIPTION_XCLASS).text
+      self.metadata.set_description(description)
+    except:
+      logging.info("[" + self.get_tid() + " extract_description] : No description!")
+      self.metadata.set_description("")
   
   def extract_categories(self):
     genres = []
