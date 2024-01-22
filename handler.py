@@ -36,6 +36,8 @@ class Handler:
       Base URL of the title
     current_chapter_base_url: Union[None, str]
       Base URL of the chapter
+    current_title_manga_updates_base_url: Sstr
+      Base URL of the MangaUpdates for this title
     is_webtoon: bool
       True if current title is webtoon this governs the download behavior
       currently required for MangaDex
@@ -52,6 +54,7 @@ class Handler:
     self.download_chapter_rel_base_path = None
     self.current_title_base_url = None
     self.current_chapter_base_url = None
+    self.current_title_manga_updates_base_url = None
     self.is_webtoon = False
     self.current_download_image_number = 1
 
@@ -192,6 +195,20 @@ class Handler:
     time.sleep(SLEEP_SEC)
 
     logging.info("[" + self.get_tid() + " init_for_chapter]: (Title: " + self.metadata.get_title() + ", Chapter: " + self.download_chapter_rel_base_path + ") Loading chapter url: " + chapter_url)
+
+  def check_manga_updates_status(self):
+    """
+    Checks if the current title has chapters in the mangaupdates
+    which are not reflected on the current source's chapter list
+    Must have a MangaUpdates link associated with this title
+    """
+    if self.current_title_manga_updates_base_url == None:
+      logging.info("[" + self.get_tid() + " check_manga_updates_status]: (Title: " + self.metadata.get_title() + ") has no MangaUpdates link!")
+      return
+
+    self.start_driver()
+
+    self.terminate_driver()
 
   def extract_current_page(self):
     """
