@@ -14,6 +14,8 @@ from selenium.webdriver import Firefox
 from selenium.webdriver.common.by import By 
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
 
 class Handler:
   def __init__(self, tid, source_name):
@@ -201,6 +203,9 @@ class Handler:
     Checks if the current title has chapters in the mangaupdates
     which are not reflected on the current source's chapter list
     Must have a MangaUpdates link associated with this title
+
+    TODO: Hanlde period chapters
+    TODO: Compare with downloaded chapters
     """
     if self.current_title_manga_updates_base_url == None:
       logging.info("[" + self.get_tid() + " check_manga_updates_status]: (Title: " + self.metadata.get_title() + ") has no MangaUpdates link!")
@@ -208,7 +213,43 @@ class Handler:
 
     self.start_driver()
 
+    self.driver.get(self.current_title_manga_updates_base_url)
+
+    wait = WebDriverWait(self.driver, SLEEP_SEC * 2)
+    chs_translated_link_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGAUPDATES_MAIN_PAGE_TRANSLATED_CHAPTERS_LINK_XCLASS)))
+    chs_translated_link_obj.click()
+
+    ch_strs = []
+    
+    while True:
+      # Obtain all the chapters for the current page
+      chs_obj = wait.until(EC.presence_of_all_elements_located((By.XPATH, MANGAUPDATES_TRANSLATED_PAGE_CHAPTERS_XCLASS)))
+
+      ch = None
+      for ch in chs_obj:
+        if ch.text != "":
+          low, high = utils.extract_chapter_num_range(ch.text)
+          assert("." not in low)
+          assert(True if high == None else "." not in high)
+          ch_nums = utils.generate_ch_range(low, high)
+          # High to low
+          for ch_num in reversed(ch_nums):
+            if ch_num not in ch_strs:
+              ch_strs.append(ch_num)
+      
+      # Check if there is more 
+      try:
+        assert(ch != None)
+        next_page_obj = self.driver.find_element(By.XPATH, MANGAUPDATES_TRANSLATED_PAGE_CHAPTERS_NEXT_40_PER_XCLASS)
+        next_page_obj.click()
+        logging.info("[" + self.get_tid() + " check_manga_updates_status]: (Title: " + self.metadata.get_title() + ") traversing next page!")
+        wait.until(EC.invisibility_of_element(ch))
+      except:
+        logging.info("[" + self.get_tid() + " check_manga_updates_status]: (Title: " + self.metadata.get_title() + ") found all chapters!")
+        break
     self.terminate_driver()
+
+    logging.info("[" + self.get_tid() + " check_manga_updates_status]: (Title: " + self.metadata.get_title() + ") " + str(ch_strs))
 
   def extract_current_page(self):
     """

@@ -3,6 +3,8 @@ import shutil
 from os.path import split as path_split, join as path_join
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from math import floor
+import logging
 
 
 def get_xpath(elm):
@@ -85,6 +87,53 @@ def extract_chapter_num_string(chapter_title):
     raise Exception("Unable to find chapter number for '" + chapter_title + "'")
   
   return num_string
+
+def extract_chapter_num_range(num_string):
+  """
+  Returns a tuple of strings
+    Low, High
+  If there is no hypen High will be None
+
+  TODO: This does not handle any chapters with a period
+  and gets rounded down. eg. 46.5 -> 46
+  """
+  if "-" not in num_string:
+    return extract_chapter_num_string(num_string), None
+  else:
+    splitted = num_string.split("-")
+    assert(len(splitted) == 2)
+    low = extract_chapter_num_string(splitted[0])
+    high = extract_chapter_num_string(splitted[1])
+
+    if "." in low:
+      logging.warn("[extract_chapter_num_range]: Low got converrted from " + low + " to " + str(int(floor(float(low)))))
+      low = str(int(floor(float(low))))
+    if "." in high:
+      logging.warn("[extract_chapter_num_range]: Low got converrted from " + high + " to " + str(int(floor(float(high)))))
+      high = str(int(floor(float(high))))
+    return low, high
+  
+def generate_ch_range(low_str, high_str):
+  """
+  55 None -> [55]
+  55 57 -> [55, 56, 57]
+  """
+  if low_str == None:
+    raise Exception("Low should not be None!")
+  if high_str == None:
+    return [str(low_str)]
+  
+  low_num = None
+  high_num = None
+  try:
+    low_num = int(low_str)
+    high_num = int(high_str)
+  except:
+    raise Exception("Unable to convert chapter string to int!")
+  
+  ret = [str(i) for i in range(low_num, high_num + 1)]
+  return ret
+
 
 def zip_folder_into_cbz(abs_folder_path):
   split_path = path_split(abs_folder_path)

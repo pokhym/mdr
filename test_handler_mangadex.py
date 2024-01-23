@@ -210,6 +210,18 @@ def test_get_mangaupdates_link():
 
   logging.info("MangaUpdates URL: " + mh.current_title_manga_updates_base_url)
 
+def test_get_mangaupdates_translated_chs():
+  mh = HandlerMangaDex(0, SOURCE_MANGADEX)
+  mh.reset_for_next_title()
+
+  mh.init_for_title("test/", "https://mangadex.org/title/0b9dfda1-8255-46ff-90f5-f0980923a1b0/1e8f8b80-49a6-4ac4-84ee-20715aa49b45")
+
+  mh.extract_mangaupdates_url()
+
+  logging.info("MangaUpdates URL: " + mh.current_title_manga_updates_base_url)
+
+  mh.check_manga_updates_status()
+
 if __name__ == "__main__":
   # Setup Logging
   logging.basicConfig(level=logging.INFO
@@ -227,4 +239,4 @@ if __name__ == "__main__":
   # add the handler to the root logger
   logging.getLogger().addHandler(console)
   
-  test_get_mangaupdates_link()
+  test_get_mangaupdates_translated_chs()

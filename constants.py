@@ -165,3 +165,12 @@ MANGAHERE_SHOW_DANMAKU_XPATH = "/html/body/div[12]/a"
 # Chapter Image XPATH
 MANGAHERE_CHAPTER_IMAGE_XPATH = "/html/body/div[7]/div/img"
 """--- END START PER SOURCE CONSTANTS ---"""
+
+"""--- BEGIN MANGAUPDATES CONSTANTS ---"""
+# Link to click to view all translated chapters
+MANGAUPDATES_MAIN_PAGE_TRANSLATED_CHAPTERS_LINK_XCLASS = "/html/body/div[2]/div[2]/div[2]/div[2]/div/div[2]/div[1]/div[3]/div[12]/a[4]/i"
+# The column containing all the chapter numbers
+MANGAUPDATES_TRANSLATED_PAGE_CHAPTERS_XCLASS = "//div[contains(@class, 'col-1 text text-center')]"
+# The next button XPATH when we have 40 items per page
+MANGAUPDATES_TRANSLATED_PAGE_CHAPTERS_NEXT_40_PER_XCLASS = "/html/body/div[2]/div[2]/div[2]/div[2]/div/div[2]/div/div[207]/div/div[3]/a"
+"""--- END MANGAUPDATES CONSTANTS ---"""
