@@ -116,6 +116,10 @@ MANGADEX_WEBTOON_OUTER_OVERFLOW_XCLASS = ".//*"
 # CHange the view type (eg. single page, double page) button
 # Single Page -> Double Page -> Long Strip -> Wide Strip
 MANGADEX_CHANGE_READER_TYPE = "/html/body/div[1]/div[1]/div[2]/div[2]/div/div[2]/div/div[7]/button[1]"
+
+# MangaUpdates XCLASS
+MANGADEX_MANGAUPDATES_XCLASS = "/html/body/div[1]/div[1]/div[2]/div[2]/div/div[9]/div[2]/div[1]/div[8]/div[2]/a[1]"
+MANGADEX_MANGAUPDATES_ATTRIBUTE = "href"
 """--- END MANAGDEX CONSTANTS ---"""
 
 """--- BEGIN MANGAHERE CONSTANTS ---"""

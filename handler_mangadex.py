@@ -45,6 +45,31 @@ class HandlerMangaDex(Handler):
     body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
     body_obj.click()
 
+  def extract_mangaupdates_url(self):
+    """
+    Extracts the MangaHere link from the title page
+    """
+    started_driver_locally = False
+    if self.driver == None:
+      self.start_driver()
+      started_driver_locally = True
+      self.driver.get(self.current_title_base_url)
+      time.sleep(SLEEP_SEC)
+    else:
+      self.driver.get(self.current_title_base_url)
+      time.sleep(SLEEP_SEC)
+    logging.info("[" + self.get_tid() + " extract_mangaupdates_url]: Extracting MangaUpdates link!")
+    try:
+      wait = WebDriverWait(self.driver, SLEEP_SEC)
+      mangaupdates_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_MANGAUPDATES_XCLASS)))
+      url = mangaupdates_obj.get_attribute(MANGADEX_MANGAUPDATES_ATTRIBUTE)
+      self.current_title_manga_updates_base_url = url
+      assert(self.current_title_manga_updates_base_url != "" and self.current_title_manga_updates_base_url != None)
+    except:
+      logging.error("[" + self.get_tid() + " extract_mangaupdates_url]: Unable to obtain MangaUpdates link!")
+
+    if started_driver_locally:
+      self.terminate_driver()
 
   def extract_current_page(self):
     # Sometimes the page number cannot be seen if the image is too big scroll to the top of the page
