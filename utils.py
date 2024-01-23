@@ -107,10 +107,10 @@ def extract_chapter_num_range(num_string):
     high = extract_chapter_num_string(splitted[1])
 
     if "." in low:
-      logging.warn("[extract_chapter_num_range]: Low got converrted from " + low + " to " + str(int(floor(float(low)))))
+      logging.warn("[extract_chapter_num_range]: Low got converted from " + low + " to " + str(int(floor(float(low)))))
       low = str(int(floor(float(low))))
     if "." in high:
-      logging.warn("[extract_chapter_num_range]: Low got converrted from " + high + " to " + str(int(floor(float(high)))))
+      logging.warn("[extract_chapter_num_range]: Low got converted from " + high + " to " + str(int(floor(float(high)))))
       high = str(int(floor(float(high))))
     return low, high
   
