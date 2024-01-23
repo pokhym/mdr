@@ -3,7 +3,9 @@
 out
 test/**
 test_log.txt
+test_missing.txt
 log*.txt
+missing.txt
 library_links.txt
 *.xml
 

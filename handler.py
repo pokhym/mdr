@@ -18,7 +18,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 class Handler:
-  def __init__(self, tid, source_name):
+  def __init__(self, tid, source_name, missing_chapters_abs_path=None):
     """
     Member Variables
     -----------------
@@ -34,6 +34,8 @@ class Handler:
       Absolute base path
     download_chapter_rel_base_path: Union[None, str]
       Relative base path to the current chapter download
+    missing_chapters_abs_path: Union[None, str]
+      Absolute base path to the log file containing titles' missing chapters
     current_title_base_url: Union[None, str]
       Base URL of the title
     current_chapter_base_url: Union[None, str]
@@ -54,6 +56,7 @@ class Handler:
     self.downloaded_blobs_set = set()
     self.download_title_abs_base_path = None
     self.download_chapter_rel_base_path = None
+    self.missing_chapters_abs_path = missing_chapters_abs_path
     self.current_title_base_url = None
     self.current_chapter_base_url = None
     self.current_title_manga_updates_base_url = None
@@ -203,9 +206,6 @@ class Handler:
     Checks if the current title has chapters in the mangaupdates
     which are not reflected on the current source's chapter list
     Must have a MangaUpdates link associated with this title
-
-    TODO: Hanlde period chapters
-    TODO: Compare with downloaded chapters
     """
     if self.current_title_manga_updates_base_url == None:
       logging.info("[" + self.get_tid() + " check_manga_updates_status]: (Title: " + self.metadata.get_title() + ") has no MangaUpdates link!")
@@ -250,6 +250,22 @@ class Handler:
     self.terminate_driver()
 
     logging.info("[" + self.get_tid() + " check_manga_updates_status]: (Title: " + self.metadata.get_title() + ") " + str(ch_strs))
+
+    ch_counts = utils.count_chapter_existence(ch_strs, self.download_title_abs_base_path)
+    has_0_counts = True if list(ch_counts.values()).count(0) > 0 else False
+
+    if has_0_counts:
+      logging.info("[" + self.get_tid() + " check_manga_updates_status]: (Title: " + self.metadata.get_title() + ") has missing chapters! Check " + str(self.missing_chapters_abs_path))
+
+      if self.missing_chapters_abs_path != None:
+        with open(self.missing_chapters_abs_path, "a") as fd:
+          fd.write(self.metadata.get_title().strip() + ",")
+          fd.write(self.current_title_base_url.strip())
+          for ch_str in ch_strs:
+            if ch_counts[ch_str] == 0:
+              fd.write("," + ch_str)
+          fd.write("\n")
+          fd.close()
 
   def extract_current_page(self):
     """

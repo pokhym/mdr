@@ -1,6 +1,7 @@
 import base64
 import shutil
-from os.path import split as path_split, join as path_join
+from os.path import split as path_split, join as path_join, isfile
+from os import listdir
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from math import floor
@@ -134,6 +135,41 @@ def generate_ch_range(low_str, high_str):
   ret = [str(i) for i in range(low_num, high_num + 1)]
   return ret
 
+def count_chapter_existence(ch_strs_list, title_base_path):
+  """
+  Takes a list of strings representing the chapters that should exist
+  Takes a path to the title folder
+  
+  Counts the number of chapters for a specfici prefix.
+
+  eg. ch_strs_list = ["45", "44", "43"]
+  eg. path contains = ["45.cbz", "43.1.cbz', "43.2.cbz"]
+
+  Returns a dict
+  {
+    "45" : 1,
+    "44" : 0,
+    "43" : 2
+  }
+  """
+  ret = {}
+  cbzs = [f for f in listdir(title_base_path) if isfile(path_join(title_base_path, f))]
+  cbzs = [f.replace(".cbz", "") for f in cbzs if ".cbz" in f]
+
+  for ch_str in ch_strs_list:
+    ret[ch_str] = 0
+  
+  for ch_str in cbzs:
+    ch_str_strip = ch_str
+    period_idx = ch_str.find(".")
+    if period_idx != -1:
+      ch_str_strip = ch_str_strip[:period_idx]
+    for k in ret.keys():
+      if k in ch_str_strip:
+        ret[k] += 1
+        break
+  return ret
+      
 
 def zip_folder_into_cbz(abs_folder_path):
   split_path = path_split(abs_folder_path)

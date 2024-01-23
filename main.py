@@ -1,6 +1,6 @@
 import logging
 import multiprocessing as mp
-from os.path import exists, expanduser
+from os.path import exists, expanduser, abspath
 
 from handler_mangadex import HandlerMangaDex
 from handler_mangahere import HandlerMangaHere
@@ -22,7 +22,10 @@ LIBRARY_LINKS_FILE_PATH = "library_links.txt"
 # The path to the log file so that problems may be debugged
 # such as when a download fails or the last operation that
 # occured before an exception was raised
-LOG_FILE_PATH = "log.txt"
+LOG_FILE_PATH = abspath("log.txt")
+
+# The path of the file containing missing chapters per title
+MISSING_CHS_LOG_FILE_PATH = abspath("missing.txt")
 
 # The number of concurrent HandlerMangaDex instances to exist
 MAX_THREADS = 1
@@ -64,7 +67,7 @@ def run_handler_thread(tid):
     # logging.info("[run_handler_thread]: Thread " + str(tid) + " handling: " + str(url))
 
     if "mangadex" in url:
-      mh = HandlerMangaDex(tid, SOURCE_MANGADEX)
+      mh = HandlerMangaDex(tid, SOURCE_MANGADEX, MISSING_CHS_LOG_FILE_PATH)
       mh.reset_for_next_title()
       mh.init_for_title(ROOT_LIB_PATH, url)
       mh.extract_metadata()
@@ -84,7 +87,7 @@ if __name__ == "__main__":
   logging.basicConfig(level=logging.INFO
                       , format="%(asctime)s;%(levelname)s;%(message)s"
                       , datefmt="%Y-%m-%d %H:%M:%S"
-                      , filename="log.txt"
+                      , filename=LOG_FILE_PATH
                       , filemode="w")
   # define a Handler which writes INFO messages or higher to the sys.stderr
   console = logging.StreamHandler()
@@ -97,6 +100,10 @@ if __name__ == "__main__":
   logging.getLogger().addHandler(console)
 
   logging.info("[main]: Starting!")
+
+  # open missing to clear it
+  with open(MISSING_CHS_LOG_FILE_PATH, "w") as fd:
+    fd.close()
 
   create_thread_mapping()
   if MAX_THREADS == 1:
