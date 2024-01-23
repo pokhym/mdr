@@ -94,8 +94,7 @@ If you have a `.tachibk` file, extract it and parse it with `gen_urls.sh`.
 
 ## TODOs
 
-* Add tool to match the mangaupdates status with ones from current sources
-  * Add migration
+* Add migration
 * Remove timeouts for explicit waits?
   * MangaHere
 * Add other sources
