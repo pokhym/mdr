@@ -27,29 +27,36 @@ class HandlerMangaDex(Handler):
     self.select_english_chapters_only()
 
   def select_english_chapters_only(self):
+    wait = WebDriverWait(self.driver, SLEEP_SEC * 2)
     # Click user icon
-    self.driver.find_element(By.ID, MANGADEX_USER_ICON_ID).click()
+    userid_obj = wait.until(EC.presence_of_element_located((By.ID, MANGADEX_USER_ICON_ID)))
+    userid_obj.click()
     # Select chapter selection language
-    self.driver.find_element(By.XPATH, MANGADEX_USER_ICON_CHAPTER_LANGUAGES_XPATH).click()
+    userid_ch_lang_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_USER_ICON_CHAPTER_LANGUAGES_XPATH)))
+    userid_ch_lang_obj.click()
     # Select the checkmark for english
-    self.driver.find_element(By.XPATH, MANGADEX_USER_ICON_CHAPTER_LANGUAES_ENGLISH_XPATH).click()
+    userid_ch_lang_eng_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_USER_ICON_CHAPTER_LANGUAES_ENGLISH_XPATH)))
+    userid_ch_lang_eng_obj.click()
 
     # Ensure it is checked
-    assert("true" == self.driver.find_element(By.XPATH, MANGADEX_USER_ICON_CHAPTER_LANGUAES_ENGLISH_XPATH).get_attribute(MANGADEX_USER_ICON_CHAPTER_LANGUAES_ENGLISH_CHECKED_ATTR))
-    time.sleep(SLEEP_SEC)
+    assert("true" == userid_ch_lang_eng_obj.get_attribute(MANGADEX_USER_ICON_CHAPTER_LANGUAES_ENGLISH_CHECKED_ATTR))
 
     # Exit the menu
-    self.driver.find_element(By.CSS_SELECTOR, "body").click()
-    time.sleep(SLEEP_SEC)
+    body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
+    body_obj.click()
 
 
   def extract_current_page(self):
     # Sometimes the page number cannot be seen if the image is too big scroll to the top of the page
-    time.sleep(SLEEP_SEC)
-    self.driver.find_element(By.CSS_SELECTOR, "body").send_keys(Keys.PAGE_UP)
-    self.driver.find_element(By.CSS_SELECTOR, "body").send_keys(Keys.PAGE_UP)
-    time.sleep(SLEEP_SEC)
-    content = self.driver.find_element(By.XPATH, MANGADEX_PAGE_COUNT_XPATH).text
+    wait = WebDriverWait(self.driver, SLEEP_SEC)
+    body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
+    body_obj.send_keys(Keys.PAGE_UP)
+    wait = WebDriverWait(self.driver, SLEEP_SEC)
+    body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
+    body_obj.send_keys(Keys.PAGE_UP)
+    
+    content_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_PAGE_COUNT_XPATH)))
+    content = content_obj.text
     # try:
     #   content = self.driver.find_element(By.XPATH, MANGADEX_PAGE_COUNT_XPATH).text
     # except:
@@ -84,11 +91,14 @@ class HandlerMangaDex(Handler):
     Returns None if webtoon
     """
     # Sometimes the page number cannot be seen if the image is too big scroll to the top of the page
-    time.sleep(SLEEP_SEC)
-    self.driver.find_element(By.CSS_SELECTOR, "body").send_keys(Keys.PAGE_UP)
-    self.driver.find_element(By.CSS_SELECTOR, "body").send_keys(Keys.PAGE_UP)
-    content = self.driver.find_element(By.XPATH, MANGADEX_PAGE_COUNT_XPATH).text
-    time.sleep(SLEEP_SEC)
+    wait = WebDriverWait(self.driver, SLEEP_SEC)
+    body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
+    body_obj.send_keys(Keys.PAGE_UP)
+    body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
+    body_obj.send_keys(Keys.PAGE_UP)
+
+    content_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_PAGE_COUNT_XPATH)))
+    content = content_obj.text
     # try:
     #   content = self.driver.find_element(By.XPATH, MANGADEX_PAGE_COUNT_XPATH).text
     # except:
@@ -174,6 +184,8 @@ class HandlerMangaDex(Handler):
     Number of pages in the chapter
     """ 
     self.driver.get(self.current_chapter_base_url)
+    # Required to ensure that the first image is the top of the page
+    # Otherwise MANGADEX_IMAGE_XCLASS may return not the first image
     time.sleep(SLEEP_SEC)
     end_page_num = 0
 
@@ -202,6 +214,8 @@ class HandlerMangaDex(Handler):
 
       # Delete image
       self.driver.execute_script(MANGADEX_IMAGE_DELETE_SCRIPT)
+
+      wait.until(EC.invisibility_of_element_located(image_obj))
       
       end_page_num += 1
       self.current_download_image_number += 1
@@ -219,17 +233,19 @@ class HandlerMangaDex(Handler):
     if self.is_webtoon:
       end_page_num = self.extract_webtoon_chapter()
     else:
+      wait = WebDriverWait(self.driver, SLEEP_SEC)
       # Open the menu
       # This only should be done once as this remains open until you go back
       # To the original content page
       logging.info("[" + self.get_tid() + " extract_chapter_images]: Opening menu")
-      self.driver.find_element(By.CSS_SELECTOR, "body").send_keys("m")
-      time.sleep(SLEEP_SEC)
+      body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
+      body_obj.send_keys("m")
       logging.info("[" + self.get_tid() + " extract_chapter_images]: Selecting long strip")
       # Convert to long strip to obtain blobs all at once and use extract_webtoon as normal
-      self.driver.find_element(By.XPATH, MANGADEX_CHANGE_READER_TYPE).click()
-      self.driver.find_element(By.XPATH, MANGADEX_CHANGE_READER_TYPE).click()
-      time.sleep(SLEEP_SEC)
+      change_reader_type_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_CHANGE_READER_TYPE)))
+      wait.until(EC.visibility_of(change_reader_type_obj))
+      change_reader_type_obj.click()
+      change_reader_type_obj.click()
       
       end_page_num = self.extract_webtoon_chapter()
 
@@ -252,21 +268,27 @@ class HandlerMangaDex(Handler):
     return
   
   def extract_title_name(self):
-    title = self.driver.find_element(By.XPATH, MANGADEX_TITLE_XCLASS).text
+    wait = WebDriverWait(self.driver, SLEEP_SEC)
+    title_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_TITLE_XCLASS)))
+    title = title_obj.text
+    # title = self.driver.find_element(By.XPATH, MANGADEX_TITLE_XCLASS).text
     self.metadata.set_title(title)
 
   def extract_description(self):
     try:
-      description = self.driver.find_element(By.XPATH, MANGADEX_DESCRIPTION_XCLASS).text
+      wait = WebDriverWait(self.driver, SLEEP_SEC)
+      description_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_DESCRIPTION_XCLASS)))
+      description = description_obj.text
       self.metadata.set_description(description)
     except:
       logging.info("[" + self.get_tid() + " extract_description] : No description!")
       self.metadata.set_description("")
   
   def extract_categories(self):
+    wait = WebDriverWait(self.driver, SLEEP_SEC)
     genres = []
     try:
-      genres_obj = self.driver.find_element(By.XPATH, MANGADEX_GENRES_XCLASS)
+      genres_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_GENRES_XCLASS)))
       for tag_obj in genres_obj.find_elements(By.CLASS_NAME, MANGADEX_GENRES_TAG_OBJ_CLASS):
         genres.append(tag_obj.find_element(By.TAG_NAME, MANGADEX_GENRES_TAG_OBJ_TAG).text)
     except:
@@ -274,7 +296,7 @@ class HandlerMangaDex(Handler):
     
     themes = []
     try:
-      themes_obj = self.driver.find_element(By.XPATH, MANGADEX_THEMES_XCLASS)
+      themes_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_THEMES_XCLASS)))
       for tag_obj in themes_obj.find_elements(By.CLASS_NAME, MANGADEX_THEMES_TAG_OBJ_CLASS):
         themes.append(tag_obj.find_element(By.TAG_NAME, MANGADEX_THEMES_TAG_OBJ_TAG).text)
     except:
@@ -282,7 +304,7 @@ class HandlerMangaDex(Handler):
     
     demographic = []
     try:
-      demographic_obj = self.driver.find_element(By.XPATH, MANGADEX_DEMOGRAPHIC_XCLASS)
+      demographic_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_DEMOGRAPHIC_XCLASS)))
       # logging.info("[" + self.get_tid() + " extract_categories] : 2.1")
       for tag_obj in demographic_obj.find_elements(By.CLASS_NAME, MANGADEX_DEMOGRAPHIC_TAG_OBJ_CLASS):
         demographic.append(tag_obj.find_element(By.TAG_NAME, MANGADEX_DEMOGRAPHIC_TAG_OBJ_TAG).text)
@@ -291,7 +313,7 @@ class HandlerMangaDex(Handler):
 
     format = []
     try:
-      format_obj = self.driver.find_element(By.XPATH, MANGADEX_FORMAT_XCLASS)
+      format_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_FORMAT_XCLASS)))
       for tag_obj in format_obj.find_elements(By.CLASS_NAME, MANGADEX_FORMAT_TAG_OBJ_CLASS):
         format.append(tag_obj.find_element(By.TAG_NAME, MANGADEX_FORMAT_TAG_OBJ_TAG).text)
     except:
@@ -321,9 +343,13 @@ class HandlerMangaDex(Handler):
     page_num = 1
     while True:
       logging.info("[" + self.get_tid() + " extract_chapter_numbers]: Grabbing page " + str(page_num) + " of chapters")
+      wait = WebDriverWait(self.driver, SLEEP_SEC)
+      chs_obj = wait.until(EC.presence_of_all_elements_located((By.XPATH, MANGADEX_CHAPTER_TOP_LEVEL_XCLASS)))
+      chs_obj = wait.until(EC.visibility_of_all_elements_located((By.XPATH, MANGADEX_CHAPTER_TOP_LEVEL_XCLASS)))
       # Obtain the the first page  
-      for ch_obj in self.driver.find_elements(By.XPATH, MANGADEX_CHAPTER_TOP_LEVEL_XCLASS):
-        flag_obj = ch_obj.find_element(By.XPATH, MANGADEX_CHAPTER_TOP_LEVEL_INNER_LANGUAGE_CLASS)
+      for ch_obj in chs_obj: # self.driver.find_elements(By.XPATH, MANGADEX_CHAPTER_TOP_LEVEL_XCLASS):
+        wait = WebDriverWait(ch_obj, SLEEP_SEC)
+        flag_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_CHAPTER_TOP_LEVEL_INNER_LANGUAGE_CLASS)))
         lang = flag_obj.get_attribute(MANGADEX_CHAPTER_TOP_LEVEL_INNER_LANGUAGE_ATTR)
 
         if TARGET_LANGUAGE == TargetLanguageEnum.ENGLISH and lang == MANGADEX_ENGLISH_TITLE:
@@ -367,12 +393,12 @@ class HandlerMangaDex(Handler):
 
       # Click to advance to next page
       right_arrow_button.click()
-      time.sleep(SLEEP_SEC)
       
       page_num += 1
 
   def extract_cover(self):
-    cover = self.driver.find_element(By.XPATH, MANGADEX_TITLE_COVER_IMAGE_XPATH)
+    wait = WebDriverWait(self.driver, SLEEP_SEC)
+    cover = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_TITLE_COVER_IMAGE_XPATH)))
     href = cover.get_attribute(MANGADEX_TITLE_COVER_IMAGE_URL_ATTR)
 
     joined_path = None
@@ -391,7 +417,6 @@ class HandlerMangaDex(Handler):
     logging.info("[" + self.get_tid() + " extract_metadata]: Extracting metadata!")
     self.start_driver()
     self.driver.get(self.current_title_base_url)
-    time.sleep(SLEEP_SEC)
 
     logging.info("[" + self.get_tid() + " extract_metadata]: Selecting language!")
     self.select_chapter_language()

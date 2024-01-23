@@ -109,9 +109,9 @@ def test_title_metadata4():
 
   mh.extract_metadata()
 
-  mh.metadata.dump()
+  mh.metadata.dump(log=True)
 
-def test_title_metadata4():
+def test_title_metadata5():
   mh = HandlerMangaDex(0, SOURCE_MANGADEX)
   mh.reset_for_next_title()
 
@@ -121,7 +121,7 @@ def test_title_metadata4():
 
   mh.metadata.dump(log=True)
 
-def test_title_metadata5():
+def test_title_metadata6():
   mh = HandlerMangaDex(0, SOURCE_MANGADEX)
   mh.reset_for_next_title()
 
@@ -217,4 +217,4 @@ if __name__ == "__main__":
   # add the handler to the root logger
   logging.getLogger().addHandler(console)
   
-  test_title_metadata5()
+  test_title_metadata4()
