@@ -286,4 +286,4 @@ if __name__ == "__main__":
   # add the handler to the root logger
   logging.getLogger().addHandler(console)
   
-  test_get_mangaupdates_translated_chs2()
+  test_get_mangaupdates_translated_chs3()

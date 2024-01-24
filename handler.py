@@ -234,6 +234,9 @@ class Handler:
       for ch in chs_obj:
         if ch.text != "":
           low, high = utils.extract_chapter_num_range(ch.text)
+          if low == None and high == None:
+            logging.warn("[" + self.get_tid() + " check_manga_updates_status]: Skipping '" + ch.text + "' because low and high both returned None!")
+            continue
           assert("." not in low)
           assert(True if high == None else "." not in high)
           ch_nums = utils.generate_ch_range(low, high)
@@ -499,5 +502,4 @@ class Handler:
           logging.info("[" + self.get_tid() + " get_update]: Skipping chapter " + str(chs[idx]) + " for title: " + self.metadata.get_title() + " as it is already downloaded")
 
     # Check missing via MangaUpdates
-    # NOTE: Currently broken
-    # self.check_manga_updates_status()
+    self.check_manga_updates_status()

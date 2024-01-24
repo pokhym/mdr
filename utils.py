@@ -94,28 +94,51 @@ def extract_chapter_num_range(num_string):
   Returns a tuple of strings
     Low, High
   If there is no hypen High will be None
+  If there is no valid number both Low, High will be None
 
   TODO: This does not handle any chapters with a period
   and gets rounded down. eg. 46.5 -> 46
   """
+  orig_num_str = num_string
+  # If the first character of the num_string is not a number simply return
+  # eg. Twitter Extras 6
+  if re.search("^[0-9]", num_string) == None:
+    logging.warn("[extract_chapter_num_range]: num_string does not contain a number as its first character '" + num_string + "'")
+    return None, None
   # https://www.mangaupdates.com/releases.html?search=73433348200&stype=series
   # This has chapters with alpha characters in it delete all of them
   # Handle 15a-c
   num_string = re.sub("[a-zA-Z]-[a-zA-Z]", "", num_string)
   # Handle 15c-19
   num_string = re.sub("[a-zA-Z]", "", num_string)
+  # Manifests if "Extras"
+  if num_string == "":
+    return None, None
+  
   if "-" not in num_string:
     if "." in num_string:
       logging.warn("[extract_chapter_num_range]: num_string got converted from " + num_string + " to " + str(int(floor(float(num_string)))))
       num_string = str(int(floor(float(num_string))))
       return num_string, None
     else:
-      return extract_chapter_num_string(num_string), None
+      try:
+        return extract_chapter_num_string(num_string), None
+      except:
+        logging.warn("[extract_chapter_num_range]: Failed to extract single chapter num! For: " + orig_num_str)
+        return None, None
   else:
     splitted = num_string.split("-")
     assert(len(splitted) == 2)
-    low = extract_chapter_num_string(splitted[0])
-    high = extract_chapter_num_string(splitted[1])
+    low = None
+    high = None
+    try:
+      low = extract_chapter_num_string(splitted[0])
+    except:
+      raise Exception("Range cannot have no low value! For: " + orig_num_str)
+    try:
+      high = extract_chapter_num_string(splitted[1])
+    except:
+      raise Exception("Failed to extract high for range! For: " + orig_num_str)
 
     if "." in low:
       logging.warn("[extract_chapter_num_range]: Low got converted from " + low + " to " + str(int(floor(float(low)))))
