@@ -165,6 +165,11 @@ class Handler:
 
     self.terminate_driver()
 
+    if self.source_name == SOURCE_MANGADEX:
+      self.start_driver()
+      self.extract_mangaupdates_url()
+      self.terminate_driver()
+
   def reset_for_next_chapter(self):
     """
     Resets all member variables for handling the
@@ -249,7 +254,7 @@ class Handler:
         break
     self.terminate_driver()
 
-    logging.info("[" + self.get_tid() + " check_manga_updates_status]: (Title: " + self.metadata.get_title() + ") " + str(ch_strs))
+    # logging.info("[" + self.get_tid() + " check_manga_updates_status]: (Title: " + self.metadata.get_title() + ") " + str(ch_strs))
 
     ch_counts = utils.count_chapter_existence(ch_strs, self.download_title_abs_base_path)
     has_0_counts = True if list(ch_counts.values()).count(0) > 0 else False
@@ -266,6 +271,17 @@ class Handler:
               fd.write("," + ch_str)
           fd.write("\n")
           fd.close()
+    else:
+      logging.info("[" + self.get_tid() + " check_manga_updates_status]: (Title: " + self.metadata.get_title() + ") has no missing chapters!")
+
+  def extract_mangaupdates_url(self):
+    """
+    Extract MangaUpdates url
+
+    Implemented for:
+      - MangaDex
+    """
+    pass
 
   def extract_current_page(self):
     """
@@ -453,7 +469,8 @@ class Handler:
   def get_update(self):
     """
     Checks for new chapters and if required
-    downloads them
+    downloads them. Also checks MangaUpdates
+    if the link exists
     """
     chs, urls = self.metadata.get_chapter_numbers()
     assert(len(chs) == len(urls))
@@ -480,3 +497,6 @@ class Handler:
         else:
           assert(exists(joined_chapter_path))
           logging.info("[" + self.get_tid() + " get_update]: Skipping chapter " + str(chs[idx]) + " for title: " + self.metadata.get_title() + " as it is already downloaded")
+
+    # Check missing via MangaUpdates
+    self.check_manga_updates_status()

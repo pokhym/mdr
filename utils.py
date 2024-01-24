@@ -99,7 +99,12 @@ def extract_chapter_num_range(num_string):
   and gets rounded down. eg. 46.5 -> 46
   """
   if "-" not in num_string:
-    return extract_chapter_num_string(num_string), None
+    if "." in num_string:
+      logging.warn("[extract_chapter_num_range]: num_string got converted from " + num_string + " to " + str(int(floor(float(num_string)))))
+      num_string = str(int(floor(float(num_string))))
+      return num_string, None
+    else:
+      return extract_chapter_num_string(num_string), None
   else:
     splitted = num_string.split("-")
     assert(len(splitted) == 2)
