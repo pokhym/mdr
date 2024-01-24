@@ -6,7 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from math import floor
 import logging
-
+import re
 
 def get_xpath(elm):
     """
@@ -98,6 +98,12 @@ def extract_chapter_num_range(num_string):
   TODO: This does not handle any chapters with a period
   and gets rounded down. eg. 46.5 -> 46
   """
+  # https://www.mangaupdates.com/releases.html?search=73433348200&stype=series
+  # This has chapters with alpha characters in it delete all of them
+  # Handle 15a-c
+  num_string = re.sub("[a-zA-Z]-[a-zA-Z]", "", num_string)
+  # Handle 15c-19
+  num_string = re.sub("[a-zA-Z]", "", num_string)
   if "-" not in num_string:
     if "." in num_string:
       logging.warn("[extract_chapter_num_range]: num_string got converted from " + num_string + " to " + str(int(floor(float(num_string)))))
