@@ -249,6 +249,26 @@ def test_get_mangaupdates_translated_chs2():
 
   mh.check_manga_updates_status()
 
+def test_get_mangaupdates_translated_chs3():
+  """
+  MangaUpdates containts things like
+    Extras
+    20 (End)
+  https://mangadex.org/title/051e6a66-7373-4583-98b6-b746153041e9/e9985bbe-ace2-4cc0-a56c-99cd25de0990
+
+  TODO:
+  """
+  mh = HandlerMangaDex(0, SOURCE_MANGADEX, "test_missing.txt")
+  mh.reset_for_next_title()
+
+  mh.init_for_title("test/", "https://mangadex.org/title/051e6a66-7373-4583-98b6-b746153041e9/e9985bbe-ace2-4cc0-a56c-99cd25de0990")
+
+  mh.extract_mangaupdates_url()
+
+  logging.info("MangaUpdates URL: " + mh.current_title_manga_updates_base_url)
+
+  mh.check_manga_updates_status()
+
 if __name__ == "__main__":
   # Setup Logging
   logging.basicConfig(level=logging.INFO

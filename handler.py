@@ -499,4 +499,5 @@ class Handler:
           logging.info("[" + self.get_tid() + " get_update]: Skipping chapter " + str(chs[idx]) + " for title: " + self.metadata.get_title() + " as it is already downloaded")
 
     # Check missing via MangaUpdates
-    self.check_manga_updates_status()
+    # NOTE: Currently broken
+    # self.check_manga_updates_status()
