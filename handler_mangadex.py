@@ -41,6 +41,10 @@ class HandlerMangaDex(Handler):
     # Ensure it is checked
     assert("true" == userid_ch_lang_eng_obj.get_attribute(MANGADEX_USER_ICON_CHAPTER_LANGUAES_ENGLISH_CHECKED_ATTR))
 
+    # As we are expecting the page to refresh now wait until the main body of the body to show up
+    body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
+    wait.until(EC.visibility_of(body_obj))
+    
     # Exit the menu
     body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
     body_obj.click()
