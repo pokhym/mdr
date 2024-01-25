@@ -235,6 +235,21 @@ def test_get_mangaupdates_translated_chs1():
   mh.check_manga_updates_status()
 
 def test_get_mangaupdates_translated_chs2():
+  mh = HandlerMangaDex(0, SOURCE_MANGADEX)
+  mh.reset_for_next_title()
+
+  mh.init_for_title("test/", "https://mangadex.org/title/10db587f-a232-485d-b4a8-68ee0cb15e3c/93ee0736-016a-42cf-bd09-7129280318f5")
+
+  mh.extract_mangaupdates_url()
+
+  logging.info("MangaUpdates URL: " + mh.current_title_manga_updates_base_url)
+
+  mh.check_manga_updates_status()
+
+  # mh.get_update()
+
+
+def test_get_mangaupdates_translated_chs2():
   """
   Test 14c chapter
   """
@@ -298,4 +313,4 @@ if __name__ == "__main__":
   # add the handler to the root logger
   logging.getLogger().addHandler(console)
   
-  test_get_mangaupdates_translated_chs4()
+  test_get_mangaupdates_translated_chs2()

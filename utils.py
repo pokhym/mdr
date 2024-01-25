@@ -112,6 +112,10 @@ def extract_chapter_num_range(num_string):
   num_string = re.sub("[a-zA-Z]-[a-zA-Z]", "", num_string)
   # Handle 15c-19
   num_string = re.sub("[a-zA-Z]", "", num_string)
+  # '35.5 (end)'is currently '35.5 ()' here
+  # Fix by deleting parentheses
+  num_string = num_string.replace("(", "")
+  num_string = num_string.replace(")", "")
   # Manifests if "Extras"
   if num_string == "":
     return None, None
