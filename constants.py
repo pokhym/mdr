@@ -168,7 +168,10 @@ MANGAHERE_CHAPTER_IMAGE_XPATH = "/html/body/div[7]/div/img"
 
 """--- BEGIN MANGAUPDATES CONSTANTS ---"""
 # Link to click to view all translated chapters
-MANGAUPDATES_MAIN_PAGE_TRANSLATED_CHAPTERS_LINK_XCLASS = "/html/body/div[2]/div[2]/div[2]/div[2]/div/div[2]/div[1]/div[3]/div[12]/a[4]/i"
+MANGAUPDATES_MAIN_PAGE_TRANSLATED_CHAPTERS_LINK_XCLASS = "//a[contains(@rel, 'nofollow')]"
+MANGAUPDATES_MAIN_PAGE_TRANSLATED_CHAPTERS_LINK_ATTRIBUTE = "href"
+# Must contain the following substring for it to list the releases
+MANGAUPDATES_MAIN_PAGE_TRANSLATED_CHAPTERS_LINK_SUBSTR = "https://www.mangaupdates.com/releases.html?search="
 # The column containing all the chapter numbers
 MANGAUPDATES_TRANSLATED_PAGE_CHAPTERS_XCLASS = "//div[contains(@class, 'col-1 text text-center')]/span"
 # The next button XPATH when we have 40 items per page

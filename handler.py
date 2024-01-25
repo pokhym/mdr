@@ -221,9 +221,17 @@ class Handler:
     self.driver.get(self.current_title_manga_updates_base_url)
 
     wait = WebDriverWait(self.driver, SLEEP_SEC * 2)
-    chs_translated_link_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGAUPDATES_MAIN_PAGE_TRANSLATED_CHAPTERS_LINK_XCLASS)))
-    chs_translated_link_obj.click()
-
+    chs_translated_link_obj = wait.until(EC.presence_of_all_elements_located((By.XPATH, MANGAUPDATES_MAIN_PAGE_TRANSLATED_CHAPTERS_LINK_XCLASS)))
+    
+    found = False
+    for ch_a_obj in chs_translated_link_obj:
+      if MANGAUPDATES_MAIN_PAGE_TRANSLATED_CHAPTERS_LINK_SUBSTR in ch_a_obj.get_attribute(MANGAUPDATES_MAIN_PAGE_TRANSLATED_CHAPTERS_LINK_ATTRIBUTE):
+        ch_a_obj.click()
+        found = True
+        break
+    # Must be able to find and click the link to the translated releases page
+    assert(found == True)
+    
     ch_strs = []
     
     while True:
