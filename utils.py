@@ -182,7 +182,7 @@ def count_chapter_existence(ch_strs_list, title_base_path):
   Counts the number of chapters for a specfici prefix.
 
   eg. ch_strs_list = ["45", "44", "43"]
-  eg. path contains = ["45.cbz", "43.1.cbz', "43.2.cbz"]
+  eg. path cbzs = ["45.cbz", "43.1.cbz', "43.2.cbz"]
 
   Returns a dict
   {
@@ -203,10 +203,8 @@ def count_chapter_existence(ch_strs_list, title_base_path):
     period_idx = ch_str.find(".")
     if period_idx != -1:
       ch_str_strip = ch_str_strip[:period_idx]
-    for k in ret.keys():
-      if k in ch_str_strip:
-        ret[k] += 1
-        break
+    if ch_str_strip in ch_strs_list:
+      ret[ch_str_strip] += 1
   return ret
       
 

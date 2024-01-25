@@ -296,6 +296,18 @@ def test_get_mangaupdates_translated_chs4():
 
   mh.check_manga_updates_status()
 
+def test_mangaupdates_missing():
+  mh = HandlerMangaDex(0, SOURCE_MANGADEX, "test_missing.txt")
+  mh.reset_for_next_title()
+
+  mh.init_for_title("test/", "https://mangadex.org/title/10227f74-9134-4262-b01d-8966bc149c4d/b7d1a6ea-fbb9-4fa5-a6a4-098320656f24")
+
+  mh.extract_mangaupdates_url()
+
+  logging.info("MangaUpdates URL: " + mh.current_title_manga_updates_base_url)
+
+  mh.check_manga_updates_status()
+
 if __name__ == "__main__":
   # Setup Logging
   logging.basicConfig(level=logging.INFO
@@ -313,4 +325,4 @@ if __name__ == "__main__":
   # add the handler to the root logger
   logging.getLogger().addHandler(console)
   
-  test_get_mangaupdates_translated_chs2()
+  test_mangaupdates_missing()
