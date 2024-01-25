@@ -62,13 +62,17 @@ class HandlerMangaDex(Handler):
       self.start_driver()
       started_driver_locally = True
       self.driver.get(self.current_title_base_url)
-      time.sleep(SLEEP_SEC)
+      wait = WebDriverWait(self.driver, SLEEP_SEC * 2)
+      body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
+      wait.until(EC.visibility_of(body_obj))
     else:
       self.driver.get(self.current_title_base_url)
-      time.sleep(SLEEP_SEC)
+      wait = WebDriverWait(self.driver, SLEEP_SEC * 2)
+      body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
+      wait.until(EC.visibility_of(body_obj))
     logging.info("[" + self.get_tid() + " extract_mangaupdates_url]: Extracting MangaUpdates link!")
     try:
-      wait = WebDriverWait(self.driver, SLEEP_SEC)
+      wait = WebDriverWait(self.driver, SLEEP_SEC * 2)
       mangaupdates_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_MANGAUPDATES_XCLASS)))
       url = mangaupdates_obj.get_attribute(MANGADEX_MANGAUPDATES_ATTRIBUTE)
       self.current_title_manga_updates_base_url = url
@@ -126,8 +130,10 @@ class HandlerMangaDex(Handler):
     # Sometimes the page number cannot be seen if the image is too big scroll to the top of the page
     wait = WebDriverWait(self.driver, SLEEP_SEC)
     body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
+    wait.until(EC.visibility_of(body_obj))
     body_obj.send_keys(Keys.PAGE_UP)
     body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
+    wait.until(EC.visibility_of(body_obj))
     body_obj.send_keys(Keys.PAGE_UP)
 
     content_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_PAGE_COUNT_XPATH)))
@@ -176,7 +182,9 @@ class HandlerMangaDex(Handler):
     while True:
       if attempts > 5:
         self.driver.get(self.current_chapter_base_url + "/" + str(self.current_download_image_number))
-        time.sleep(SLEEP_SEC)
+        wait = WebDriverWait(self.driver, SLEEP_SEC * 2)
+        body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
+        wait.until(EC.visibility_of(body_obj))
         logging.info("[" + self.get_tid() + " extract_single_page]: Reloading because no images!")
         attempts = 0
       attempts += 1
@@ -219,7 +227,9 @@ class HandlerMangaDex(Handler):
     self.driver.get(self.current_chapter_base_url)
     # Required to ensure that the first image is the top of the page
     # Otherwise MANGADEX_IMAGE_XCLASS may return not the first image
-    time.sleep(SLEEP_SEC)
+    wait = WebDriverWait(self.driver, SLEEP_SEC * 2)
+    body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
+    wait.until(EC.visibility_of(body_obj))
     end_page_num = 0
 
     while True:
@@ -248,7 +258,7 @@ class HandlerMangaDex(Handler):
       # Delete image
       self.driver.execute_script(MANGADEX_IMAGE_DELETE_SCRIPT)
 
-      wait.until(EC.invisibility_of_element_located(image_obj))
+      wait.until(EC.invisibility_of_element(image_obj))
       
       end_page_num += 1
       self.current_download_image_number += 1
@@ -301,7 +311,7 @@ class HandlerMangaDex(Handler):
     return
   
   def extract_title_name(self):
-    wait = WebDriverWait(self.driver, SLEEP_SEC)
+    wait = WebDriverWait(self.driver, SLEEP_SEC * 2)
     title_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_TITLE_XCLASS)))
     wait.until(EC.visibility_of(title_obj))
     title = title_obj.text

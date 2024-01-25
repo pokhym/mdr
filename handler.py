@@ -137,7 +137,6 @@ class Handler:
     logging.info("[" + self.get_tid() + " init_for_title]: Loading title url: " + title_base_url)
     self.current_title_base_url = title_base_url
     self.driver.get(self.current_title_base_url)
-    # time.sleep(SLEEP_SEC)
     wait = WebDriverWait(self.driver, SLEEP_SEC * 2)
     body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
     wait.until(EC.visibility_of(body_obj))
@@ -164,7 +163,6 @@ class Handler:
     # logging.info("[" + self.get_tid() + " init_for_title]: Loading title url: " + title_base_url)
     self.current_title_base_url = title_base_url
     self.driver.get(self.current_title_base_url)
-    # time.sleep(SLEEP_SEC)
     body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
     wait.until(EC.visibility_of(body_obj))
 
@@ -207,7 +205,9 @@ class Handler:
     
     self.current_chapter_base_url = chapter_url
     self.driver.get(self.current_chapter_base_url)
-    time.sleep(SLEEP_SEC)
+    wait = WebDriverWait(self.driver, SLEEP_SEC * 2)
+    body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
+    wait.until(EC.visibility_of(body_obj))
 
     logging.info("[" + self.get_tid() + " init_for_chapter]: (Title: " + self.metadata.get_title() + ", Chapter: " + self.download_chapter_rel_base_path + ") Loading chapter url: " + chapter_url)
 
@@ -222,10 +222,12 @@ class Handler:
       return
 
     self.start_driver()
+    wait = WebDriverWait(self.driver, SLEEP_SEC * 2)
 
     self.driver.get(self.current_title_manga_updates_base_url)
+    body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
+    wait.until(EC.visibility_of(body_obj))
 
-    wait = WebDriverWait(self.driver, SLEEP_SEC * 2)
     chs_translated_link_obj = wait.until(EC.presence_of_all_elements_located((By.XPATH, MANGAUPDATES_MAIN_PAGE_TRANSLATED_CHAPTERS_LINK_XCLASS)))
     
     found = False
@@ -241,6 +243,8 @@ class Handler:
     
     while True:
       # Obtain all the chapters for the current page
+      body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
+      wait.until(EC.visibility_of(body_obj))
       chs_obj = wait.until(EC.presence_of_all_elements_located((By.XPATH, MANGAUPDATES_TRANSLATED_PAGE_CHAPTERS_XCLASS)))
 
       ch = None
