@@ -33,7 +33,6 @@ class HandlerMangaDex(Handler):
     userid_obj.click()
     # Select chapter selection language
     userid_ch_lang_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_USER_ICON_CHAPTER_LANGUAGES_XPATH)))
-    wait.until(EC.visibility_of(userid_ch_lang_obj))
     userid_ch_lang_obj.click()
     # Select the checkmark for english
     userid_ch_lang_eng_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_USER_ICON_CHAPTER_LANGUAES_ENGLISH_XPATH)))
