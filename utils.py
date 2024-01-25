@@ -98,6 +98,7 @@ def extract_chapter_num_range(num_string):
 
   TODO: This does not handle any chapters with a period
   and gets rounded down. eg. 46.5 -> 46
+  TODO: 46.a-c -> 46
   """
   orig_num_str = num_string
   # If the first character of the num_string is not a number simply return
