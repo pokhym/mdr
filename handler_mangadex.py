@@ -271,7 +271,7 @@ class HandlerMangaDex(Handler):
 
     logging.info("[" + self.get_tid() + " extract_chapter_images]: Extracting page numbers")
     # curr_page_num = self.extract_current_page()
-    end_page_num = self.extract_total_pages()
+    end_page_num = None
 
     if self.is_webtoon:
       end_page_num = self.extract_webtoon_chapter()
