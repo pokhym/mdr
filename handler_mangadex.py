@@ -2,7 +2,7 @@ from handler import Handler
 from constants import *
 from comic_info import ComicInfo
 import utils
-import urllib
+import requests
 import shutil
 
 import logging
@@ -33,9 +33,13 @@ class HandlerMangaDex(Handler):
     userid_obj.click()
     # Select chapter selection language
     userid_ch_lang_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_USER_ICON_CHAPTER_LANGUAGES_XPATH)))
+    # Wait until the user menu is available
+    wait.until(EC.visibility_of(userid_ch_lang_obj))
     userid_ch_lang_obj.click()
     # Select the checkmark for english
     userid_ch_lang_eng_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_USER_ICON_CHAPTER_LANGUAES_ENGLISH_XPATH)))
+    # Wait until language choice menu is visible
+    wait.until(EC.visibility_of(userid_ch_lang_eng_obj))
     userid_ch_lang_eng_obj.click()
 
     # Ensure it is checked
@@ -299,6 +303,7 @@ class HandlerMangaDex(Handler):
   def extract_title_name(self):
     wait = WebDriverWait(self.driver, SLEEP_SEC)
     title_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_TITLE_XCLASS)))
+    wait.until(EC.visibility_of(title_obj))
     title = title_obj.text
     # title = self.driver.find_element(By.XPATH, MANGADEX_TITLE_XCLASS).text
     self.metadata.set_title(title)
@@ -438,7 +443,18 @@ class HandlerMangaDex(Handler):
     else:
       self.save_screenshot()
       raise Exception("Unknown cover image type with href: " + href)
-    urllib.request.urlretrieve(cover.get_attribute(MANGADEX_TITLE_COVER_IMAGE_URL_ATTR), joined_path)
+    
+    # https://stackoverflow.com/questions/32763720/timeout-a-file-download-with-python-urllib
+    # Make the actual request, set the timeout for no data to 10 seconds and enable streaming responses so we don't have to keep the large files in memory
+    request = requests.get(href, timeout=SLEEP_SEC, stream=True)
+
+    # Open the output file and make sure we write in binary mode
+    with open(joined_path, 'wb') as fh:
+        # Walk through the request response in chunks of 1024 * 1024 bytes, so 1MiB
+        for chunk in request.iter_content(1024 * 1024):
+            # Write the chunk to the file
+            fh.write(chunk)
+            # Optionally we can check here if the download is taking too long
 
     logging.info("[" + self.get_tid() + " extract_cover]: Saving cover at: " + joined_path)
 

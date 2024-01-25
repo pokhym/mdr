@@ -137,7 +137,10 @@ class Handler:
     logging.info("[" + self.get_tid() + " init_for_title]: Loading title url: " + title_base_url)
     self.current_title_base_url = title_base_url
     self.driver.get(self.current_title_base_url)
-    time.sleep(SLEEP_SEC)
+    # time.sleep(SLEEP_SEC)
+    wait = WebDriverWait(self.driver, SLEEP_SEC * 2)
+    body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
+    wait.until(EC.visibility_of(body_obj))
 
     # Obtain the title
     self.extract_title_name()
@@ -161,7 +164,9 @@ class Handler:
     # logging.info("[" + self.get_tid() + " init_for_title]: Loading title url: " + title_base_url)
     self.current_title_base_url = title_base_url
     self.driver.get(self.current_title_base_url)
-    time.sleep(SLEEP_SEC)
+    # time.sleep(SLEEP_SEC)
+    body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
+    wait.until(EC.visibility_of(body_obj))
 
     self.terminate_driver()
 
