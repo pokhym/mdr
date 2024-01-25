@@ -11,6 +11,8 @@ Currently supports
 * Sources
   * MangaDex
   * MangaHere (except those marked as 18+)
+* Missing chapters checker uses MangaUpdates and is currently implemented for
+  * MangaDex
 
 ## Dependencies
 
@@ -62,6 +64,12 @@ https://mangahere.cc/manga/XXXX
 https://mangahere.cc/manga/XXXX
 https://mangahere.cc/manga/XXXX
 ```
+
+Logging will be placed into the root folder this project is cloned to.
+By default, this is `log.txt` you can change this location in `main.py`.
+
+Any missing chapters will be saved to a a file of root folder this project is cloned to.
+By default, this is `missing.txt` you can change this location in `main.py`.
 
 If you have a `.tachibk` file, extract it and parse it with `grab_urls.sh`.
 
