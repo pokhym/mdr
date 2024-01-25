@@ -42,7 +42,7 @@ GECKO_BIN_PATH = "/snap/bin/geckodriver"
 
 This is currently a work in progress and can be buggy (specifically if `MAX_THREADS` is not 1 in `main.py`) due to webpage load times.
 APIs are not used when accessing MangaDex meaning that the page is loaded and parsed with Selenium instead.
-For examples of how to download a specific chapter/title, refer to `handler_mangadex.py`.
+For examples of how to download a specific chapter/title, refer to `test_handler_mangadex.py`.
 
 If you run into problems with timeouts causing exceptions please modify `SLEEP_SEC` in `constant.py`.
 This governs how long `selenium` waits before it decides to fail.
