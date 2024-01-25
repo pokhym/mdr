@@ -44,6 +44,9 @@ This is currently a work in progress and can be buggy (specifically if `MAX_THRE
 APIs are not used when accessing MangaDex meaning that the page is loaded and parsed with Selenium instead.
 For examples of how to download a specific chapter/title, refer to `handler_mangadex.py`.
 
+If you run into problems with timeouts causing exceptions please modify `SLEEP_SEC` in `constant.py`.
+This governs how long `selenium` waits before it decides to fail.
+
 For trying to batch download run `main.py`.
 This requires a file (by default `library_links.txt`) located in the root directory.
 Feel free to change constants in `main.py` to modify behavior.
@@ -60,7 +63,7 @@ https://mangahere.cc/manga/XXXX
 https://mangahere.cc/manga/XXXX
 ```
 
-If you have a `.tachibk` file, extract it and parse it with `gen_urls.sh`.
+If you have a `.tachibk` file, extract it and parse it with `grab_urls.sh`.
 
 ## Files/Structure
 
