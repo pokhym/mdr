@@ -291,6 +291,14 @@ class HandlerMangaDex(Handler):
       wait.until(EC.visibility_of(body_obj))
       # body_obj.send_keys("m")
 
+      try: # Refresh page if button appears
+        click_to_retry_obj = self.driver.find(By.XPATH, "//div[contains(@class, 'error mx-auto')]")
+        click_to_retry_obj.click()
+        body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
+        wait.until(EC.visibility_of(body_obj))
+      except:
+        pass
+
       # Obtain the first image that is of the correct type
       image_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_IMAGE_XCLASS)))
       body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
