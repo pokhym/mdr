@@ -13,7 +13,7 @@ GECKO_BIN_PATH = "/snap/bin/geckodriver"
 METADATA_FILE_NAME = "metadata.txt"
 
 """ --- GLOBAL SLEEP TIME --- """
-SLEEP_SEC = 5
+SLEEP_SEC = 10
 
 """--- BEGIN TARGET LANGUAGE ---"""
 TARGET_LANGUAGE = TargetLanguageEnum.ENGLISH
@@ -88,13 +88,16 @@ MANGADEX_PAGE_KEYWORD_END = "\n"
 # 1 / 11 slash is the delimiter
 MANGADEX_PAGE_DELIM_CURR_TOTAL = "/"
 # Image class
-MANGADEX_IMAGE_CLASS = "img ls limit-width"
+# MANGADEX_IMAGE_CLASS = "img ls limit-width"
+MANGADEX_IMAGE_CLASS1 = "img"
+MANGADEX_IMAGE_CLASS2 = "limit-width"
 # Image XCLASS
-MANGADEX_IMAGE_XCLASS = "//img[contains(@class, '" + MANGADEX_IMAGE_CLASS + "')]"
+MANGADEX_IMAGE_XCLASS = "//img[contains(@class, '" + MANGADEX_IMAGE_CLASS1 + "') and contains(@class, '" + MANGADEX_IMAGE_CLASS2 + "')]"
 # Delete image scripte
-MANGADEX_IMAGE_DELETE_SCRIPT = """
-  if(document.getElementsByClassName(""" + '"' + MANGADEX_IMAGE_CLASS + '"' + """).length > 0) {
-    var l = document.getElementsByClassName(""" + '"' + MANGADEX_IMAGE_CLASS + '"' + """)[0];
+def MANGADEX_IMAGE_DELETE_SCRIPT(CLASS):
+  return """
+  if(document.getElementsByClassName(""" + '"' + CLASS + '"' + """).length > 0) {
+    var l = document.getElementsByClassName(""" + '"' + CLASS + '"' + """)[0];
     l.parentNode.removeChild(l);
   }
 """

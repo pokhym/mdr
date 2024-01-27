@@ -200,6 +200,26 @@ def test_full4():
 
   mh.get_update()
 
+def test_full5():
+  """
+  Ch 200 first page has weird class that differs
+  and therefore could not be found by XPATH
+  Need to check for the image some other way in order for it to be found
+
+  Possibly find by //img that has a blob and not display none
+
+  Also need to modify the execute script part to ensure that the class passed through
+  is obtained via selenium
+  """
+  mh = HandlerMangaDex(0, SOURCE_MANGADEX)
+  mh.reset_for_next_title()
+
+  mh.init_for_title("test/", "https://mangadex.org/title/259dfd8a-f06a-4825-8fa6-a2dcd7274230/bd573ff3-2cf0-4ed2-968d-da046d26f3b2")
+
+  mh.extract_metadata()
+
+  mh.get_update()
+
 def test_get_mangaupdates_link():
   mh = HandlerMangaDex(0, SOURCE_MANGADEX)
   mh.reset_for_next_title()
@@ -270,8 +290,6 @@ def test_get_mangaupdates_translated_chs3():
     Extras
     20 (End)
   https://mangadex.org/title/051e6a66-7373-4583-98b6-b746153041e9/e9985bbe-ace2-4cc0-a56c-99cd25de0990
-
-  TODO:
   """
   mh = HandlerMangaDex(0, SOURCE_MANGADEX, "test_missing.txt")
   mh.reset_for_next_title()
@@ -325,4 +343,4 @@ if __name__ == "__main__":
   # add the handler to the root logger
   logging.getLogger().addHandler(console)
   
-  test_mangaupdates_missing()
+  test_full4()

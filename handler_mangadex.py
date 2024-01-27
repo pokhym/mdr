@@ -227,15 +227,18 @@ class HandlerMangaDex(Handler):
     self.driver.get(self.current_chapter_base_url)
     # Required to ensure that the first image is the top of the page
     # Otherwise MANGADEX_IMAGE_XCLASS may return not the first image
-    wait = WebDriverWait(self.driver, SLEEP_SEC * 2)
+    wait = WebDriverWait(self.driver, SLEEP_SEC)
     body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
     wait.until(EC.visibility_of(body_obj))
     end_page_num = 0
+    # This is used to ensure that we do not get stale references to images
+    time.sleep(SLEEP_SEC)
 
     while True:
-      wait = WebDriverWait(self.driver, SLEEP_SEC * 2)
+      # wait = WebDriverWait(self.driver, SLEEP_SEC * 2)
       try:
         image_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_IMAGE_XCLASS)))
+        wait.until(EC.element_to_be_clickable(image_obj))
       except:
         logging.info("[" + self.get_tid() + " extract_webtoon_chapter]: Finished downloading chapter")
         assert(len(self.driver.find_elements(By.XPATH, MANGADEX_IMAGE_XCLASS)) == 0)
@@ -256,7 +259,7 @@ class HandlerMangaDex(Handler):
         fd.close()
 
       # Delete image
-      self.driver.execute_script(MANGADEX_IMAGE_DELETE_SCRIPT)
+      self.driver.execute_script(MANGADEX_IMAGE_DELETE_SCRIPT(image_obj.get_attribute("class")))
 
       wait.until(EC.invisibility_of_element(image_obj))
       
@@ -271,18 +274,29 @@ class HandlerMangaDex(Handler):
 
     logging.info("[" + self.get_tid() + " extract_chapter_images]: Extracting page numbers")
     # curr_page_num = self.extract_current_page()
-    end_page_num = None
+    # Determine if webtoon or not
+    end_page_num = self.extract_total_pages()
 
     if self.is_webtoon:
       end_page_num = self.extract_webtoon_chapter()
     else:
-      wait = WebDriverWait(self.driver, SLEEP_SEC)
+      wait = WebDriverWait(self.driver, SLEEP_SEC * 2)
       # Open the menu
       # This only should be done once as this remains open until you go back
       # To the original content page
       logging.info("[" + self.get_tid() + " extract_chapter_images]: Opening menu")
+
+      # Wait until body loads
       body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
+      wait.until(EC.visibility_of(body_obj))
+      # body_obj.send_keys("m")
+
+      # Obtain the first image that is of the correct type
+      image_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_IMAGE_XCLASS)))
+      body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
+      wait.until(EC.visibility_of(body_obj))
       body_obj.send_keys("m")
+
       logging.info("[" + self.get_tid() + " extract_chapter_images]: Selecting long strip")
       # Convert to long strip to obtain blobs all at once and use extract_webtoon as normal
       change_reader_type_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_CHANGE_READER_TYPE)))
