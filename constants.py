@@ -13,7 +13,7 @@ GECKO_BIN_PATH = "/snap/bin/geckodriver"
 METADATA_FILE_NAME = "metadata.txt"
 
 """ --- GLOBAL SLEEP TIME --- """
-SLEEP_SEC = 10
+SLEEP_SEC = 20
 
 """--- BEGIN TARGET LANGUAGE ---"""
 TARGET_LANGUAGE = TargetLanguageEnum.ENGLISH
@@ -94,13 +94,18 @@ MANGADEX_IMAGE_CLASS2 = "limit-width"
 # Image XCLASS
 MANGADEX_IMAGE_XCLASS = "//img[contains(@class, '" + MANGADEX_IMAGE_CLASS1 + "') and contains(@class, '" + MANGADEX_IMAGE_CLASS2 + "')]"
 # Delete image scripte
-def MANGADEX_IMAGE_DELETE_SCRIPT(CLASS):
+def MANGADEX_IMAGE_DELETE_SCRIPT_BY_CLASS(CLASS):
   return """
   if(document.getElementsByClassName(""" + '"' + CLASS + '"' + """).length > 0) {
     var l = document.getElementsByClassName(""" + '"' + CLASS + '"' + """)[0];
     l.parentNode.removeChild(l);
   }
 """
+def MANGADEX_IMAGE_DELETE_SCRIPT_BY_WEBELEMENT(driver, webelement):
+  return driver.execute_script("""
+  var element = arguments[0];
+  element.parentNode.removeChild(element);
+  """, webelement)
 # Attribute containing the blob url
 MANGADEX_IMAGE_BLOB_ATTR = "src"
 # Next image visibility attribute
