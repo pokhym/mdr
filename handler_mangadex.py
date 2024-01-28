@@ -30,6 +30,7 @@ class HandlerMangaDex(Handler):
     wait = WebDriverWait(self.driver, SLEEP_SEC * 2)
     # Click user icon
     userid_obj = wait.until(EC.presence_of_element_located((By.ID, MANGADEX_USER_ICON_ID)))
+    wait.until(EC.visibility_of(userid_obj))
     userid_obj.click()
     # Select chapter selection language
     userid_ch_lang_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_USER_ICON_CHAPTER_LANGUAGES_XPATH)))
@@ -227,7 +228,7 @@ class HandlerMangaDex(Handler):
     self.driver.get(self.current_chapter_base_url)
     # Required to ensure that the first image is the top of the page
     # Otherwise MANGADEX_IMAGE_XCLASS may return not the first image
-    wait = WebDriverWait(self.driver, SLEEP_SEC)
+    wait = WebDriverWait(self.driver, SLEEP_SEC * 2)
     body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
     wait.until(EC.visibility_of(body_obj))
     end_page_num = 0
@@ -300,7 +301,7 @@ class HandlerMangaDex(Handler):
         pass
 
       # Obtain the first image that is of the correct type
-      image_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_IMAGE_XCLASS)))
+      # image_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_IMAGE_XCLASS)))
       body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
       wait.until(EC.visibility_of(body_obj))
       body_obj.send_keys("m")
@@ -312,7 +313,11 @@ class HandlerMangaDex(Handler):
       change_reader_type_obj.click()
       change_reader_type_obj.click()
       
-      end_page_num = self.extract_webtoon_chapter()
+      # Wiat until page refreshes
+      body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
+      wait.until(EC.visibility_of(body_obj))
+      
+      self.extract_webtoon_chapter()
 
     # Ensure the correct number of files is downloaded
     assert(self.current_download_image_number - 1 == end_page_num)
@@ -494,6 +499,10 @@ class HandlerMangaDex(Handler):
     logging.info("[" + self.get_tid() + " extract_metadata]: Extracting metadata!")
     self.start_driver()
     self.driver.get(self.current_title_base_url)
+
+    wait = WebDriverWait(self.driver, SLEEP_SEC)
+    body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
+    wait.until(EC.visibility_of(body_obj))
 
     logging.info("[" + self.get_tid() + " extract_metadata]: Selecting language!")
     self.select_chapter_language()
