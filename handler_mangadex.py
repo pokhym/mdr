@@ -239,7 +239,7 @@ class HandlerMangaDex(Handler):
       # wait = WebDriverWait(self.driver, SLEEP_SEC * 2)
       try:
         image_obj = wait.until(EC.presence_of_element_located((By.XPATH, MANGADEX_IMAGE_XCLASS)))
-        wait.until(EC.visibility_of(image_obj))
+        # wait.until(EC.visibility_of(image_obj))
       except:
         logging.info("[" + self.get_tid() + " extract_webtoon_chapter]: Finished downloading chapter")
         assert(len(self.driver.find_elements(By.XPATH, MANGADEX_IMAGE_XCLASS)) == 0)
@@ -262,7 +262,7 @@ class HandlerMangaDex(Handler):
       # Delete image
       MANGADEX_IMAGE_DELETE_SCRIPT_BY_WEBELEMENT(self.driver, image_obj)
 
-      wait.until(EC.invisibility_of_element(image_obj))
+      wait.until(EC.staleness_of(image_obj))
       
       end_page_num += 1
       self.current_download_image_number += 1
