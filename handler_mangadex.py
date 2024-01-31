@@ -235,6 +235,10 @@ class HandlerMangaDex(Handler):
     # This is used to ensure that we do not get stale references to images
     time.sleep(SLEEP_SEC)
 
+    # Obtain the number of images to downoad here
+    image_objs = wait.until(EC.presence_of_all_elements_located((By.XPATH, MANGADEX_IMAGE_XCLASS)))
+    end_page_num = len(image_objs)
+
     while True:
       # wait = WebDriverWait(self.driver, SLEEP_SEC * 2)
       try:
@@ -246,8 +250,8 @@ class HandlerMangaDex(Handler):
         break
       image_blob = image_obj.get_attribute(MANGADEX_IMAGE_BLOB_ATTR)
 
-      if(image_blob in self.downloaded_blobs_set):
-        break
+      assert(image_blob not in self.downloaded_blobs_set)
+      
       self.downloaded_blobs_set.add(image_blob)
 
       logging.info("[" + self.get_tid() + " extract_webtoon_chapter]: Downloading image " + str(self.current_download_image_number) + " with uri " + image_blob)
@@ -264,7 +268,7 @@ class HandlerMangaDex(Handler):
 
       wait.until(EC.staleness_of(image_obj))
       
-      end_page_num += 1
+      # end_page_num += 1
       self.current_download_image_number += 1
 
     assert(self.current_download_image_number -1 == end_page_num)
@@ -317,7 +321,8 @@ class HandlerMangaDex(Handler):
       body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
       wait.until(EC.visibility_of(body_obj))
       
-      self.extract_webtoon_chapter()
+      end_page_num_ret = self.extract_webtoon_chapter()
+      assert(end_page_num_ret == end_page_num)
 
     # Ensure the correct number of files is downloaded
     assert(self.current_download_image_number - 1 == end_page_num)
