@@ -215,11 +215,16 @@ class HandlerMangaDex(Handler):
         break
     assert(exists(path_join(self.download_title_abs_base_path, self.download_chapter_rel_base_path, str(self.current_download_image_number) + ".png")))
 
-  def extract_webtoon_chapter(self):
+  def extract_webtoon_chapter(self, in_end_page_num=None):
     """
     As MangaDex seems to treat webtoons differently by loading all the images "at once"
     this function is required to iterate over all of them. Requires the chapter to be loaded
     by the driver before calling this
+
+    Arguments
+    -----------------
+    in_end_page_num (int):
+      The number of pages this chapter should have.  Only used if it is not None
 
     Returns
     ------------------
@@ -271,7 +276,10 @@ class HandlerMangaDex(Handler):
       # end_page_num += 1
       self.current_download_image_number += 1
 
-    assert(self.current_download_image_number -1 == end_page_num)
+    if(in_end_page_num != None):
+      assert(self.current_download_image_number -1 == in_end_page_num)
+    else:
+      assert(self.current_download_image_number -1 == end_page_num)
     return end_page_num
 
   def extract_chapter_images(self):
@@ -321,7 +329,8 @@ class HandlerMangaDex(Handler):
       body_obj = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "body")))
       wait.until(EC.visibility_of(body_obj))
       
-      end_page_num_ret = self.extract_webtoon_chapter()
+      assert(end_page_num != None)
+      end_page_num_ret = self.extract_webtoon_chapter(end_page_num)
       assert(end_page_num_ret == end_page_num)
 
     # Ensure the correct number of files is downloaded
